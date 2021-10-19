@@ -1,0 +1,8 @@
+Acrobatics is an ability to perform acrobatic feats
+Stealth is an ability to hide and remain quiet
+Thievery is an ability to pickpocket and steal small objects
+Lockpicking is an ability to open closed locks
+Deception is an ability to manipulate human expectations
+Traps is an ability to see and disarm traps
+Stupefy is an ability to quietly knock out targets
+Nature is your knowledge of natural terrain and wildlife

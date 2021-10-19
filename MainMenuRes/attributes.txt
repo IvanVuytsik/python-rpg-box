@@ -1,0 +1,10 @@
+Strength
+Constitution
+Dexterity
+Agility
+Awareness
+Personality
+Intelligence
+Wisdom
+Willpower
+Luck

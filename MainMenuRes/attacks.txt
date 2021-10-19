@@ -1,0 +1,5 @@
+Melee damage. You attack in close combat
+Block. Chance to reduce incoming attacks by 50%
+Ranged damage. Your attack in ranged combat
+Retaliation. Chance to retaliate to a melee attack
+Critical strike. Chance of inflicting multiplied damage

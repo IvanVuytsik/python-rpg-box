@@ -1,0 +1,10 @@
+Strength influences skills requiring raw physical power
+Constitution determines your health and resistances
+Dexterity influences skills requiring swift hands
+Agility influences skills requiring quick reaction and mobility
+Awareness influences skills requiring attention to detail and observation
+Personality influences skills requiring interaction with living creatures
+Intelligence influences skills based on manipulation of information
+Wisdom determines your ability to see a bigger picture and learn
+Willpower determines your resistances and perseverance
+Luck influences favorable events and affects many skills

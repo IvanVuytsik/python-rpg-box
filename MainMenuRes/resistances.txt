@@ -1,0 +1,7 @@
+Threshold shows how much physical damage is negated
+Defence determines damage ratio between Armor and Health points
+Arcana resistance lowers any negative effects of Arcana type
+Energy resistance lowers any negative effects of Energy type
+Frost resistance lowers any negative effects of Frost type
+Fire resistance lowers any negative effects of Fire type
+Poison resistance lowers any negative effects of Poison type

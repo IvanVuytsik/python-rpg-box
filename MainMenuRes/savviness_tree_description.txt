@@ -1,0 +1,8 @@
+Investigation is an ability to process evidence and connect dots
+Medicine is your knowledge of healing practices
+Lore is your knowledge of history and languages
+Persuasion is an ability to make others accept your reason
+Arcane is your knowledge of magic practices
+Divine is your knowledge of holy practices
+Alchemy is your knowledge of concoctions and components
+Engineering is your knowledge of mechanisms

@@ -1,0 +1,46 @@
+{
+  "rowan": [
+    {
+      "1": "Finally home.",
+      "2": "The warmth of the sun and smell of summer hay.",
+      "3": "Just like the old days",
+      "4": "Captain! We made it.",
+      "5": "I thought we'd end up in one of those slave pits.",
+      "6": "And grant eternal rest.",
+      "7": "Thank you captain. I will.",
+      "8": "Is there anything I can help you with?",
+      "9": "Of course. I will do that.",
+      "10": "Sorry captain, Riversmouth is not my destination."
+    },
+    {
+      "1": "",
+      "2": "",
+      "3": ""
+    }
+  ],
+
+  "captain": [
+    {
+      "1": "Not the smoothest of my journeys.",
+      "2": "Those pirates grow more dangerous every year.",
+      "3": "And we lost good men. Cargo too.",
+      "4": "Miara bless their souls.",
+      "5": "Your belongings are in the chest.",
+      "5_1": "What's left of them at least.",
+      "6": "And show you papers to city guards in Cleonel.",
+      "7": "Good luck, exile.",
+      "8": "Not much you can do for the old Edora now,",
+      "8_1": "but I appreciate you asked. I still have my",
+      "8_2": "charm. If you ever visit Riversmouth, please",
+      "8_3": "find Silus. He will know the rest."
+    },
+    {
+      "1": "",
+      "2": "",
+      "3": ""
+    }
+  ]
+
+
+
+}

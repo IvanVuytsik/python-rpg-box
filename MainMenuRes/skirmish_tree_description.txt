@@ -1,0 +1,8 @@
+Melee is your knowledge of close combat tactics
+Ranged is your knowledge of ranged combat tactics
+Parrying is an ability to use armor, shield or weapon to deflect blows
+Athletics is an ability to govern your body
+Intimidation is your knowledge of human pressure points and fears
+Tactics is an ability to command and inspire others in combat
+Arming is your knowledge of weaponry and armor
+Siege is your knowledge of siege equipment and tactics
