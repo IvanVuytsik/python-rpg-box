@@ -23,7 +23,6 @@ from random import shuffle
 from PIL import Image
 from scipy.ndimage import zoom
 import scipy
-import Wolves
 
 # srcImage = Image.open("WorldMap/BWMap.png")
 # grayImage = srcImage.convert('L')
@@ -1056,7 +1055,7 @@ def stats():
     Cartographer = Technique(7.1, 9.1,techniques_img[0], 0.8, 'Increases speed on the global map by 50%',button.nature,0,'Cartographer',0,50,1, 10)
     Combo = Technique(8.1, 9.1,techniques_img[66], 0.8,'Attack target twice in melee',button.melee,0,'Combo',0,2,1, 10)
     Educated = Technique(9.1, 9.1,techniques_img[29], 0.8,'Increases experience gain by 25%',button.lore,0,'Educated',0,25,1,10)
-    Quick_Shot = Technique(10.1, 9.1,techniques_img[56], 0.8,'Gives 15% chance of a free ranged attack',button.ranged,0,'Quick Shot',0,15,1, 10)
+    Quick_Shot = Technique(10.1, 9.1,techniques_img[56], 0.8,'Gives 25% chance of a free ranged attack',button.ranged,0,'Quick Shot',0,15,1, 10)
     Camp_Doctor = Technique(11.1, 9.1,techniques_img[42], 0.8, 'Increases healing rate on the map by 25%',button.medicine,0,'Camp Doctor',0,25,1, 10)
     Thief = Technique(12.1, 9.1,techniques_img[30], 0.8,'Allows to steal from traders',button.thievery,0,'Thief',0,15,1, 10)
     Quartermaster = Technique(13.1, 9.1,techniques_img[46], 0.8,'Doubles efficiency of resting in battle',button.arming,0,'Quartermaster',0,100,1, 10)
@@ -2604,7 +2603,8 @@ def global_map():
     tavern_sound = pygame.mixer.Sound('WorldMap/settlement/tavern.wav')
     alchemy_sound = pygame.mixer.Sound('WorldMap/settlement/alchemy.mp3')
     chorus_sound = pygame.mixer.Sound('WorldMap/settlement/chorus.wav')
-
+    city_board_sound = pygame.mixer.Sound('WorldMap/settlement/city_board.mp3')
+    caravan_sound = pygame.mixer.Sound('WorldMap/settlement/caravan_sound.wav')
     # randomlist = []
     # for i in range(0, 10):
     #     n = random.randint(1, 10)
@@ -2663,7 +2663,7 @@ def global_map():
     global char_level
     char_level = 0
     global learning_points
-    learning_points = 100
+    learning_points = 0
     # global stat_distributable
     # stat_distributable = 0
 
@@ -2963,6 +2963,9 @@ def global_map():
     troops_melee = []
     Dunstan = Troops(units_img[0], 0.8, 'Your younger brother and skilled swordsman Dunstan',0,0,'dunstan',0)
     Light_Infantry = Troops(units_img[1], 0.8, 'A regiment of militia and spearmen led by a captain ',0,0,'light_infantry',0)
+    Bartelago = Troops(units_img[5], 0.8, 'Bartelago is a mighty warrior and your old friend',0,0,'bartelago',0)
+    Anselm = Troops(units_img[6], 0.8, 'Brother Anselm is a former grey cloak agent',0,0,'anselm',0)
+
 
     troops_melee.extend([])
 
@@ -2970,6 +2973,9 @@ def global_map():
     #_------------------------------------------------------------------------------------
     troops_ranged = []
     Light_Archers = Troops(units_img[2], 0.8, 'A regiment of light archers',0,0,'light_archers',0)
+    Regina = Troops(units_img[7], 0.8, 'Regina a former grey cloak ranger and a skilled hunter',0,0,'regina',0)
+    Alba = Troops(units_img[9], 0.8, 'Alba is a coven witch sent to find an ancient artifact',0,0,'alba',0)
+    Severin = Troops(units_img[8], 0.8, 'Severin is a battle mage and scholar',0,0,'severin',0)
 
 
     troops_ranged.extend([])
@@ -3182,7 +3188,7 @@ def global_map():
     Cartographer = Technique(7.1, 9.1,techniques_img[0], 0.8, 'Increases speed on the global map by 50%',button.nature,0,'Cartographer',20,50,0, 10)
     Combo = Technique(8.1, 9.1,techniques_img[66], 0.8,'Attack target twice in melee',button.melee,0,'Combo',20,2,0, 10)
     Educated = Technique(9.1, 9.1,techniques_img[29], 0.8,'Increases experience gain by 25%',button.lore,0,'Educated',20,25,0,10)
-    Quick_Shot = Technique(10.1, 9.1,techniques_img[56], 0.8,'Gives 15% chance of a free ranged attack',button.ranged,0,'Quick Shot',20,15,0, 10)
+    Quick_Shot = Technique(10.1, 9.1,techniques_img[56], 0.8,'Gives 25% chance of a free ranged attack',button.ranged,0,'Quick Shot',20,15,0, 10)
     Camp_Doctor = Technique(11.1, 9.1,techniques_img[42], 0.8, 'Increases healing rate on the map by 25%',button.medicine,0,'Camp Doctor',20,25,0, 10)
     Thief = Technique(12.1, 9.1,techniques_img[30], 0.8,'Allows to steal from traders',button.thievery,0,'Thief',20,15,0, 10)
     Quartermaster = Technique(13.1, 9.1,techniques_img[46], 0.8,'Doubles efficiency of resting in battle',button.arming,0,'Quartermaster',20,100,0, 10)
@@ -3565,54 +3571,78 @@ def global_map():
     warlock_belt = Item(belt_list_img[7], 0.8,f'Warlock belt. Supply+{2} | Resistances+{10}',10,0,'warlock_belt',3000)
     duel_belt = Item(belt_list_img[8], 0.8,f'Duel belt. Supply+{4} | Retaliate+{12} | Block+{12}',12,0,'duel_belt',4500)
     druid_belt = Item(belt_list_img[9], 0.8,f'Druid belt. Supply+{2} | THR+{4}',4,0,'druid_belt',3000)
-    belt_list.extend([noble_belt,duel_belt,war_belt,day_belt])
+    belt_list.extend([])
 
     necklace_list = []
     traders_luck = Item(necklace_list_img[0], 0.8,f'Trader\'s luck. Tricks+{1}',1,0,'traders_luck',100)
-    moon_crest = Item(necklace_list_img[1], 0.8,f'Moon crest. Tricks+{2} | Arcana res+{10}',10,0,'moon_crest',800)
+    moon_crest = Item(necklace_list_img[1], 0.8,f'Moon crest. Tricks+{2} | Arcana res.+{10}',10,0,'moon_crest',800)
     brothers_mark = Item(necklace_list_img[2], 0.8,f'Brother\'s mark. Tricks+{3} | Crit+{3}',3,0,'brothers_mark',1200)
     the_eye = Item(necklace_list_img[3], 0.8,f'The Eye. Tricks+{6}',6,0,'the_eye',2500)
     war_amulet = Item(necklace_list_img[4], 0.8,f'War amulet. Tricks+{2} | DEF+{2} | ARM+{10}',10,0,'war_amulet',1500)
-    deep_endless = Item(necklace_list_img[5], 0.8,f'Deep Endless. Tricks+{12}',12,0,'deep_endless',7000)
-    warlock_amulet = Item(necklace_list_img[6], 0.8,f'Warlock amulet. Tricks+{4} | Resistances +{10}',10,0,'warlock_amulet',4000)
-    spider_amulet = Item(necklace_list_img[7], 0.8,f'Spider amulet. Tricks+{4} | Retaliate +{8}',8,0,'spider_amulet',3000)
-    necklace_list.extend([deep_endless,spider_amulet,moon_crest])
+    deep_endless = Item(necklace_list_img[5], 0.8,f'Deep Endless. Tricks+{12}',12,0,'deep_endless',2700)
+    warlock_amulet = Item(necklace_list_img[6], 0.8,f'Warlock amulet. Tricks+{4} | Resistances+{10}',10,0,'warlock_amulet',2600)
+    spider_amulet = Item(necklace_list_img[7], 0.8,f'Spider amulet. Tricks+{4} | Retaliate+{8}',8,0,'spider_amulet',2100)
+    defilers_amulet = Item(necklace_list_img[8], 0.8,f'Defiler\'s amulet. Tricks+{6} | Poison/Fire Res.+{20}',20,0,'defilers_amulet',1600)
+    grimshard_amulet = Item(necklace_list_img[9], 0.8,f'Grimshard amulet. Tricks+{4} | Crit+{8}',8,0,'grimshard_amulet',2300)
+    the_shining = Item(necklace_list_img[10], 0.8,f'The Shining. Health+{12} | BLK+{6}',12,0,'the_shining',1100)
+    sailors_luck = Item(necklace_list_img[11], 0.8,f'Sailor\'s luck. Tricks+{4} | Energy/Frost Res.+{20}',20,0,'sailors_luck',1300)
+    crystal_amulet = Item(necklace_list_img[12], 0.8,f'Crystal amulet. Tricks+{10} | DEF+{20}',20,0,'crystal_amulet',2800)
+    necklace_list.extend([])
 
     helm_list = []
     travel_hat = Item(helm_list_img[0], 0.8,f'Travel hat. DEF+{4}',4,0,'travel_hat',200)
     steel_helm = Item(helm_list_img[1], 0.8,f'Steel helmet. ARM+{18} | DEF+{6}',18,0,'steel_helm',1200)
-    tournament_helm = Item(helm_list_img[2], 0.8,f'Tournament helmet. ARM+{40} | DEF+{10} THR+{6}',40,0,'tournament_helm',4000)
+    tournament_helm = Item(helm_list_img[2], 0.8,f'Tournament helmet. ARM+{40} | DEF+{10} THR+{6}',40,0,'tournament_helm',3600)
     monk_hood = Item(helm_list_img[3], 0.8,f'Monk hood. DEF+{8}',8,0,'monk_hood',400)
     leather_hood = Item(helm_list_img[4], 0.8,f'Leather hood. ARM+{8} | DEF+{4}',8,0,'leather_hood',500)
     light_chain_helm = Item(helm_list_img[5], 0.8,f'Light chain helmet. ARM+{28} | DEF+{6} | THR+{2}',28,0,'light_chain_helm',2200)
-    protector_helm = Item(helm_list_img[6], 0.8,f'Protector\'s helmet. ARM+{36} | DEF+{14} | THR+{4}',36,0,'protector_helm',3600)
-    leather_helm = Item(helm_list_img[7], 0.8,f'Leather helmet. ARM+{12} | DEF+{2}',12,0,'leather_helm',700)
+    protector_helm = Item(helm_list_img[6], 0.8,f'Protector\'s helmet. ARM+{36} | DEF+{14} | THR+{4}',36,0,'protector_helm',2800)
+    legion_helm = Item(helm_list_img[7], 0.8,f'Legion helmet. ARM+{32} | DEF+{9} | THR+{2}',32,0,'legion_helm',1200)
+    leather_helm = Item(helm_list_img[8], 0.8,f'Leather helmet. ARM+{12} | DEF+{2}',12,0,'leather_helm',700)
+    pretorian_helm = Item(helm_list_img[9], 0.8,f'Pretorian helmet.  ARM+{38} | DEF+{14} | THR+{4}',38,0,'pretorian_helm',2200)
+    inquisitor_hat = Item(helm_list_img[10], 0.8,f'Inquisitor hat. DEF+{6} | Melee Attack+{12} | Crit+{3}',12,0,'inquisitor_hat',1900)
+    brigade_helm = Item(helm_list_img[11], 0.8,f'Brigade helmet. ARM+{26} | DEF+{8}',26,0,'brigade_helm',1400)
+    mage_hat = Item(helm_list_img[12], 0.8,f'Mage hat. DEF+{6} | Resistances+{12}',12,0,'mage_hat',1400)
+    mercenary_helm = Item(helm_list_img[13], 0.8,f'Mercenary helmet. ARM+{32} | DEF+{6} | THR+{3}',32,0,'mercenary_helm',1250)
+    turtle_helm = Item(helm_list_img[14], 0.8,f'Turtle helmet. ARM+{56} | DEF+{14} | THR+{7}',56,0,'turtle_helm',3200)
+    pigface_helm = Item(helm_list_img[15], 0.8,f'Pigface helmet. ARM+{40} | DEF+{20} | THR+{5}',40,0,'pigface_helm',3000)
+    full_helm = Item(helm_list_img[16], 0.8,f'Full helmet. ARM+{36} | DEF+{10} | THR+{5}',36,0,'full_helm',2600)
+    ranger_hat = Item(helm_list_img[17], 0.8,f'Ranger hat. DEF+{6} | Ranged Attack+{12} | Crit+{4}',12,0,'ranger_hat',1500)
+    hoplite_helm = Item(helm_list_img[18], 0.8,f'Hoplite helmet. ARM+{36} | DEF+{12} | THR+{3}',36,0,'hoplite_helm',1650)
 
-    helm_list.extend([tournament_helm,leather_hood,light_chain_helm,protector_helm])
+
+    helm_list.extend([])
 
     cloak_list = []
     travel_cloak = Item(cloak_list_img[0], 0.8,f'Travel cloak. DEF+{2}',2,0,'travel_cloak',150)
     night_cloak = Item(cloak_list_img[1], 0.8,f'Night cloak. DEF+{4} | Crit+{4}',4,0,'night_cloak',300)
     full_cloak = Item(cloak_list_img[2], 0.8,f'Full cloak. DEF+{4} | ARM+{8}',8,0,'full_cloak',500)
-    ranger_cloak = Item(cloak_list_img[3], 0.8,f'Ranger cloak. DEF+{6} | Block+{6} | Ranged attack+{10}',10,0,'ranger_cloak',900)
+    ranger_cloak = Item(cloak_list_img[3], 0.8,f'Ranger cloak. DEF+{6} | BLK+{6} | Ranged attack+{10}',10,0,'ranger_cloak',900)
     jester_cloak = Item(cloak_list_img[4], 0.8,f'Jester cloak. DEF+{8} | Retaliate+{8} | Health+{20}',20,0,'jester_cloak',750)
     war_cloak = Item(cloak_list_img[5], 0.8,f'War cloak. DEF+{8} | ARM+{20} | THR+{2}',20,0,'war_cloak',1400)
-    noble_cloak = Item(cloak_list_img[6], 0.8,f'Noble cloak. DEF+{6} | Block+{6} | Retaliate+{6}',6,0,'noble_cloak',2000)
-    warlock_cloak = Item(cloak_list_img[7], 0.8,f'Warlock cloak. DEF+{4} | Tricks+{4} | Resistances+{10}',10,0,'warlock_cloak',3000)
-
-    cloak_list.extend([ranger_cloak,war_cloak,full_cloak])
+    noble_cloak = Item(cloak_list_img[6], 0.8,f'Noble cloak. DEF+{6} | Block+{6} | Retaliate+{6}',6,0,'noble_cloak',1800)
+    warlock_cloak = Item(cloak_list_img[7], 0.8,f'Warlock cloak. DEF+{4} | Tricks+{4} | Resistances+{10}',10,0,'warlock_cloak',2600)
+    royal_cloak = Item(cloak_list_img[8], 0.8,f'Royal cloak. DEF+{10} | Tricks+{2} | Health +{20}',20,0,'royal_cloak',3200)
+    thief_cloak = Item(cloak_list_img[9], 0.8,f'Thief cloak. DEF+{4} | Tricks+{4} | Stealth+{20}',20,0,'thief_cloak',1600)
+    cloak_list.extend([])
 
     armor_list = []
     travel_clothes = Item(armor_list_img[0], 0.8,f"Travel clothes. ARM+{4} | DEF+{2}",4,0,'travel_clothes',150)
     robes = Item(armor_list_img[1], 0.8,f"Robes. DEF+{6}",6,0,'robes',200)
     light_leather = Item(armor_list_img[2], 0.8,f"Light leather armor. ARM+{12} | DEF+{6}",12,0,'light_leather',700)
     light_chain_mail = Item(armor_list_img[3], 0.8,f"Light chain mail. ARM+{40} | DEF+{10} | THR +{4}",40,0,'light_chain_mail',1600)
-    light_plate_armor = Item(armor_list_img[4], 0.8,f"Light plate armor. ARM+{60} | DEF+{12} | Block+{6} | THR+{6}",60,0,'light_plate_armor',2600)
+    light_plate_armor = Item(armor_list_img[4], 0.8,f"Light plate armor. ARM+{60} | DEF+{12} | BLK+{6} | THR+{6}",60,0,'light_plate_armor',2600)
     leather_armor = Item(armor_list_img[5], 0.8,f"Leather armor. ARM+{20} | DEF+{8}",20,0,'leather_armor',1200)
-    reinforced_armor = Item(armor_list_img[6], 0.8,f"Reinforced. ARM+{30} | DEF+{8} | THR+{2}",30,0,'reinforced_armor',1600)
-    nomad_armor = Item(armor_list_img[7], 0.8,f"Nomad. ARM+{24} | DEF+{16}",24,0,'nomad_armor',900)
-
-    armor_list.extend([light_chain_mail,light_plate_armor,light_leather,nomad_armor])
+    reinforced_armor = Item(armor_list_img[6], 0.8,f"Reinforced leather armor. ARM+{30} | DEF+{8} | THR+{2}",30,0,'reinforced_armor',1600)
+    nomad_armor = Item(armor_list_img[7], 0.8,f"Nomad armor. ARM+{24} | DEF+{16}",24,0,'nomad_armor',900)
+    legion_armor = Item(armor_list_img[8], 0.8,f"Legion armor. ARM+{32} | DEF+{16} | THR+{4}",32,0,'legion_armor',1400)
+    cuirasse = Item(armor_list_img[9], 0.8,f"Cuirasse. ARM+{28} | DEF+{8} | THR+{3}",28,0,'cuirasse',1150)
+    tournament_armor = Item(armor_list_img[10], 0.8,f"Tournament armor. ARM+{120} | DEF+{30} | THR+{12}",120,0,'tournament_armor',9000)
+    heavy_plate = Item(armor_list_img[11], 0.8,f"Heavy plate armor. ARM+{100} | DEF+{26} | THR+{10}",100,0,'heavy_plate',7500)
+    reinforced_chain = Item(armor_list_img[12], 0.8,f"Reinforced chain mail. ARM+{48} | DEF+{14} | THR+{5}",48,0,'reinforced_chain',2200)
+    lamellar_armor = Item(armor_list_img[13], 0.8,f"Lamellar armor. ARM+{44} | DEF+{20} | THR+{6}",44,0,'lamellar_armor',1800)
+    plate_armor = Item(armor_list_img[14], 0.8,f"Plate armor. ARM+{80} | DEF+{22} | THR+{8}",80,0,'plate_armor',6000)
+    armor_list.extend([])
 
     gloves_list = []
     travel_gloves = Item(gloves_list_img[0], 0.8,f'Travel gloves. DEF+{4} | ARM+{4}',4,0,'travel_gloves',150)
@@ -3628,33 +3658,42 @@ def global_map():
     tournament_gloves = Item(gloves_list_img[10], 0.8,f'Tournament gloves. DEF+{20} | ARM+{40} | THR+{6}',40,0,'tournament_gloves',3000)
     war_gloves = Item(gloves_list_img[11], 0.8,f'War gloves. DEF+{14} | ARM+{28} | THR+{3}',28,0,'war_gloves',2000)
     basilisk_gloves = Item(gloves_list_img[12], 0.8,f'Basilisk gloves. DEF+{10} | ARM+{20} | Tricks+{4} | Fire/Poison Res.+{60}',20,0,'basilisk_gloves',4000)
-
-    gloves_list.extend([light_leather_gloves,leather_gloves,reinforced_gloves,
-                        light_plate_gloves,thieves_gloves,plate_gloves,tournament_gloves,war_gloves,basilisk_gloves])
+    gloves_list.extend([])
 
     pants_list = []
     cloth_pants = Item(pants_list_img[0], 0.8,f'Cloth pants. DEF+{4} | ARM+{4}',4,0,'cloth_pants',200)
-    monk_pants = Item(pants_list_img[1], 0.8,f'Monk pants. DEF+{8} | Block+{4}',8,0,'monk_pants',100)
+    monk_pants = Item(pants_list_img[1], 0.8,f'Monk pants. DEF+{8} | BLK+{4}',8,0,'monk_pants',100)
     leather_pants = Item(pants_list_img[2], 0.8,f'Leather pants. DEF+{8} | ARM+{20}',20,0,'leather_pants',300)
     light_chain_pants = Item(pants_list_img[3], 0.8,f'Light chain pants. DEF+{12} | ARM+{24} | THR+{2}',24,0,'light_chain_pants',900)
     reinforced_pants = Item(pants_list_img[4], 0.8,f'Reinforced pants. DEF+{10} | ARM+{22}',22,0,'reinforced_pants',1200)
     light_plate_pants = Item(pants_list_img[5], 0.8,f'Light plate pants. DEF+{10} | ARM+{28} | THR+{4}',28,0,'light_plate_pants',1400)
-    plate_pants = Item(pants_list_img[6], 0.8,f'Plate pants. DEF+{12} | ARM+{32} | Threshold+{6}',32,0,'plate_pants',3200)
-    heavy_plate_pants = Item(pants_list_img[7], 0.8,f'Heavy plate pants. DEF+{16} | ARM+{40} | THR+{8}',40,0,'heavy_plate_pants',2000)
-
-    pants_list.extend([leather_pants,reinforced_pants,light_plate_pants,heavy_plate_pants,plate_pants])
+    plate_pants = Item(pants_list_img[6], 0.8,f'Plate pants. DEF+{12} | ARM+{32} | THR+{6}',32,0,'plate_pants',2200)
+    heavy_plate_pants = Item(pants_list_img[7], 0.8,f'Heavy plate pants. DEF+{14} | ARM+{36} | THR+{8}',36,0,'heavy_plate_pants',2600)
+    tournament_pants = Item(pants_list_img[8], 0.8,f'Tournment pants. DEF+{16} | ARM+{42} | THR+{10}',42,0,'tournament_pants',3400)
+    pants_list.extend([])
 
     dagger_list = []
-    steel_dagger = Item(dagger_list_img[0], 0.8,f'Steel dagger. Melee Attack+{6} | Crit+{3} | Block+{6}',6,0,'steel_dagger',900)
+    steel_dagger = Item(dagger_list_img[0], 0.8,f'Steel dagger. Melee Attack+{6} | Crit+{3} | BLK+{6}',6,0,'steel_dagger',900)
     thief_dagger = Item(dagger_list_img[1], 0.8,f'Thief\'s dagger. Melee Attack+{4} | Crit+{6}',6,0,'thief_dagger',400)
-    ranger_dagger = Item(dagger_list_img[2], 0.8,f'Ranger dagger. Melee Attack+{12} | Crit+{8} | Block+{8}',12,0,'ranger_dagger',1200)
+    ranger_dagger = Item(dagger_list_img[2], 0.8,f'Ranger dagger. Melee Attack+{12} | Crit+{8} | BLK+{8}',12,0,'ranger_dagger',1200)
     butcher_dagger = Item(dagger_list_img[3], 0.8,f'Butcher\'s dagger. Melee Attack+{10} | Crit+{4}',10,0,'butcher_dagger',600)
-    common_dagger = Item(dagger_list_img[4], 0.8,f'Common dagger. Melee Attack+{2} | Block+{6}',6,0,'common_dagger',300)
-    broad_dagger = Item(dagger_list_img[5], 0.8,f'Broad dagger. Melee Attack+{6} | Block+{8}',8,0,'broad_dagger',450)
+    common_dagger = Item(dagger_list_img[4], 0.8,f'Common dagger. Melee Attack+{2} | BLK+{6}',6,0,'common_dagger',300)
+    broad_dagger = Item(dagger_list_img[5], 0.8,f'Broad dagger. Melee Attack+{6} | BLK+{8}',8,0,'broad_dagger',450)
     hunt_knife = Item(dagger_list_img[6], 0.8,f'Hunt knife. Melee Attack+{5}',5,0,'hunt_knife',200)
-    war_dagger = Item(dagger_list_img[7], 0.8,f'War dagger. Melee Attack+{16} | Crit+{3} | Block+{12}',16,0,'war_dagger',1600)
+    war_dagger = Item(dagger_list_img[7], 0.8,f'War dagger. Melee Attack+{16} | Crit+{3} | BLK+{12}',16,0,'war_dagger',1600)
+    storm_dagger = Item(dagger_list_img[8], 0.8,f'Storm dagger. Melee Attack+{20} | BLK+{10} | Energy Res.+{20}',20,0,'storm_dagger',1400)
+    sting_dagger = Item(dagger_list_img[9], 0.8,f'Sting dagger. Melee Attack+{24} | Crit+{8}',24,0,'sting_dagger',2200)
+    bone_dagger = Item(dagger_list_img[10], 0.8,f'Bone dagger. Melee Attack+{6} | BLK+{12} | DEF+{6}',12,0,'bone_dagger',1150)
+    druid_dagger = Item(dagger_list_img[11], 0.8,f'Druid dagger. Melee Attack+{24} | Retaliate+{12} | Health+{24}',24,0,'druid_dagger',1700)
+    sun_dagger = Item(dagger_list_img[12], 0.8,f'Sun dagger. Melee Attack+{20} | BLK+{10} | Fire Res.+{20}',20,0,'sun_dagger',1400)
+    redsteel_dagger = Item(dagger_list_img[13], 0.8,f'Redsteel dagger. Melee Attack+{24} |  BLK+{8}',24,0,'redsteel_dagger',1600)
+    royal_dagger = Item(dagger_list_img[14], 0.8,f'Royal dagger. Melee Attack+{10} | Retaliate+{10}',10,0,'royal_dagger',1900)
+    mercenary_dagger = Item(dagger_list_img[15], 0.8,f'Mercenary dagger. Melee Attack+{8} | Crit+{2} | BLK+{4}',8,0,'mercenary_dagger',800)
+    quality_dagger = Item(dagger_list_img[16], 0.8,f'Quality dagger. Melee Attack+{10} | Crit+{1} | BLK+{6}',10,0,'quality_dagger',900)
+    knight_dagger = Item(dagger_list_img[17], 0.8,f'Knight dagger. Melee Attack+{20} | Crit+{4} | BLK+{8}',20,0,'knight_dagger',2000)
+    duel_dagger = Item(dagger_list_img[18], 0.8,f'Duel dagger. Melee Attack+{12} | Retaliate+{6} | BLK+{6}',12,0,'duel_dagger',1800)
 
-    dagger_list.extend([war_dagger,ranger_dagger])
+    dagger_list.extend([])
 
     sword_list = []
     steel_sword = Item(sword_list_img[0], 0.8,f'Steel sword. Melee Attack+{16}',16,0,'steel_sword',900)
@@ -3665,33 +3704,61 @@ def global_map():
     spider_sword = Item(sword_list_img[5], 0.8,f'Spider sword. Melee Attack+{30} | Crit+{3}',30,0,'spider_sword',2600)
     soldier_sword = Item(sword_list_img[6], 0.8,f'Soldier\'s sword. Melee Attack+{24}',24,0,'soldier_sword',1600)
     mercenary_sword = Item(sword_list_img[7], 0.8,f'Mercenary sword. Melee Attack+{28}',28,0,'mercenary_sword',1900)
-
-    sword_list.extend([mercenary_sword,the_sunrise,spider_sword,short_sword])
+    broad_sword = Item(sword_list_img[8], 0.8,f'Broad sword sword. Melee Attack+{22}',22,0,'broad_sword',1400)
+    snake_sword = Item(sword_list_img[9], 0.8,f'Snake sword. Melee Attack+{40} | Crit+{6}',40,0,'snake_sword',2650)
+    great_sword = Item(sword_list_img[10], 0.8,f'Great sword. Melee Attack+{38} | BLK+{4}',38,0,'great_sword',1750)
+    paladin_sword = Item(sword_list_img[11], 0.8,f'Paladin sword. Melee Attack+{48} | BLK+{12}',48,0,'paladin_sword',2700)
+    pirate_sword = Item(sword_list_img[12], 0.8,f'Pirate sword. Melee Attack+{18}',18,0,'pirate_sword',950)
+    aircutter = Item(sword_list_img[13], 0.8,f'Aircutter. Melee Attack+{32} | Crit+{8} | Retaliate+{12}',32,0,'aircutter',3400)
+    captain_sword = Item(sword_list_img[14], 0.8,f'Captain sword. Melee Attack+{26} | BLK+{8}',26,0,'captain_sword',1800)
+    sabre = Item(sword_list_img[15], 0.8,f'Sabre. Melee Attack+{24} | Retaliate+{4} | BLK+{4}',24,0,'sabre',1600)
+    temple_sword = Item(sword_list_img[16], 0.8,f'Temple sword. Melee Attack+{36} | Crit+{6}',36,0,'temple_sword',3400)
+    nomad_sword = Item(sword_list_img[17], 0.8,f'Nomad sword. Melee Attack+{26}',28,0,'nomad_sword',1250)
+    curved_sword = Item(sword_list_img[18], 0.8,f'Curved sword. Melee Attack+{32}',32,0,'curved_sword',1550)
+    legion_sword = Item(sword_list_img[19], 0.8,f'Legion sword. Melee Attack+{24} | BLK+{6}',24,0,'legion_sword',1450)
+    pretorian_sword = Item(sword_list_img[20], 0.8,f'Pretorian sword. Melee Attack+{32}| BLK+{12}',32,0,'pretorian_sword',1900)
+    the_sorrow = Item(sword_list_img[21], 0.8,f'The Sorrow. Melee Attack+{72} | Crit+{10}',72,0,'the_sorrow',4400)
+    sword_list.extend([])
 
     shoes_list = []
     simple_shoes = Item(shoes_list_img[0], 0.8,f'Slippers. DEF+{2}',2,0,'simple_shoes',50)
     travel_shoes = Item(shoes_list_img[1], 0.8,f'Travel shoes. DEF+{4} | ARM+{8}',8,0,'travel_shoes',300)
     light_plate_shoes = Item(shoes_list_img[2], 0.8,f'Light plate shoes. DEF+{8} | ARM+{24} | THR+{2}',24,0,'light_plate_shoes',2000)
     light_chain_shoes = Item(shoes_list_img[3], 0.8,f'Light chain shoes. DEF+{6} | ARM+{16} | THR+{1}',16,0,'light_chain_shoes',1400)
-    plate_shoes = Item(shoes_list_img[4], 0.8,f'Plate shoes. DEF+{10} | ARM+{30} | Threshold+{3}',30,0,'plate_shoes',2800)
+    plate_shoes = Item(shoes_list_img[4], 0.8,f'Plate shoes. DEF+{10} | ARM+{30} | THR+{3}',30,0,'plate_shoes',2400)
     common_shoes = Item(shoes_list_img[5], 0.8,f'Common shoes. DEF+{2} | ARM+{4}',4,0,'common_shoes',200)
     hunter_shoes = Item(shoes_list_img[6], 0.8,f'Hunter shoes. DEF+{6} | ARM+{6}',6,0,'hunter_shoes',500)
     ranger_shoes = Item(shoes_list_img[7], 0.8,f'Ranger shoes. DEF+{10} | ARM+{6}',10,0,'ranger_shoes',900)
-
-    shoes_list.extend([plate_shoes,hunter_shoes,light_plate_shoes,ranger_shoes])
+    heavy_plate_shoes = Item(shoes_list_img[8], 0.8,f'Heavy plate shoes. DEF+{12} | ARM+{36} | THR+{4}',36,0,'heavy_plate_shoes',2800)
+    shadow_shoes = Item(shoes_list_img[9], 0.8,f'Shadow shoes. DEF+{14} | ARM+{10} | Crit+{4}',14,0,'shadow_shoes',1600)
+    arcane_shoes = Item(shoes_list_img[10], 0.8,f'Arcane shoes. DEF+{6} | ARM+{6} | Elemental Res.+{10}',10,0,'arcane_shoes',2300)
+    trader_shoes = Item(shoes_list_img[11], 0.8,f'Trader shoes. ARM+{20} | Health+{20} | Block+{8}',20,0,'trader_shoes',1300)
+    leather_shoes = Item(shoes_list_img[12], 0.8,f'Leather shoes. DEF+{6} | ARM+{12}',12,0,'leather_shoes',800)
+    tournament_shoes = Item(shoes_list_img[13], 0.8,f'Tournament shoes. DEF+{12} | ARM+{48} | THR+{6}',48,0,'tournament_shoes',3600)
+    snakeskin_shoes = Item(shoes_list_img[14], 0.8,f'Snakeskin shoes. DEF+{10} | ARM+{10} | Retaliate+{8}',10,0,'snakeskin_shoes',1450)
+    shoes_list.extend([])
 
     ring_list = []
     silver_ring = Item(ring_list_img[0], 0.8,f"Silver ring. Elemental Res.+{6}",6,0,'silver_ring',150)
     moon_ring = Item(ring_list_img[1], 0.8,f'Moon ring. Arcana Res.+{20} | Tricks+{2} ',20,0,'moon_ring',300)
     holy_ring = Item(ring_list_img[2], 0.8,f"Holy ring. Elemental Res+{12} | ARM+{6}",12,0,'holy_ring',400)
-    trinity_ring = Item(ring_list_img[3], 0.8,f"Trinity ring. DEF+{5} | Block +{5} | THR+{5}",5,0,'trinity_ring',4000)
+    trinity_ring = Item(ring_list_img[3], 0.8,f"Trinity ring. DEF+{5} | Block +{5} | THR+{5}",5,0,'trinity_ring',3000)
     minor_protection_ring = Item(ring_list_img[4], 0.8,f"Minor protection ring. ARM+{20} | THR+{2}",20,0,'minor_protection_ring',1600)
     minor_health_ring = Item(ring_list_img[5], 0.8,f"Minor health ring. Health+{20}",20,0,'minor_health_ring',1200)
     emerald_ring = Item(ring_list_img[6], 0.8,f"Emerald ring. Poison res.+{20}",20,0,'emerald_ring',900)
     unity_ring = Item(ring_list_img[7], 0.8,f"Unity ring. Melee Attack+{6} | Ranged Attack+{6}",6,0,'unity_ring',1300)
-
-    ring_list.extend([unity_ring,emerald_ring,minor_health_ring,minor_protection_ring,trinity_ring])
-
+    protection_ring = Item(ring_list_img[9], 0.8,f"Protection ring. ARM+{30} | THR+{3}",30,0,'protection_ring',2100)
+    health_ring = Item(ring_list_img[8], 0.8,f"Health ring. Health+{40}",40,0,'health_ring',1900)
+    medusa_ring = Item(ring_list_img[10], 0.8,f"Medusa ring. Health+{10} | THR+{2}",10,0,'medusa_ring',1250)
+    bloodoath_ring = Item(ring_list_img[11], 0.8,f"Bloodoath ring. Crit+{7}",7,0,'bloodoath_ring',2200)
+    duel_ring = Item(ring_list_img[12], 0.8,f"Duel ring. BLK+{8} | Melee Attack+{4}",8,0,'duel_ring',1700)
+    snake_ring = Item(ring_list_img[13], 0.8,f"Snake ring. Retaliation+{8} | DEF+{4}",8,0,'snake_ring',1450)
+    obscurity_ring = Item(ring_list_img[14], 0.8,f"Obscurity ring. Stealth+{20} | Crit+{2}",20,0,'obscurity_ring',1300)
+    ocean_ring = Item(ring_list_img[15], 0.8,f"Ocean ring. Energy/Frost Res.+{40} | Tricks+{2}",40,0,'ocean_ring',2300)
+    war_ring = Item(ring_list_img[16], 0.8,f"War ring. DEF+{12} | Block +{6} | THR+{3}",12,0,'war_ring',2650)
+    bone_ring = Item(ring_list_img[17], 0.8,f"Bone ring. Armor+{20} | Poison Res.+{40}",40,0,'bone_ring',2250)
+    sun_ring = Item(ring_list_img[18], 0.8,f"Sun ring. Fire/Arcane Res.+{40} | Tricks+{2}",40,0,'sun_ring',2300)
+    ring_list.extend([])
 
     inv_list = []
     letter_1 = Item(trinkets_list_img[0], 0.8, f'A signed royal document that grants you freedom',0,0,'royal_pardon',0)
@@ -3701,8 +3768,7 @@ def global_map():
     lockmaster_tools = Item(trinkets_list_img[47], 0.8, f'Tools used by thieves and burglars',20,0, 'lockmaster_tools',750)
     alchemist_kit = Item(trinkets_list_img[46], 0.8, f'A set of tools for preparing potions',20,0, 'alchemist_kit',750)
 
-
-    inv_list.extend([letter_1, apple,crowbar,lockmaster_tools,alchemist_kit])
+    inv_list.extend([letter_1, apple])
 
     bow_list = []
     simple_bow = Item(bows_list_img[0], 0.8,f'Makeshift bow. Ranged Attack+{8}',8,0,'simple_bow',100)
@@ -3713,8 +3779,17 @@ def global_map():
     militia_bow = Item(bows_list_img[5], 0.8,f'Militia bow. Ranged Attack+{16}',16,0,'militia_bow',550)
     redwood_bow = Item(bows_list_img[6], 0.8,f'Redwood bow. Ranged Attack+{20}',20,0,'redwood_bow',800)
     curved_bow = Item(bows_list_img[7], 0.8,f'Curved bow. Ranged Attack+{24} | Crit+{3}',24,0,'curved_bow',1100)
-
-    bow_list.extend([metal_bow,curved_bow,peasant_bow,war_bow,redwood_bow])
+    nomad_bow = Item(bows_list_img[8], 0.8,f'Nomad bow. Ranged Attack+{26} | Crit+{4}',26,0,'nomad_bow',1200)
+    bone_bow = Item(bows_list_img[9], 0.8,f'Bone bow. Ranged Attack+{24} | Crit+{2} | Arcana Res.+{20}',24,0,'bone_bow',1300)
+    marksman_bow = Item(bows_list_img[10], 0.8,f'Marksman bow. Ranged Attack+{36} | Crit+{9}',36,0,'marksman_bow',2300)
+    forest_bow = Item(bows_list_img[11], 0.8,f'Forest bow. Ranged Attack+{24} | Crit+{12} | Poison/Frost Res.+{20}',24,0,'forest_bow',1800)
+    blackwood_bow = Item(bows_list_img[12], 0.8,f'Blackwood bow. Ranged Attack+{32} | Crit+{7}',32,0,'blackwood_bow',2100)
+    flameguard = Item(bows_list_img[13], 0.8,f'Flameguard. Ranged Attack+{40} | Crit+{10} | Fire Res.+{20}',40,0,'flameguard',3600)
+    mechanized_bow = Item(bows_list_img[14], 0.8,f'Mechanized bow. Ranged Attack+{48} | Crit+{6}',48,0,'mechanized_bow',4000)
+    soldier_bow = Item(bows_list_img[15], 0.8,f'Soldier bow. Ranged Attack+{30} | Crit+{4} | Tricks+{2}',30,0,'soldier_bow',1700)
+    long_bow = Item(bows_list_img[16], 0.8,f'Long bow. Ranged Attack+{42}',42,0,'long_bow',2600)
+    valley_bow = Item(bows_list_img[17], 0.8,f'Valley bow. Ranged Attack+{18} | Crit+{1}',20,0,'valley_bow',650)
+    bow_list.extend([])
 
     list_of_items = []
     list_of_items.extend([belt_list, necklace_list, helm_list, cloak_list,
@@ -3779,9 +3854,6 @@ def global_map():
     mx, my = pygame.mouse.get_pos()
     player_rect.x, player_rect.y = mouse_position
 
-    world_map = pygame.image.load("WorldMap/Map.png").convert_alpha()
-    world_map = pygame.transform.scale(world_map, (int(WINDOW_SIZE[0]), (int(WINDOW_SIZE[1]))))
-
     GM_normal_icon = pygame.image.load("WorldMap/cursor_final.png").convert_alpha()
     GM_normal_icon = pygame.transform.scale(GM_normal_icon, (int(WINDOW_SIZE[0] * 0.02), (int(WINDOW_SIZE[1] * 0.03))))
 
@@ -3802,9 +3874,6 @@ def global_map():
 
     gm_talk_icon = pygame.image.load("WorldMap/talk_icon.png").convert_alpha()
     gm_talk_icon = pygame.transform.scale(gm_talk_icon, (int(WINDOW_SIZE[0] * 0.02), (int(WINDOW_SIZE[1] * 0.04))))
-
-    gm_party_icon = pygame.image.load("WorldMap/party_icon.png").convert_alpha()
-    gm_party_icon = pygame.transform.scale(gm_party_icon, (int(WINDOW_SIZE[0] * 0.02), (int(WINDOW_SIZE[1] * 0.04))))
 
     gm_infosheet = pygame.image.load("WorldMap/gm_scroll.png").convert_alpha()
     gm_infosheet = pygame.transform.scale(gm_infosheet, (int(WINDOW_SIZE[0] * 0.3), (int(WINDOW_SIZE[1] * 0.3))))
@@ -3847,6 +3916,7 @@ def global_map():
 
 # -------------------------------------QuestList------------------------------------------
     toggle_char_sheet = False
+    toggle_journal = False
     global toggle_game_menu
     toggle_game_menu = False
     pyautogui.moveTo(750, 400)
@@ -3859,16 +3929,8 @@ def global_map():
     movement_modifier = 0
     inv_modifier = 0
     scroll = [0, 0]
-    party_movement = [0, 0]
     GM_player_rect = pygame.Rect((display.get_width() / 2), (display.get_height() / 2), 50, 50)
-    GM_party_rect = gm_party_icon.get_rect()
-    GM_party_rect.width,GM_party_rect.height = 2,2
-        #pygame.Rect(5, 5, 5, 5)
-        #gm_party_icon.get_rect()
     encounter_timer = 0
-    mine_assault_timer = 0
-    mine_encounter = False
-    chest_encounter = False
     encounter = False
     throw_dice = False
     escape_dice = True
@@ -3907,42 +3969,6 @@ def global_map():
     chest_box = []
     town_box = []
 #------------------------------------------------------------------------------
-# ---------------------------TileCollision-------------------------------------
-    def collision_test(rect, tiles):
-        hit_list = []
-        for tile in tiles:
-            if rect.colliderect(tile):
-                hit_list.append(tile)
-        return hit_list
-
-    # ---------------------------XCollision-----------------------------
-    def move(rect, movement, tiles):
-        collision_types = {'top': False, 'bottom': False, 'right': False, 'left': False}
-        rect.x += movement[0]
-        hit_list = collision_test(rect, tiles)
-        for tile in hit_list:
-            if movement[0] > 0:
-                rect.right = tile.left
-                movement[0] -= 0.5
-                collision_types['right'] = True
-            elif movement[0] < 0:
-                rect.left = tile.right
-                movement[0] += 0.5
-                collision_types['left'] = True
-        # ---------------------------YCollision-----------------------------
-        rect.y += movement[1]
-        hit_list = collision_test(rect, tiles)
-        for tile in hit_list:
-            if movement[1] > 0:
-                rect.bottom = tile.top
-                movement[1] -= 0.5
-                collision_types['bottom'] = True
-            elif movement[1] < 0:
-                rect.top = tile.bottom
-                movement[1] += 0.5
-                collision_types['top'] = True
-        return rect, collision_types
-
     def gm_draw_text(text, font, text_col, x, y):
         img = font.render(text, True, text_col)
         display.blit(img, (x, y))
@@ -3952,10 +3978,66 @@ def global_map():
         gm_draw_text(f'{button.wealth}', GM_font_ESK, (255, 225, 100), bag_of_coins.get_width() - 30,
                      display.get_height() * 0.92)
 
+#---------------------------------------CollisionMask -----------------------------------
+    world_map = pygame.image.load("WorldMap/Map.png").convert_alpha()
+    world_map = pygame.transform.scale(world_map, (int(WINDOW_SIZE[0]), (int(WINDOW_SIZE[1]))))
+    #map_border = pygame.image.load("WorldMap/map_mask.png").convert_alpha()
+    #map_border = pygame.transform.scale(map_border, (int(WINDOW_SIZE[0]), (int(WINDOW_SIZE[1]))))
+    gm_party_icon = pygame.image.load("WorldMap/party_icon.png").convert_alpha()
+    gm_party_icon = pygame.transform.scale(gm_party_icon, (int(WINDOW_SIZE[0] * 0.02), (int(WINDOW_SIZE[1] * 0.04))))
+#------------------------------------------------------------------------------------------
+    party_movement = [0, 0]
+    class PlayerParty:
+        def __init__(self, posX, posY):
+            self.img = gm_party_icon
+            self.rect = self.img.get_rect()
+            self.rect.w,self.rect.h = 1,1
+            self.rect.x = posX
+            self.rect.y = posY
+            self.speed = 0.25
+
+        def draw(self):
+            self.view = pygame.draw.circle(display, (255,255,255), (self.rect.centerx, self.rect.centery),30,1)
+            display.blit(self.img, (self.rect.x-12, self.rect.y-14))
+
+        def collision_test(self,tiles):
+            hit_list = []
+            for tile in tiles:
+                if self.rect.colliderect(tile):
+                    hit_list.append(tile)
+            return hit_list
+
+        def move(self, tiles):
+            collision_types = {'top': False, 'bottom': False, 'right': False, 'left': False}
+            self.rect.x += party_movement[0]
+            hit_list = self.collision_test(tiles)
+            for tile in hit_list:
+                if moving_right and self.rect.colliderect(tile):
+                    party_movement[0] -= 5
+                    self.speed = 0
+                    collision_types['right'] = True
+                elif moving_left and self.rect.colliderect(tile):
+                    party_movement[0] += 5
+                    self.speed = 0
+                    collision_types['left'] = True
+            # ---------------------------YCollision-----------------------------
+            self.rect.y += party_movement[1]
+            hit_list = self.collision_test(tiles)
+            for tile in hit_list:
+                if moving_up and self.rect.colliderect(tile):
+                    party_movement[1] += 5
+                    self.speed = 0
+                    collision_types['bottom'] = True
+                elif moving_down and self.rect.colliderect(tile):
+                    party_movement[1] -= 5
+                    self.speed = 0
+                    collision_types['top'] = True
+            return self.rect, collision_types
+
+#----------------------------------------------------------------------------------
     def gm_draw_map():
         display.blit(world_map, (-100 - scroll[0], 0 - scroll[1]))
-
-#---------------------------------------WhileSounds-----------------------------------
+#-------------------------------------WhileSounds-----------------------------------
     def play_while_sound (sound):
         global whileSound
         global whileSound_counter
@@ -3965,8 +4047,8 @@ def global_map():
         elif whileSound_counter == 10:
             whileSound_counter = 0
 
-    #------------------------------------Traps----------------------------------------
-    def activate_trap (trapsound, count, minDamage, maxDamage):
+#------------------------------------Traps----------------------------------------
+    def activate_trap(trapsound, count, minDamage, maxDamage):
         global trapSound
         global trapCounter
         if trapSound == True:
@@ -3976,6 +4058,11 @@ def global_map():
             trapSound = False
         elif trapCounter == count:
             trapCounter = 0
+
+    def initiate_encounter (encounter, mapsize):
+        with open('BattleScreen/encounter_conditions.txt', 'w') as out:
+            out.writelines([str(encounter) + "\n", str(mapsize) + "\n"])
+        battle_module()
 
  #----------------------------------------WorldMapMessage------------------------------------
     class MessageText(pygame.sprite.Sprite):
@@ -4034,8 +4121,38 @@ def global_map():
         img = pygame.image.load(f'WorldMap/quest/quest_img/{x}.png').convert_alpha()
         img = pygame.transform.scale(img,  (int(WINDOW_SIZE[0] * 0.2), (int(WINDOW_SIZE[1] * 0.44))))
         quest_img.append(img)
+    #-----------------------------------QuestJournal-------------------------------
+    gm_quest_book = pygame.image.load("WorldMap/quest_book.png").convert_alpha()
+    gm_quest_book = pygame.transform.scale(gm_quest_book, (int(WINDOW_SIZE[0] * 0.3), (int(WINDOW_SIZE[1] * 0.4))))
 
-    # -----------------------------------Quest-----------------------------------
+    log_entries = []
+    class Journal():
+        def __init__(self, x, y, chapter):
+            self.x = x
+            self.y = y
+            self.max_chapter = 0
+            self.cur_chapter = chapter
+
+        def log_scroll(self):
+            display.blit(gm_quest_book, (display.get_width() * 0.3, display.get_height() * 0.3))
+            img = fontStats.render(f'Chapter {self.cur_chapter}', True, (61, 38, 34))
+            display.blit(img, (WINDOW_SIZE[0]//4.2, WINDOW_SIZE[1]//3.8))
+
+        # def log_entry(self, text, font, text_col, x, y):
+        #     img = font.render(text, True, text_col)
+        #     display.blit(img, (x, y))
+        #
+        # def log_text(self, text, font, text_col, x, y):
+        #     img = font.render(text, True, text_col)
+        #     display.blit(img, (x, y))
+
+        def initiate(self):
+            self.log_scroll()
+            # self.log_entry()
+            # self.log_text()
+
+    journal = Journal(WINDOW_SIZE[0]//2, WINDOW_SIZE[1]//2, 1)
+    # -----------------------------------Quest-------------------------------------
     class Quest(pygame.sprite.Sprite):
         def __init__(self, x, y, img, story_image, story_text, status):
             pygame.sprite.Sprite.__init__(self)
@@ -4050,7 +4167,7 @@ def global_map():
         def draw_story(self, lore, xmodifier, ymodifier):
             msg_list = []
             line_spacing_count = 0
-            if self.rect.collidepoint(mouse_position) and encounter == False and self.rect.colliderect(GM_party_rect):
+            if self.rect.collidepoint(mouse_position) and encounter == False and self.rect.colliderect(player_party.rect):
                 display.blit(self.story_image, (self.rect.x - 120, self.rect.y + 10))
                 gm_draw_text(self.story_text, GM_font_TNR, (255, 225, 100), self.rect.x - 100, self.rect.y + 20)
                 for line in lore.split('\n'):
@@ -4061,7 +4178,7 @@ def global_map():
                 play_while_sound(scroll_sound)
 
         def hide_quest(self):
-            if self.rect.collidepoint(mouse_position) and self.status == 'unlocked' and self.rect.colliderect(GM_party_rect):
+            if self.rect.collidepoint(mouse_position) and self.status == 'unlocked' and self.rect.colliderect(player_party.rect):
                 for count, i in enumerate(quest_box):
                     if all(i.status) != 'invisible':
                         i.status = 'invisible'
@@ -4087,7 +4204,7 @@ def global_map():
         def initiate(self):
             activate = False
             pos = pygame.mouse.get_pos()
-            if self.rect.collidepoint(mouse_position) and self.rect.colliderect(GM_party_rect) and encounter == False:
+            if self.rect.collidepoint(mouse_position) and self.rect.colliderect(player_party.rect) and encounter == False:
                 if self.rect.collidepoint(pos):
                     if pygame.mouse.get_pressed()[0] == 1 and self.clicked == False:
                         activate = True
@@ -4146,7 +4263,7 @@ def global_map():
                     surface.blit(img, (x, y))
 
         def hide_mine(self):
-            if self.rect.collidepoint(mouse_position) and self.status != 'invisible' and self.rect.colliderect(GM_party_rect):
+            if self.rect.collidepoint(mouse_position) and self.status != 'invisible' and self.rect.colliderect(player_party.rect):
                 for count, i in enumerate(mines_box):
                     if all(i.status) != 'invisible':
                         i.status = 'invisible'
@@ -4161,10 +4278,9 @@ def global_map():
                     if all(l.status) != 'invisible':
                         l.status = 'invisible'
 
-
         def initiate(self):
             activate = False
-            if self.rect.collidepoint(mouse_position) and self.rect.colliderect(GM_party_rect) \
+            if self.rect.collidepoint(mouse_position) and self.rect.colliderect(player_party.rect) \
                     and encounter == False and self.owner != 'player' and self.status != 'invisible' and toggle_char_sheet == False:
                     if pygame.mouse.get_pressed()[0] == 1 and self.clicked == False:
                         activate = True
@@ -4175,7 +4291,7 @@ def global_map():
 
 #-----------------------------------------------------------------------------------
     def mine_encounter (surface, mine, mine_img, mine_text, textX, textY):
-        if mine.rect.collidepoint(mouse_position) and mine.rect.colliderect(GM_party_rect):
+        if mine.rect.collidepoint(mouse_position) and mine.rect.colliderect(player_party.rect):
             if mine.owner != 'player' and mine.status != 'invisible' and toggle_char_sheet == False:
                 mine.mine_text(surface, mine_img,mine_text, fontDescription, (0, 0, 0), (mine.rect.x - textX), (mine.rect.y-textY))
                 play_while_sound(scroll_sound)
@@ -4218,7 +4334,7 @@ def global_map():
                 surface.blit(scroll,(x, y))
 
         def hide_chest(self):
-            if self.rect.colliderect(GM_party_rect) and encounter == False \
+            if self.rect.colliderect(player_party.rect) and encounter == False \
                and self.status != 'invisible' and toggle_char_sheet == False:
                 for count, i in enumerate(chest_box):
                    if all(i.status) != 'invisible':
@@ -4235,7 +4351,7 @@ def global_map():
                         l.status = 'invisible'
 
         def initiate(self, item0,item1, item2,item3,item4,item5,item6,item7):
-            if self.rect.colliderect(GM_party_rect) and encounter == False \
+            if self.rect.colliderect(player_party.rect) and encounter == False \
                 and self.status != 'invisible' and toggle_char_sheet == False \
                 and investigation >= self.investigation:
                 items_in_chest.extend([item0,item1,item2,item3,item4,item5,item6,item7])
@@ -4243,7 +4359,7 @@ def global_map():
                     if self.trap_active == False and traps < self.trap:
                         self.trap_active = True
                         activate_trap(snap_trap_sound,100,5,10)
-                        message_text = MessageText(GM_party_rect.centerx, GM_party_rect.centery-20,
+                        message_text = MessageText(player_party.rect.centerx, player_party.rect.centery-20,
                                                    f'Trap! {self.trap}',(255,255,255))
                         message_text_group.add(message_text) #"#fdc253"
                         message_text_group.update()
@@ -4264,7 +4380,7 @@ def global_map():
                        play_while_sound(chest_open_sound)
                 elif lockpicking < self.difficulty:
                       play_while_sound(locked_sound)
-                      message_text = MessageText(GM_party_rect.centerx, GM_party_rect.centery-20,
+                      message_text = MessageText(player_party.rect.centerx, player_party.rect.centery-20,
                                                  f'The chest is locked! Difficulty: {self.difficulty} || Trap: {self.trap}',(255,255,255))
                       message_text_group.add(message_text)
                       message_text_group.update()
@@ -4272,6 +4388,9 @@ def global_map():
     #----------------------------------------StoredItems--------------------------------------
     steal_item = button.ToggleButton(display,500, 370, steal_icon, 20, 30, 0, False, 'Steal')
     #-----------------------------------------------------------------------------------------
+    npc_talk = pygame.image.load("WorldMap/talk_icon.png").convert_alpha()
+    npc_talk = pygame.transform.scale(npc_talk, (int(WINDOW_SIZE[0] * 0.01), (int(WINDOW_SIZE[1] * 0.02))))
+
     path, dirs, trader_potions = next(os.walk("MainMenuRes/inventory/trader_potions"))
     trader_potions_count = len(trader_potions)
     TRADER_POTION_TYPES = trader_potions_count
@@ -4282,12 +4401,12 @@ def global_map():
         trader_potions_img.append(img)
 #-------------------------------------------------Unlocked---------------------------------
     potions_dict = {}
-    potions_dict.update({"0":False,"1":False,"2":False,"3":False,"4":False,"5":False,"6":False,"7":False,"8":False,
+    potions_dict.update({"0":False,"1":False,"2":False,"3":False,"4":False,"5":False,"6":False,"7":False,"8.png":False,
                          "9":False,"10":False,"11":False,"12":False,"13":False,"14":False,"15":False,"16":False,"17":False,
                          "18":False,"19":False,"20":False,"21":False,"22":False,"23":False,"24":False,"25":False,"26":False})
 
     troops_dict = {}
-    troops_dict.update({"0":False,"1":False,"2":False,"3":False,"4":False,"5":False,"6":False,"7":False,"8":False,"9":False,
+    troops_dict.update({"0":False,"1":False,"2":False,"3":False,"4":False,"5":False,"6":False,"7":False,"8.png":False,"9":False,
                         "10":False,"11":False,"12":False,"13":False,"14":False,"15":False,"16":False,"17":False,"18":False,
                         "19":False,"20":False,"21":False,"22":False,"23":False,"24":False,"25":False,"26":False,"27":False,
                         "28":False,"29":False,"30":False,"31":False,"32":False,"33":False,"34":False,"35":False,"36":False})
@@ -4317,6 +4436,7 @@ def global_map():
             #self.rect.topleft = ()
             self.surface = surface
             self.taken = False
+            self.clicked = False
             self.in_chest = in_chest
             self.available = available
             self.caught = False
@@ -4325,7 +4445,7 @@ def global_map():
         def get_item(self, list,item):
             self.list = list
             self.item = item
-            if self.item != None:
+            if self.item != None :
                list.extend([item])
             if self.item != None and self.type != 'item' and self.type != 'potion':
                     troops_dict.update({self.n:self.type})
@@ -4338,7 +4458,7 @@ def global_map():
                list.extend([item])
             if self.item != None and self.type != 'item' and self.type != 'potion':
                    troops_dict.update({self.n:self.type})
-            coins_sound.play()
+                   coins_sound.play()
             if button.start_wealth >= self.value:
                 button.wealth -= self.value
                 button.start_wealth = button.wealth
@@ -4360,6 +4480,12 @@ def global_map():
                 button.wealth -= self.value
                 button.start_wealth = button.wealth
 
+        def start_quest(self):
+            if self.type == 'caravan':
+                caravan_sound.play()
+                initiate_encounter(1,1)
+                party_movement[0],party_movement[1] = (self.list, self.item)
+
         def draw_chest_item (self,surface,x,y,Xmod,Ymod):
             self.Xmod = Xmod
             self.Ymod =Ymod
@@ -4367,6 +4493,8 @@ def global_map():
             if self.taken == False and self.available == True:
                 surface.blit(list_image,(x + Xmod,y + Ymod))
                 self.rect.topleft = (x + Xmod,y + Ymod)
+                if self.item == 'npc':
+                   surface.blit(npc_talk,(x+5 + Xmod,y+5 + Ymod))
 
         def stored_item_info(self,surface,font,text,value,col,x,y):
             if self.rect.collidepoint(mouse_position):
@@ -4376,9 +4504,10 @@ def global_map():
                     price = font.render(f'Cost: {value}', True, col)
                     surface.blit(price,(x,y+20))
                     if steal_item.toggled == True:
-                        steal_chance = int(thievery//2+(stealth+deception)//4 + luck) - self.value//100
-                        steal_try = font.render(f'Chance: {steal_chance}%', True, col)
-                        surface.blit(steal_try,(x+200,y+20))
+                        if self.type == 'potion' or self.type == 'item':
+                            steal_chance = int(thievery//2+(stealth+deception)//4 + luck) - self.value//50
+                            steal_try = font.render(f'Chance: {steal_chance}%', True, col)
+                            surface.blit(steal_try,(x+200,y+20))
 
         def chest_event_handler(self, event):
             if event.type == pygame.MOUSEBUTTONDOWN:
@@ -4394,6 +4523,20 @@ def global_map():
                             else:
                                 self.get_item(self.list,self.item)
 
+        def quest_npc_event_handler(self):
+            action = False
+            pos = pygame.mouse.get_pos()
+            if self.available == True:
+                if self.rect.collidepoint(pos):
+                    if pygame.mouse.get_pressed()[0] == 1 and self.clicked == False:
+                        time.sleep(0.1)
+                        action = True
+                        self.clicked = True
+                        self.start_quest()
+                    if pygame.mouse.get_pressed()[0] == 0:
+                        self.clicked = False
+                return action
+
         def store_event_handler(self, event):
             if steal_item.toggled==False and self.caught == False:
                 if self.taken == False and self.available == True:
@@ -4403,9 +4546,10 @@ def global_map():
                                 if self.rect.collidepoint(event.pos):
                                     self.taken = True
                                     self.in_chest = False
+                                    self.clicked = True
                                     if self.type == 'potion':
                                         self.buy_potion(self.list,self.item)
-                                    elif self.type != 'potion':
+                                    elif self.type != 'potion' and self.item != 'npc':
                                         self.buy_item(self.list,self.item)
 
             if steal_item.toggled==True:
@@ -4414,7 +4558,7 @@ def global_map():
                         if event.button == 1:
                             steal_dice= random.randint(0,100)
                             steal_chance = int(thievery//2+(stealth+deception)//4 + luck) - self.value//100
-                            if self.rect.collidepoint(event.pos):
+                            if self.rect.collidepoint(event.pos) and self.type != 1:
                                 if steal_chance >= steal_dice:
                                     self.taken = True
                                     self.in_chest = False
@@ -4428,8 +4572,8 @@ def global_map():
                                     print(steal_chance)
                                 else:
                                     self.caught = True
-                                    if self.caught == True and self.type != 1:
-                                        old_ways_battle()
+                                    if self.caught == True and self.type != 1 and self.value != 0:
+                                        initiate_encounter(0,0)
                                     steal_item.toggled = False
                                     self.countdown +=1
                                     if self.countdown >= 100:
@@ -4438,23 +4582,52 @@ def global_map():
 #---------------------------------------------------------------------------------------------
     #----------mercenaries---------
     hire_dunstan = StoredItem(display,units_img,0,troops_melee,Dunstan,True, False,'Your brother Dunstan',0,1)
+    hire_bartelago = StoredItem(display,units_img,5,troops_melee,Bartelago,True, False,'Mighty warrior Bartelago',0,1)
+    hire_anselm = StoredItem(display,units_img,6,troops_melee,Anselm,True, False,'Brother Anselm',0,1)
+    hire_regina = StoredItem(display,units_img,7,troops_ranged,Regina,True, False,'Ranger Regina',0,1)
+    hire_alba = StoredItem(display,units_img,9,troops_ranged,Alba,True, False,'Coven witch Alba',0,1)
+    hire_severin = StoredItem(display,units_img,8,troops_ranged,Severin,True, False,'Battle mage Severin',0,1)
+
     hire_light_archers = StoredItem(display,units_img,2,troops_ranged,Light_Archers,True, False,'A regiment of light archers',2000,1)
     hire_chevaliers = StoredItem(display,units_img,3,troops_cavalry,Chevaliers,True, False,'Armored assault cavalry',4000,1)
     hire_light_infantry = StoredItem(display,units_img,1,troops_melee,Light_Infantry,True, False,'A regiment of light infantry led by a captain',2000,1)
     hire_scouts = StoredItem(display,units_img,4,troops_support,Scouts,True, False,'A group of trained scouts',1200,1)
 
-
+    #----------------------------------miniquests-------------------------------------
+    qst_0 = StoredItem(display,gold_img,4,60,45,True, False,'Protect caravan to Bellenau for 250 gold',0,'caravan')
 
 #-------------potions----------
     ptn_0 = StoredItem(display,trader_potions_img,0,potions_dict,True,True, False,'Health potion',500,'potion')
-    ptn_1 = StoredItem(display,trader_potions_img,1,potions_dict,True,True, False,'Defence potion',1800,'potion')
+    ptn_1 = StoredItem(display,trader_potions_img,1,potions_dict,True,True, False,'Defence potion',1400,'potion')
     ptn_2 = StoredItem(display,trader_potions_img,2,potions_dict,True,True, False,'Acid',750,'potion')
     ptn_3 = StoredItem(display,trader_potions_img,3,potions_dict,True,True, False,'Antidote',300,'potion')
-    ptn_4 = StoredItem(display,trader_potions_img,4,potions_dict,True,True, False,'Berserk potion',1300,'potion')
+    ptn_4 = StoredItem(display,trader_potions_img,4,potions_dict,True,True, False,'Berserk potion',1200,'potion')
     ptn_5 = StoredItem(display,trader_potions_img,5,potions_dict,True,True, False,'Cleansing potion',400,'potion')
 
+    ptn_6 = StoredItem(display,trader_potions_img,6,potions_dict,True,True, False,'Frost shield',400,'potion')
+    ptn_7 = StoredItem(display,trader_potions_img,7,potions_dict,True,True, False,'Fire shield',400,'potion')
+    ptn_8 = StoredItem(display,trader_potions_img,8,potions_dict,True,True, False,'Energy shield',400,'potion')
+    ptn_9 = StoredItem(display,trader_potions_img,9,potions_dict,True,True, False,'Moon potion',400,'potion')
+    ptn_10 = StoredItem(display,trader_potions_img,10,potions_dict,True,True, False,'Rejuvenation',600,'potion')
+    ptn_11 = StoredItem(display,trader_potions_img,11,potions_dict,True,True, False,'Poison',900,'potion')
 
-    #--------------gold-----------
+    ptn_12 = StoredItem(display,trader_potions_img,12,potions_dict,True,True, False,'Deathkiss potion',500,'potion')
+    ptn_13 = StoredItem(display,trader_potions_img,13,potions_dict,True,True, False,'Dark Cloud potion',1200,'potion')
+    ptn_14 = StoredItem(display,trader_potions_img,14,potions_dict,True,True, False,'Celerity potion',850,'potion')
+    ptn_15 = StoredItem(display,trader_potions_img,15,potions_dict,True,True, False,'Ironskin potion',500,'potion')
+    ptn_16 = StoredItem(display,trader_potions_img,16,potions_dict,True,True, False,'Liquid frost',1100,'potion')
+    ptn_17 = StoredItem(display,trader_potions_img,17,potions_dict,True,True, False,'Ritual potion',2400,'potion')
+
+    ptn_18 = StoredItem(display,trader_potions_img,18,potions_dict,True,True, False,'Liquid fire',1100,'potion')
+    ptn_19 = StoredItem(display,trader_potions_img,19,potions_dict,True,True, False,'Dream potion',1800,'potion')
+    ptn_20 = StoredItem(display,trader_potions_img,20,potions_dict,True,True, False,'Vigor potion',250,'potion')
+    ptn_21 = StoredItem(display,trader_potions_img,21,potions_dict,True,True, False,'Energy shard',1100,'potion')
+    ptn_22 = StoredItem(display,trader_potions_img,22,potions_dict,True,True, False,'Fire grenade',2800,'potion')
+    ptn_23 = StoredItem(display,trader_potions_img,23,potions_dict,True,True, False,'Shrapnel grenade',3000,'potion')
+    ptn_24 = StoredItem(display,trader_potions_img,24,potions_dict,True,True, False,'Earth shard',2400,'potion')
+    ptn_25 = StoredItem(display,trader_potions_img,25,potions_dict,True,True, False,'Concentration potion',950,'potion')
+
+#--------------gold-----------
     gld_0 = StoredItem(display,gold_img,0,None,None,True, False,'gold',random.randint(100,250),'gold')
     gld_1 = StoredItem(display,gold_img,1,None,None,True, False,'gold',random.randint(250,500),'gold')
     gld_2 = StoredItem(display,gold_img,2,None,None,True, False,'gold',random.randint(500,1000),'gold')
@@ -4521,7 +4694,7 @@ def global_map():
     srd_6 = StoredItem(display,sword_list_img,6,sword_list,soldier_sword,True, False,soldier_sword.descr,soldier_sword.value,'item')
     srd_7 = StoredItem(display,sword_list_img,7,sword_list,mercenary_sword,True, False,mercenary_sword.descr,mercenary_sword.value,'item')
 
-#------------------armor-----------
+    #------------------armor-----------
     arm_0 = StoredItem(display,armor_list_img,0,armor_list,travel_clothes,True, False,travel_clothes.descr,travel_clothes.value,'item')
     arm_1 = StoredItem(display,armor_list_img,1,armor_list,robes,True, False,robes.descr,robes.value,'item')
     arm_2 = StoredItem(display,armor_list_img,2,armor_list,light_leather,True, False,light_leather.descr,light_leather.value,'item')
@@ -4531,7 +4704,7 @@ def global_map():
     arm_6 = StoredItem(display,armor_list_img,6,armor_list,reinforced_armor,True, False,reinforced_armor.descr,reinforced_armor.value,'item')
     arm_7 = StoredItem(display,armor_list_img,7,armor_list,nomad_armor,True, False,nomad_armor.descr,nomad_armor.value,'item')
 
-    #------------------pants-----------
+    #----------pants-----------
     pnt_0 = StoredItem(display,pants_list_img,0,pants_list, cloth_pants,True, False,cloth_pants.descr,cloth_pants.value,'item')
     pnt_1 = StoredItem(display,pants_list_img,1,pants_list, monk_pants,True, False,monk_pants.descr,monk_pants.value,'item')
     pnt_2 = StoredItem(display,pants_list_img,2,pants_list, leather_pants,True, False,leather_pants.descr,leather_pants.value,'item')
@@ -4541,7 +4714,7 @@ def global_map():
     pnt_6 = StoredItem(display,pants_list_img,6,pants_list, plate_pants,True, False,plate_pants.descr,plate_pants.value,'item')
     pnt_7 = StoredItem(display,pants_list_img,7,pants_list, heavy_plate_pants,True, False,heavy_plate_pants.descr,heavy_plate_pants.value,'item')
 
-#------------------shoes-----------
+    #-------------shoes-----------
     sho_0 = StoredItem(display,shoes_list_img,0,shoes_list,simple_shoes,True, False,simple_shoes.descr,simple_shoes.value,'item')
     sho_1 = StoredItem(display,shoes_list_img,1,shoes_list,travel_shoes,True, False,travel_shoes.descr,travel_shoes.value,'item')
     sho_2 = StoredItem(display,shoes_list_img,2,shoes_list,light_plate_shoes,True, False,light_plate_shoes.descr,light_plate_shoes.value,'item')
@@ -4551,7 +4724,7 @@ def global_map():
     sho_6 = StoredItem(display,shoes_list_img,6,shoes_list,hunter_shoes,True, False,hunter_shoes.descr,hunter_shoes.value,'item')
     sho_7 = StoredItem(display,shoes_list_img,7,shoes_list,ranger_shoes,True, False,ranger_shoes.descr,ranger_shoes.value,'item')
 
-    #------------------helms-----------
+    #------------helms------------
     hat_0 = StoredItem(display,helm_list_img,0,helm_list,travel_hat,True, False,travel_hat.descr,travel_hat.value,'item')
     hat_1 = StoredItem(display,helm_list_img,1,helm_list,steel_helm,True, False,steel_helm.descr,steel_helm.value,'item')
     hat_2 = StoredItem(display,helm_list_img,2,helm_list,tournament_helm,True, False,tournament_helm.descr,tournament_helm.value,'item')
@@ -4559,7 +4732,8 @@ def global_map():
     hat_4 = StoredItem(display,helm_list_img,4,helm_list,leather_hood,True, False,leather_hood.descr,leather_hood.value,'item')
     hat_5 = StoredItem(display,helm_list_img,5,helm_list,light_chain_helm,True, False,light_chain_helm.descr,light_chain_helm.value,'item')
     hat_6 = StoredItem(display,helm_list_img,6,helm_list,protector_helm,True, False,protector_helm.descr,protector_helm.value,'item')
-    hat_7 = StoredItem(display,helm_list_img,7,helm_list,leather_helm,True, False,leather_helm.descr,leather_helm.value,'item')
+    hat_7 = StoredItem(display,helm_list_img,7,helm_list,legion_helm,True, False,legion_helm.descr,legion_helm.value,'item')
+    hat_8 = StoredItem(display,helm_list_img,8,helm_list,leather_helm,True, False,leather_helm.descr,leather_helm.value,'item')
 
     #------------------necklace-----------
     nek_0 = StoredItem(display,necklace_list_img,0,necklace_list,traders_luck,True, False,traders_luck.descr,traders_luck.value,'item')
@@ -4594,7 +4768,6 @@ def global_map():
     blt_9 = StoredItem(display,belt_list_img,9,belt_list,druid_belt,True, False,druid_belt.descr,druid_belt.value,'item')
 
 #----------------------------------------------------------------------------------------------------
-
 #------------------------------------------ItemInChest----------------------------------------------
     def remove_stored_items (list):
         for count,i in enumerate(list):
@@ -4653,7 +4826,7 @@ def global_map():
                    surface.blit(img2, (3.6*TILE_SIZE,5.6*TILE_SIZE))
 
         def hide_town(self):
-            if self.rect.colliderect(GM_party_rect) and encounter == False \
+            if self.rect.colliderect(player_party.rect) and encounter == False \
                     and self.status != 'invisible' and toggle_char_sheet == False:
                 for count, l in enumerate(town_box):
                     if all(l.status) != 'invisible':
@@ -4672,14 +4845,17 @@ def global_map():
                 party_icon = True
 
         def initiate(self, surface,scroll, scrollX, scrollY, map, mapX,mapY, text, font, text_col,textX,textY):
-            if self.rect.colliderect(GM_party_rect) and encounter == False \
+            if self.rect.colliderect(player_party.rect) and encounter == False \
                     and self.status != 'invisible' and toggle_char_sheet == False:
                 global party_icon
                 party_icon = False
                 self.entered = True
                 if self.entered == True:
                    self.enter_town(surface, scroll, scrollX, scrollY, map, mapX,mapY, text, font, text_col,textX,textY)
-                   self.status = 'invisible'
+                   for count, l in enumerate(town_box):
+                       if all(l.status) != 'invisible':
+                           l.status = 'invisible'
+                   self.status = 'visible'
                    for count, i in enumerate(chest_box):
                        if all(i.status) != 'invisible':
                            i.status = 'invisible'
@@ -4702,6 +4878,7 @@ def global_map():
     smith_items = []
     trader_items = []
     tavern_items = []
+    board_items = []
 
     class TownTrader():
         def __init__(self, surface, trader_list, list_image, n,available,type, description,value,status):
@@ -4745,7 +4922,8 @@ def global_map():
                         for count, k in enumerate(quest_box):
                             if all(k.status) != 'invisible':
                                 k.status = 'invisible'
-
+                # elif self.toggled == False:
+                #      self.trader_list = []
                      #play_while_sound(chest_open_sound)
         def draw(self, surface,font, text,text_col,textX, textY,x,y):
             self.x = x
@@ -4773,6 +4951,8 @@ def global_map():
                             time.sleep(0.2)
                             if self.type == 'trader':
                                 trader_sound.play()
+                            elif self.type == 'board':
+                                city_board_sound.play()
                             elif self.type == 'smith':
                                 smith_sound.play()
                             elif self.type == 'tavern':
@@ -4788,8 +4968,8 @@ def global_map():
                                 button.PartyHealth = 100
                                 button.PartyStartHealth = button.PartyHealth
                             elif self.type == 'port':
-                                if button.start_wealth >= 50+self.value*char_level:
-                                   button.wealth -= 50+self.value*char_level
+                                if button.start_wealth >= 100+100*char_level:
+                                   button.wealth -= 100+100*char_level
                                    button.start_wealth = button.wealth
                                    coins_sound.play()
                                    port_sound.play()
@@ -4810,14 +4990,15 @@ def global_map():
                         if self.rect.collidepoint(event.pos):
                             self.toggled = False
 #----------------------------------------Traders-----------------------------------------
-    CleonelTemple = TownTrader(display,None, traders_img,1,True,'temple', f'Temple. Heals party for {100+100*char_level} gold',100,'visible')
+    CleonelTemple = TownTrader(display,None, traders_img,1,True,'temple', f'Temple. Heals party for {100} gold per level',100,'visible')
     CleonelTrader = TownTrader(display,trader_items, traders_img,2,True,'trader','Trader. Sells various goods',0,'visible')
-    CleonelPort = TownTrader(display,None, traders_img,5,True,'port', f'Port. Travel to Westrad for {50+50*char_level} gold',-170,140)
+    CleonelPort = TownTrader(display,None, traders_img,5,True,'port', f'Port. Travel to Westrad for {100} gold per level',-170,140)
     CleonelSmith = TownTrader(display,smith_items, traders_img,4,True,'smith','Smith. Sells armor and weapons',0,'visible')
     CleonelAlchemist = TownTrader(display,alchemist_items, traders_img,0,True,'alchemist','Alchemist. Sells potions, bombs and shards',0,'visible')
-    CleonelTavern = TownTrader(display,tavern_items, traders_img,3,True,'tavern','Tavern. Hire troops and find contracts',0,'visible')
+    CleonelTavern = TownTrader(display,tavern_items, traders_img,3,True,'tavern','Tavern. Hire troops and talk to people',0,'visible')
+    CleonelBoard= TownTrader(display,board_items, traders_img,7,True,'board','Board with tasks. Find routine contracts here',0,'visible')
 
-    list_of_traders.extend([CleonelTrader,CleonelSmith,CleonelAlchemist,CleonelTavern])
+    list_of_traders.extend([CleonelPort,CleonelTemple,CleonelTrader,CleonelSmith,CleonelAlchemist,CleonelTavern,CleonelBoard])
 #----------------------------------------Dialogs------------------------------------------
     fontDialog = pygame.font.Font('WorldMap/ESKARGOT.ttf', 2)
 
@@ -4826,23 +5007,26 @@ def global_map():
     PORTRAIT_TYPES = portrait_count
     l_portrait_img = []
     r_portrait_img = []
+    i_portrait_img = []
     for x in range(PORTRAIT_TYPES):
         imgl = pygame.image.load(f'WorldMap/dialogs/portraits/{x}.png').convert_alpha()
         imgl = pygame.transform.scale(imgl,  (int(TILE_SIZE), int(TILE_SIZE*1.2)))
         imgr = pygame.transform.flip(imgl, True, False)
+        imgi = pygame.transform.scale(imgl,  (int(TILE_SIZE), int(TILE_SIZE)))
         l_portrait_img.append(imgl)
         r_portrait_img.append(imgr)
+        i_portrait_img.append(imgi)
 #------------------------------------------------------------------------------------------
     dialog_window = pygame.image.load("WorldMap/dialogs/dialog_window.png").convert_alpha()
     dialog_window = pygame.transform.scale(dialog_window, (int(WINDOW_SIZE[0] * 0.3), (int(WINDOW_SIZE[1] * 0.2))))
 
     class Dialog():
-        def __init__(self, surface, status,max_lines):
+        def __init__(self, surface, status,max_lines,toggled):
             self.surface = surface
             self.status = status
             self.selection = 0
             self.clicked = False
-            self.toggled = True
+            self.toggled = toggled
             self.phase = 0
             self.max_lines = max_lines
 
@@ -4924,13 +5108,14 @@ def global_map():
             img_who = font.render(who, True, (80,50,40))
             img_who = pygame.transform.flip(img_who, False, False)
             img_resp = font.render(self.say, True, self.font_col)
+            self.img_line_rect = pygame.Rect(self.textX+stepX, self.textY+stepY, 350, 20)
             if self.name != 'rowan' and self.clicked == True:
                 self.selection = 0
             self.img_resp_rect = img_resp.get_rect()
             self.img_resp_rect.x = self.textX
             self.img_resp_rect.y = self.textY
             if toggle_char_sheet == False:
-                surface.blit(img_who, (self.textX+TILE_SIZE*4.5, self.textY-TILE_SIZE*0.4))
+                surface.blit(img_who, (self.textX+TILE_SIZE*4.2, self.textY-TILE_SIZE*0.4))
                 surface.blit(img_resp, (self.textX+stepX, self.textY+stepY))
                 self.rightchar = rightchar
                 self.rx = TILE_SIZE*8.5
@@ -4957,7 +5142,7 @@ def global_map():
 
                 action = False
                 if pygame.mouse.get_pressed()[0] == 1 and self.clicked == False and encounter == False \
-                        and self.img_line_rect.collidepoint(mouse_position):
+                    and self.img_line_rect.collidepoint(mouse_position):
                     time.sleep(0.1)
                     action = True
                     self.clicked = True
@@ -4975,10 +5160,16 @@ def global_map():
                 return action
 
     #-----------------------------------------------------------------------------------------
-    dialog_0 = Dialog(display,'visible',15)
+    dialog_0 = Dialog(display,'visible',15,True)
+    dialog_1 = Dialog(display,'visible',3,False)
 
 
-#------------------------------------------------------------------------------------------------
+
+    #----------------------------------npc-------------------------------------
+    npc_0 = StoredItem(display,i_portrait_img,3,None,'npc',True, False,'City guard',0,1)
+
+
+    #------------------------------------------------------------------------------------------------
     def restart_game():
         play_music('MainTheme')
         button.quest_old_ways = 'unlocked'
@@ -5168,7 +5359,7 @@ def global_map():
     #     return img_copy
     #
     # gm_injury = palette_swap(gm_injury, (220,11,11),(255,255,255))
-    # gm_injury = palette_swap(gm_injury, (169,8,8),(255,255,255))
+    # gm_injury = palette_swap(gm_injury, (169,8.png,8.png),(255,255,255))
     # gm_injury = palette_swap(gm_injury, (170,18,18),(255,255,255))
     # gm_injury = palette_swap(gm_injury, (85,0,0),(255,255,255))
     # gm_injury = palette_swap(gm_injury, (255,170,170),(255,255,255))
@@ -5412,6 +5603,39 @@ def global_map():
                             if i.id == 'curved_bow':
                                 bonus_ranged_damage += i.bonus
                                 bonus_critical_strike += 3
+                            if i.id == 'nomad_bow':
+                                bonus_ranged_damage += i.bonus
+                                bonus_critical_strike += 4
+                            if i.id == 'bone_bow':
+                                bonus_ranged_damage += i.bonus
+                                bonus_critical_strike += 2
+                                bonus_arcana_res += 20
+                            if i.id == 'marksman_bow':
+                                bonus_ranged_damage += i.bonus
+                                bonus_critical_strike += 9
+                            if i.id == 'forest_bow':
+                                bonus_ranged_damage += i.bonus
+                                bonus_critical_strike += 12
+                                bonus_poison_res +=20
+                                bonus_frost_res +=20
+                            if i.id == 'blackwood_bow':
+                                bonus_ranged_damage += i.bonus
+                                bonus_critical_strike += 7
+                            if i.id == 'flameguard':
+                                bonus_ranged_damage += i.bonus
+                                bonus_critical_strike += 10
+                                bonus_fire_res +=20
+                            if i.id == 'mechanized_bow':
+                                bonus_ranged_damage += i.bonus
+                                bonus_critical_strike += 6
+                            if i.id == 'soldier_bow':
+                                bonus_ranged_damage += i.bonus
+                                bonus_critical_strike += 4
+                            if i.id == 'long_bow':
+                                bonus_ranged_damage += i.bonus
+                            if i.id == 'valley_bow':
+                                bonus_ranged_damage += i.bonus
+                                bonus_critical_strike += 1
                     elif i.toggled == False and i.status == 1 and current_bow == bow_count:
                         i.status = 0
                         if i.id == 'simple_bow':
@@ -5432,6 +5656,39 @@ def global_map():
                         if i.id == 'curved_bow':
                             bonus_ranged_damage -= i.bonus
                             bonus_critical_strike -= 3
+                        if i.id == 'nomad_bow':
+                            bonus_ranged_damage -= i.bonus
+                            bonus_critical_strike -= 4
+                        if i.id == 'bone_bow':
+                            bonus_ranged_damage -= i.bonus
+                            bonus_critical_strike -= 2
+                            bonus_arcana_res -= 20
+                        if i.id == 'marksman_bow':
+                            bonus_ranged_damage -= i.bonus
+                            bonus_critical_strike -= 9
+                        if i.id == 'forest_bow':
+                            bonus_ranged_damage -= i.bonus
+                            bonus_critical_strike -= 12
+                            bonus_poison_res -=20
+                            bonus_frost_res -=20
+                        if i.id == 'blackwood_bow':
+                            bonus_ranged_damage -= i.bonus
+                            bonus_critical_strike -= 7
+                        if i.id == 'flameguard':
+                            bonus_ranged_damage -= i.bonus
+                            bonus_critical_strike -= 10
+                            bonus_fire_res -=20
+                        if i.id == 'mechanized_bow':
+                            bonus_ranged_damage -= i.bonus
+                            bonus_critical_strike -= 6
+                        if i.id == 'soldier_bow':
+                            bonus_ranged_damage -= i.bonus
+                            bonus_critical_strike -= 4
+                        if i.id == 'long_bow':
+                            bonus_ranged_damage -= i.bonus
+                        if i.id == 'valley_bow':
+                            bonus_ranged_damage -= i.bonus
+                            bonus_critical_strike -= 1
             if current_bow != bow_count and i.status == 1 and 10*TILE_SIZE > i.y > 7*TILE_SIZE:
                 if i.id == 'simple_bow':
                     bonus_ranged_damage -= i.bonus
@@ -5451,6 +5708,39 @@ def global_map():
                 if i.id == 'curved_bow':
                     bonus_ranged_damage -= i.bonus
                     bonus_critical_strike -= 3
+                if i.id == 'nomad_bow':
+                    bonus_ranged_damage -= i.bonus
+                    bonus_critical_strike -= 4
+                if i.id == 'bone_bow':
+                    bonus_ranged_damage -= i.bonus
+                    bonus_critical_strike -= 2
+                    bonus_arcana_res -= 20
+                if i.id == 'marksman_bow':
+                    bonus_ranged_damage -= i.bonus
+                    bonus_critical_strike -= 9
+                if i.id == 'forest_bow':
+                    bonus_ranged_damage -= i.bonus
+                    bonus_critical_strike -= 12
+                    bonus_poison_res -=20
+                    bonus_frost_res -=20
+                if i.id == 'blackwood_bow':
+                    bonus_ranged_damage -= i.bonus
+                    bonus_critical_strike -= 7
+                if i.id == 'flameguard':
+                    bonus_ranged_damage -= i.bonus
+                    bonus_critical_strike -= 10
+                    bonus_fire_res -=20
+                if i.id == 'mechanized_bow':
+                    bonus_ranged_damage -= i.bonus
+                    bonus_critical_strike -= 6
+                if i.id == 'soldier_bow':
+                    bonus_ranged_damage -= i.bonus
+                    bonus_critical_strike -= 4
+                if i.id == 'long_bow':
+                    bonus_ranged_damage -= i.bonus
+                if i.id == 'valley_bow':
+                    bonus_ranged_damage -= i.bonus
+                    bonus_critical_strike -= 1
                 i.status = 0
                 i.toggled = False
             if i.status == 1 and inventory_active == True:
@@ -5490,6 +5780,40 @@ def global_map():
                             elif i.id == 'unity_ring':
                                 bonus_melee_damage += i.bonus
                                 bonus_ranged_damage += i.bonus
+                            elif i.id == 'protection_ring':
+                                bonus_armor_points += i.bonus
+                                bonus_threshold += 3
+                            elif i.id == 'health_ring':
+                                bonus_health_points += i.bonus
+                            elif i.id == 'medusa_ring':
+                                bonus_health_points += i.bonus
+                                bonus_threshold += 2
+                            elif i.id == 'health_ring':
+                                bonus_critical_strike += i.bonus
+                            elif i.id == 'duel_ring':
+                                bonus_melee_damage += 4
+                                bonus_block += i.bonus
+                            elif i.id == 'snake_ring':
+                                bonus_parry += i.bonus
+                                bonus_defence += 4
+                            elif i.id == 'obscurity_ring':
+                                bonus_stealth.value += i.bonus
+                                bonus_critical_strike += 2
+                            elif i.id == 'ocean_ring':
+                                bonus_energy_res += i.bonus
+                                bonus_frost_res += i.bonus
+                                bonus_tricks += 2
+                            elif i.id == 'war_ring':
+                                bonus_defence += i.bonus
+                                bonus_block += 6
+                                bonus_threshold += 3
+                            elif i.id == 'bone_ring':
+                                bonus_poison_res += i.bonus
+                                bonus_armor_points += 20
+                            elif i.id == 'sun_ring':
+                                bonus_fire_res += i.bonus
+                                bonus_arcana_res += i.bonus
+                                bonus_tricks += 2
                     elif i.toggled == False and i.status == 1 and current_ring == ring_count:
                         i.status = 0
                         if i.id == 'silver_ring':
@@ -5518,6 +5842,40 @@ def global_map():
                         elif i.id == 'unity_ring':
                             bonus_melee_damage -= i.bonus
                             bonus_ranged_damage -= i.bonus
+                        elif i.id == 'protection_ring':
+                            bonus_armor_points -= i.bonus
+                            bonus_threshold -= 3
+                        elif i.id == 'health_ring':
+                            bonus_health_points -= i.bonus
+                        elif i.id == 'medusa_ring':
+                            bonus_health_points -= i.bonus
+                            bonus_threshold -= 2
+                        elif i.id == 'health_ring':
+                            bonus_critical_strike -= i.bonus
+                        elif i.id == 'duel_ring':
+                            bonus_melee_damage -= 4
+                            bonus_block -= i.bonus
+                        elif i.id == 'snake_ring':
+                            bonus_parry -= i.bonus
+                            bonus_defence -= 4
+                        elif i.id == 'obscurity_ring':
+                            bonus_stealth.value -= i.bonus
+                            bonus_critical_strike -= 2
+                        elif i.id == 'ocean_ring':
+                            bonus_energy_res -= i.bonus
+                            bonus_frost_res -= i.bonus
+                            bonus_tricks -= 2
+                        elif i.id == 'war_ring':
+                            bonus_defence -= i.bonus
+                            bonus_block -= 6
+                            bonus_threshold -= 3
+                        elif i.id == 'bone_ring':
+                            bonus_poison_res -= i.bonus
+                            bonus_armor_points -= 20
+                        elif i.id == 'sun_ring':
+                            bonus_fire_res -= i.bonus
+                            bonus_arcana_res -= i.bonus
+                            bonus_tricks -= 2
             if current_ring != ring_count and i.status == 1 and 10*TILE_SIZE > i.y > 7*TILE_SIZE:
                 if i.id == 'silver_ring':
                     bonus_frost_res -= i.bonus
@@ -5545,6 +5903,40 @@ def global_map():
                 elif i.id == 'unity_ring':
                     bonus_melee_damage -= i.bonus
                     bonus_ranged_damage -= i.bonus
+                elif i.id == 'protection_ring':
+                    bonus_armor_points -= i.bonus
+                    bonus_threshold -= 3
+                elif i.id == 'health_ring':
+                    bonus_health_points -= i.bonus
+                elif i.id == 'medusa_ring':
+                    bonus_health_points -= i.bonus
+                    bonus_threshold -= 2
+                elif i.id == 'health_ring':
+                    bonus_critical_strike -= i.bonus
+                elif i.id == 'duel_ring':
+                    bonus_melee_damage -= 4
+                    bonus_block -= i.bonus
+                elif i.id == 'snake_ring':
+                    bonus_parry -= i.bonus
+                    bonus_defence -= 4
+                elif i.id == 'obscurity_ring':
+                    bonus_stealth.value -= i.bonus
+                    bonus_critical_strike -= 2
+                elif i.id == 'ocean_ring':
+                    bonus_energy_res -= i.bonus
+                    bonus_frost_res -= i.bonus
+                    bonus_tricks -= 2
+                elif i.id == 'war_ring':
+                    bonus_defence -= i.bonus
+                    bonus_block -= 6
+                    bonus_threshold -= 3
+                elif i.id == 'bone_ring':
+                    bonus_poison_res -= i.bonus
+                    bonus_armor_points -= 20
+                elif i.id == 'sun_ring':
+                    bonus_fire_res -= i.bonus
+                    bonus_arcana_res -= i.bonus
+                    bonus_tricks -= 2
                 i.status = 0
                 i.toggled = False
             if i.status == 1 and inventory_active == True:
@@ -5584,6 +5976,23 @@ def global_map():
                             elif i.id == 'spider_amulet':
                                 bonus_tricks += 4
                                 bonus_parry += i.bonus
+                            elif i.id == 'defilers_amulet':
+                                bonus_tricks += 6
+                                bonus_poison_res += i.bonus
+                                bonus_fire_res += i.bonus
+                            elif i.id == 'grimshard_amulet':
+                                bonus_tricks += 4
+                                bonus_critical_strike+= i.bonus
+                            elif i.id == 'the_shining':
+                                bonus_block += 6
+                                bonus_health_points += i.bonus
+                            elif i.id == 'sailors_luck':
+                                bonus_tricks += 4
+                                bonus_energy_res += i.bonus
+                                bonus_frost_res += i.bonus
+                            elif i.id == 'crystal_amulet':
+                                bonus_tricks += 10
+                                bonus_defence+= i.bonus
                     elif i.toggled == False and i.status == 1 and current_necklace == necklace_count:
                         i.status = 0
                         if i.id == 'traders_luck':
@@ -5612,6 +6021,23 @@ def global_map():
                         elif i.id == 'spider_amulet':
                             bonus_tricks -= 4
                             bonus_parry -= i.bonus
+                        elif i.id == 'defilers_amulet':
+                            bonus_tricks -= 6
+                            bonus_poison_res -= i.bonus
+                            bonus_fire_res -= i.bonus
+                        elif i.id == 'grimshard_amulet':
+                            bonus_tricks -= 4
+                            bonus_critical_strike -= i.bonus
+                        elif i.id == 'the_shining':
+                            bonus_block -= 6
+                            bonus_health_points -= i.bonus
+                        elif i.id == 'sailors_luck':
+                            bonus_tricks -= 4
+                            bonus_energy_res -= i.bonus
+                            bonus_frost_res -= i.bonus
+                        elif i.id == 'crystal_amulet':
+                            bonus_tricks -= 10
+                            bonus_defence -= i.bonus
             if current_necklace != necklace_count and i.status == 1 and 10*TILE_SIZE > i.y > 7*TILE_SIZE:
                 if i.id == 'traders_luck':
                     bonus_tricks -= i.bonus
@@ -5639,6 +6065,23 @@ def global_map():
                 elif i.id == 'spider_amulet':
                     bonus_tricks -= 4
                     bonus_parry -= i.bonus
+                elif i.id == 'defilers_amulet':
+                    bonus_tricks -= 6
+                    bonus_poison_res -= i.bonus
+                    bonus_fire_res -= i.bonus
+                elif i.id == 'grimshard_amulet':
+                    bonus_tricks -= 4
+                    bonus_critical_strike -= i.bonus
+                elif i.id == 'the_shining':
+                    bonus_block -= 6
+                    bonus_health_points -= i.bonus
+                elif i.id == 'sailors_luck':
+                    bonus_tricks -= 4
+                    bonus_energy_res -= i.bonus
+                    bonus_frost_res -= i.bonus
+                elif i.id == 'crystal_amulet':
+                    bonus_tricks -= 10
+                    bonus_defence -= i.bonus
                 i.status = 0
                 i.toggled = False
             if i.status == 1 and inventory_active == True:
@@ -5677,6 +6120,50 @@ def global_map():
                             elif i.id == 'leather_helm':
                                 bonus_defence += 4
                                 bonus_armor_points += i.bonus
+                            elif i.id == 'legion_helm':
+                                bonus_defence += 9
+                                bonus_armor_points += i.bonus
+                                bonus_threshold += 2
+                            elif i.id == 'pretorian_helm':
+                                bonus_defence += 14
+                                bonus_armor_points += i.bonus
+                                bonus_threshold += 4
+                            elif i.id == 'inquisitor_hat':
+                                bonus_defence += 6
+                                bonus_melee_damage += i.bonus
+                                bonus_critical_strike += 3
+                            elif i.id == 'brigade_helm':
+                                bonus_defence += 8
+                                bonus_armor_points += i.bonus
+                            elif i.id == 'mage_hat':
+                                bonus_defence += 6
+                                bonus_frost_res += i.bonus
+                                bonus_fire_res += i.bonus
+                                bonus_energy_res += i.bonus
+                            elif i.id == 'mercenary_helm':
+                                bonus_defence += 6
+                                bonus_armor_points += i.bonus
+                                bonus_threshold += 3
+                            elif i.id == 'turtle_helm':
+                                bonus_defence += 14
+                                bonus_armor_points += i.bonus
+                                bonus_threshold += 7
+                            elif i.id == 'pigface_helm':
+                                bonus_defence += 20
+                                bonus_armor_points += i.bonus
+                                bonus_threshold += 5
+                            elif i.id == 'full_helm':
+                                bonus_defence += 10
+                                bonus_armor_points += i.bonus
+                                bonus_threshold += 5
+                            elif i.id == 'ranger_hat':
+                                bonus_defence += 6
+                                bonus_critical_strike += 4
+                                bonus_ranged_damage += i.bonus
+                            elif i.id == 'hoplite_helm':
+                                bonus_defence += 12
+                                bonus_armor_points += i.bonus
+                                bonus_threshold += 3
                     elif i.toggled == False and i.status == 1 and current_helm == helm_count:
                         i.status = 0
                         if i.id == 'travel_hat':
@@ -5704,6 +6191,50 @@ def global_map():
                         elif i.id == 'leather_helm':
                             bonus_defence -= 4
                             bonus_armor_points -= i.bonus
+                        elif i.id == 'legion_helm':
+                            bonus_defence -= 9
+                            bonus_armor_points -= i.bonus
+                            bonus_threshold -= 2
+                        elif i.id == 'pretorian_helm':
+                            bonus_defence -= 14
+                            bonus_armor_points -= i.bonus
+                            bonus_threshold -= 4
+                        elif i.id == 'inquisitor_hat':
+                            bonus_defence -= 6
+                            bonus_melee_damage -= i.bonus
+                            bonus_critical_strike -= 3
+                        elif i.id == 'brigade_helm':
+                            bonus_defence -= 8
+                            bonus_armor_points -= i.bonus
+                        elif i.id == 'mage_hat':
+                            bonus_defence -= 6
+                            bonus_frost_res -= i.bonus
+                            bonus_fire_res -= i.bonus
+                            bonus_energy_res -= i.bonus
+                        elif i.id == 'mercenary_helm':
+                            bonus_defence -= 6
+                            bonus_armor_points -= i.bonus
+                            bonus_threshold -= 3
+                        elif i.id == 'turtle_helm':
+                            bonus_defence -= 14
+                            bonus_armor_points -= i.bonus
+                            bonus_threshold -= 7
+                        elif i.id == 'pigface_helm':
+                            bonus_defence -= 20
+                            bonus_armor_points -= i.bonus
+                            bonus_threshold -= 5
+                        elif i.id == 'full_helm':
+                            bonus_defence -= 10
+                            bonus_armor_points -= i.bonus
+                            bonus_threshold -= 5
+                        elif i.id == 'ranger_hat':
+                            bonus_defence -= 6
+                            bonus_critical_strike -= 4
+                            bonus_ranged_damage -= i.bonus
+                        elif i.id == 'hoplite_helm':
+                            bonus_defence -= 12
+                            bonus_armor_points -= i.bonus
+                            bonus_threshold -= 3
             if current_helm != helm_count and i.status == 1 and 10*TILE_SIZE > i.y > 7*TILE_SIZE:
                 if i.id == 'travel_hat':
                     bonus_defence -= i.bonus
@@ -5730,6 +6261,50 @@ def global_map():
                 elif i.id == 'leather_helm':
                     bonus_defence -= 4
                     bonus_armor_points -= i.bonus
+                elif i.id == 'legion_helm':
+                    bonus_defence -= 9
+                    bonus_armor_points -= i.bonus
+                    bonus_threshold -= 2
+                elif i.id == 'pretorian_helm':
+                    bonus_defence -= 14
+                    bonus_armor_points -= i.bonus
+                    bonus_threshold -= 4
+                elif i.id == 'inquisitor_hat':
+                    bonus_defence -= 6
+                    bonus_melee_damage -= i.bonus
+                    bonus_critical_strike -= 3
+                elif i.id == 'brigade_helm':
+                    bonus_defence -= 8
+                    bonus_armor_points -= i.bonus
+                elif i.id == 'mage_hat':
+                    bonus_defence -= 6
+                    bonus_frost_res -= i.bonus
+                    bonus_fire_res -= i.bonus
+                    bonus_energy_res -= i.bonus
+                elif i.id == 'mercenary_helm':
+                    bonus_defence -= 6
+                    bonus_armor_points -= i.bonus
+                    bonus_threshold -= 3
+                elif i.id == 'turtle_helm':
+                    bonus_defence -= 14
+                    bonus_armor_points -= i.bonus
+                    bonus_threshold -= 7
+                elif i.id == 'pigface_helm':
+                    bonus_defence -= 20
+                    bonus_armor_points -= i.bonus
+                    bonus_threshold -= 5
+                elif i.id == 'full_helm':
+                    bonus_defence -= 10
+                    bonus_armor_points -= i.bonus
+                    bonus_threshold -= 5
+                elif i.id == 'ranger_hat':
+                    bonus_defence -= 6
+                    bonus_critical_strike -= 4
+                    bonus_ranged_damage -= i.bonus
+                elif i.id == 'hoplite_helm':
+                    bonus_defence -= 12
+                    bonus_armor_points -= i.bonus
+                    bonus_threshold -= 3
                 i.status = 0
                 i.toggled = False
             if i.status == 1 and inventory_active == True:
@@ -5775,6 +6350,14 @@ def global_map():
                                 bonus_energy_res += i.bonus
                                 bonus_poison_res += i.bonus
                                 bonus_arcane += i.bonus
+                            elif i.id == 'royal_cloak':
+                                bonus_defence += 10
+                                bonus_tricks += 2
+                                bonus_health_points += i.bonus
+                            elif i.id == 'thief_cloak':
+                                bonus_defence += 4
+                                bonus_tricks += 4
+                                bonus_stealth.value += i.bonus
                     elif i.toggled == False and i.status == 1 and current_cloak == cloak_count:
                         i.status = 0
                         if i.id == 'travel_cloak':
@@ -5809,6 +6392,14 @@ def global_map():
                             bonus_energy_res -= i.bonus
                             bonus_poison_res -= i.bonus
                             bonus_arcane -= i.bonus
+                        elif i.id == 'royal_cloak':
+                            bonus_defence -= 10
+                            bonus_tricks -= 2
+                            bonus_health_points -= i.bonus
+                        elif i.id == 'thief_cloak':
+                            bonus_defence -= 4
+                            bonus_tricks -= 4
+                            bonus_stealth.value -= i.bonus
             if current_cloak != cloak_count and i.status == 1 and 10*TILE_SIZE > i.y > 7*TILE_SIZE:
                 if i.id == 'travel_cloak':
                     bonus_defence -= i.bonus
@@ -5842,6 +6433,14 @@ def global_map():
                     bonus_energy_res -= i.bonus
                     bonus_poison_res -= i.bonus
                     bonus_arcane -= i.bonus
+                elif i.id == 'royal_cloak':
+                    bonus_defence -= 10
+                    bonus_tricks -= 2
+                    bonus_health_points -= i.bonus
+                elif i.id == 'thief_cloak':
+                    bonus_defence -= 4
+                    bonus_tricks -= 4
+                    bonus_stealth.value -= i.bonus
                 i.status = 0
                 i.toggled = False
             if i.status == 1 and inventory_active == True:
@@ -5882,6 +6481,34 @@ def global_map():
                             elif i.id == 'nomad_armor':
                                 bonus_defence += 16
                                 bonus_armor_points += i.bonus
+                            elif i.id == 'legion_armor':
+                                bonus_defence += 16
+                                bonus_armor_points += i.bonus
+                                bonus_threshold += 4
+                            elif i.id == 'cuirasse':
+                                bonus_defence += 8
+                                bonus_armor_points += i.bonus
+                                bonus_threshold += 3
+                            elif i.id == 'tournament_armor':
+                                bonus_defence += 30
+                                bonus_armor_points += i.bonus
+                                bonus_threshold += 12
+                            elif i.id == 'heavy_plate':
+                                bonus_defence += 26
+                                bonus_armor_points += i.bonus
+                                bonus_threshold += 10
+                            elif i.id == 'reinforced_chain':
+                                bonus_defence += 14
+                                bonus_armor_points += i.bonus
+                                bonus_threshold += 5
+                            elif i.id == 'lamellar_armor':
+                                bonus_defence += 20
+                                bonus_armor_points += i.bonus
+                                bonus_threshold += 6
+                            elif i.id == 'plate_armor':
+                                bonus_defence += 22
+                                bonus_armor_points += i.bonus
+                                bonus_threshold += 8
                     elif i.toggled == False and i.status == 1 and current_armor == armor_count:
                         i.status = 0
                         if i.id == 'travel_clothes':
@@ -5911,6 +6538,34 @@ def global_map():
                         elif i.id == 'nomad_armor':
                             bonus_defence -= 16
                             bonus_armor_points -= i.bonus
+                        elif i.id == 'legion_armor':
+                            bonus_defence -= 16
+                            bonus_armor_points -= i.bonus
+                            bonus_threshold -= 4
+                        elif i.id == 'cuirasse':
+                            bonus_defence -= 8
+                            bonus_armor_points -= i.bonus
+                            bonus_threshold -= 3
+                        elif i.id == 'tournament_armor':
+                            bonus_defence -= 30
+                            bonus_armor_points -= i.bonus
+                            bonus_threshold -= 12
+                        elif i.id == 'heavy_plate':
+                            bonus_defence -= 26
+                            bonus_armor_points -= i.bonus
+                            bonus_threshold -= 10
+                        elif i.id == 'reinforced_chain':
+                            bonus_defence -= 14
+                            bonus_armor_points -= i.bonus
+                            bonus_threshold -= 5
+                        elif i.id == 'lamellar_armor':
+                            bonus_defence -= 20
+                            bonus_armor_points -= i.bonus
+                            bonus_threshold -= 6
+                        elif i.id == 'plate_armor':
+                            bonus_defence -= 22
+                            bonus_armor_points -= i.bonus
+                            bonus_threshold -= 8
             if current_armor != armor_count and i.status == 1 and 10*TILE_SIZE > i.y > 7*TILE_SIZE:
                 if i.id == 'travel_clothes':
                     bonus_defence -= i.bonus//2
@@ -5939,6 +6594,34 @@ def global_map():
                 elif i.id == 'nomad_armor':
                     bonus_defence -= 16
                     bonus_armor_points -= i.bonus
+                elif i.id == 'legion_armor':
+                    bonus_defence -= 16
+                    bonus_armor_points -= i.bonus
+                    bonus_threshold -= 4
+                elif i.id == 'cuirasse':
+                    bonus_defence -= 8
+                    bonus_armor_points -= i.bonus
+                    bonus_threshold -= 3
+                elif i.id == 'tournament_armor':
+                    bonus_defence -= 30
+                    bonus_armor_points -= i.bonus
+                    bonus_threshold -= 12
+                elif i.id == 'heavy_plate':
+                    bonus_defence -= 26
+                    bonus_armor_points -= i.bonus
+                    bonus_threshold -= 10
+                elif i.id == 'reinforced_chain':
+                    bonus_defence -= 14
+                    bonus_armor_points -= i.bonus
+                    bonus_threshold -= 5
+                elif i.id == 'lamellar_armor':
+                    bonus_defence -= 20
+                    bonus_armor_points -= i.bonus
+                    bonus_threshold -= 6
+                elif i.id == 'plate_armor':
+                    bonus_defence -= 22
+                    bonus_armor_points -= i.bonus
+                    bonus_threshold -= 8
                 i.status = 0
                 i.toggled = False
             if i.status == 1 and inventory_active == True:
@@ -6140,6 +6823,10 @@ def global_map():
                                 bonus_defence += 16
                                 bonus_armor_points += i.bonus
                                 bonus_threshold += 8
+                            elif i.id == 'tournament_pants':
+                                bonus_defence += 16
+                                bonus_armor_points += i.bonus
+                                bonus_threshold += 10
                     elif i.toggled == False and i.status == 1 and current_pants == pants_count:
                         i.status = 0
                         if i.id == 'cloth_pants':
@@ -6170,6 +6857,10 @@ def global_map():
                             bonus_defence -= 16
                             bonus_armor_points -= i.bonus
                             bonus_threshold -= 8
+                        elif i.id == 'tournament_pants':
+                            bonus_defence -= 16
+                            bonus_armor_points -= i.bonus
+                            bonus_threshold -= 10
             if current_pants != pants_count and i.status == 1 and 10*TILE_SIZE > i.y > 7*TILE_SIZE:
                 if i.id == 'cloth_pants':
                     bonus_defence -= i.bonus
@@ -6199,6 +6890,10 @@ def global_map():
                     bonus_defence -= 16
                     bonus_armor_points -= i.bonus
                     bonus_threshold -= 8
+                elif i.id == 'tournament_pants':
+                    bonus_defence -= 16
+                    bonus_armor_points -= i.bonus
+                    bonus_threshold -= 10
                 i.status = 0
                 i.toggled = False
             if i.status == 1 and inventory_active == True:
@@ -6238,6 +6933,47 @@ def global_map():
                                 bonus_melee_damage += i.bonus
                                 bonus_critical_strike += 3
                                 bonus_block += 12
+                            elif i.id == 'storm_dagger':
+                                bonus_melee_damage += i.bonus
+                                bonus_energy_res += 20
+                                bonus_block += 10
+                            elif i.id == 'sting_dagger':
+                                bonus_melee_damage += i.bonus
+                                bonus_critical_strike += 8
+                            elif i.id == 'bone_dagger':
+                                bonus_melee_damage += 6
+                                bonus_defence += 6
+                                bonus_block += i.bonus
+                            elif i.id == 'druid_dagger':
+                                bonus_melee_damage += i.bonus
+                                bonus_health_points += i.bonus
+                                bonus_parry += 12
+                            elif i.id == 'sun_dagger':
+                                bonus_melee_damage += i.bonus
+                                bonus_fire_res += i.bonus
+                                bonus_block+= 10
+                            elif i.id == 'redsteel_dagger':
+                                bonus_melee_damage += i.bonus
+                                bonus_block += 8
+                            elif i.id == 'royal_dagger':
+                                bonus_melee_damage += i.bonus
+                                bonus_parry += i.bonus
+                            elif i.id == 'mercenary_dagger':
+                                bonus_melee_damage += i.bonus
+                                bonus_critical_strike += 2
+                                bonus_block += 4
+                            elif i.id == 'quality_dagger':
+                                bonus_melee_damage += i.bonus
+                                bonus_critical_strike += 1
+                                bonus_block += 6
+                            elif i.id == 'knight_dagger':
+                                bonus_melee_damage += i.bonus
+                                bonus_critical_strike += 4
+                                bonus_block += 8
+                            elif i.id == 'duel_dagger':
+                                bonus_melee_damage += i.bonus
+                                bonus_parry += 6
+                                bonus_block += 6
                     elif i.toggled == False and i.status == 1 and current_dagger == dagger_count:
                         i.status = 0
                         if i.id == 'steel_dagger':
@@ -6266,6 +7002,47 @@ def global_map():
                             bonus_melee_damage -= i.bonus
                             bonus_critical_strike -= 3
                             bonus_block -= 12
+                        elif i.id == 'storm_dagger':
+                            bonus_melee_damage -= i.bonus
+                            bonus_energy_res -= 20
+                            bonus_block -= 10
+                        elif i.id == 'sting_dagger':
+                            bonus_melee_damage -= i.bonus
+                            bonus_critical_strike -= 8
+                        elif i.id == 'bone_dagger':
+                            bonus_melee_damage -= 6
+                            bonus_defence -= 6
+                            bonus_block -= i.bonus
+                        elif i.id == 'druid_dagger':
+                            bonus_melee_damage -= i.bonus
+                            bonus_health_points -= i.bonus
+                            bonus_parry -= 12
+                        elif i.id == 'sun_dagger':
+                            bonus_melee_damage -= i.bonus
+                            bonus_fire_res -= i.bonus
+                            bonus_block -= 10
+                        elif i.id == 'redsteel_dagger':
+                            bonus_melee_damage -= i.bonus
+                            bonus_block -= 8
+                        elif i.id == 'royal_dagger':
+                            bonus_melee_damage -= i.bonus
+                            bonus_parry -= i.bonus
+                        elif i.id == 'mercenary_dagger':
+                            bonus_melee_damage -= i.bonus
+                            bonus_critical_strike -= 2
+                            bonus_block -= 4
+                        elif i.id == 'quality_dagger':
+                            bonus_melee_damage -= i.bonus
+                            bonus_critical_strike -= 1
+                            bonus_block -= 6
+                        elif i.id == 'knight_dagger':
+                            bonus_melee_damage -= i.bonus
+                            bonus_critical_strike -= 4
+                            bonus_block -= 8
+                        elif i.id == 'duel_dagger':
+                            bonus_melee_damage -= i.bonus
+                            bonus_parry -= 6
+                            bonus_block -= 6
             if current_dagger != dagger_count and i.status == 1 and 10*TILE_SIZE > i.y > 7*TILE_SIZE:
                 if i.id == 'steel_dagger':
                     bonus_melee_damage -= i.bonus
@@ -6293,6 +7070,47 @@ def global_map():
                     bonus_melee_damage -= i.bonus
                     bonus_critical_strike -= 3
                     bonus_block -= 12
+                elif i.id == 'storm_dagger':
+                    bonus_melee_damage -= i.bonus
+                    bonus_energy_res -= 20
+                    bonus_block -= 10
+                elif i.id == 'sting_dagger':
+                    bonus_melee_damage -= i.bonus
+                    bonus_critical_strike -= 8
+                elif i.id == 'bone_dagger':
+                    bonus_melee_damage -= 6
+                    bonus_defence -= 6
+                    bonus_block -= i.bonus
+                elif i.id == 'druid_dagger':
+                    bonus_melee_damage -= i.bonus
+                    bonus_health_points -= i.bonus
+                    bonus_parry -= 12
+                elif i.id == 'sun_dagger':
+                    bonus_melee_damage -= i.bonus
+                    bonus_fire_res -= i.bonus
+                    bonus_block -= 10
+                elif i.id == 'redsteel_dagger':
+                    bonus_melee_damage -= i.bonus
+                    bonus_block -= 8
+                elif i.id == 'royal_dagger':
+                    bonus_melee_damage -= i.bonus
+                    bonus_parry -= i.bonus
+                elif i.id == 'mercenary_dagger':
+                    bonus_melee_damage -= i.bonus
+                    bonus_critical_strike -= 2
+                    bonus_block -= 4
+                elif i.id == 'quality_dagger':
+                    bonus_melee_damage -= i.bonus
+                    bonus_critical_strike -= 1
+                    bonus_block -= 6
+                elif i.id == 'knight_dagger':
+                    bonus_melee_damage -= i.bonus
+                    bonus_critical_strike -= 4
+                    bonus_block -= 8
+                elif i.id == 'duel_dagger':
+                    bonus_melee_damage -= i.bonus
+                    bonus_parry -= 6
+                    bonus_block -= 6
                 i.status = 0
                 i.toggled = False
             if i.status == 1 and inventory_active == True:
@@ -6324,6 +7142,46 @@ def global_map():
                                 bonus_melee_damage += i.bonus
                             elif i.id == 'mercenary_sword':
                                 bonus_melee_damage += i.bonus
+                            elif i.id == 'broad_sword':
+                                bonus_melee_damage += i.bonus
+                            elif i.id == 'snake_sword':
+                                bonus_melee_damage += i.bonus
+                                bonus_critical_strike += 6
+                            elif i.id == 'great_sword':
+                                bonus_melee_damage += i.bonus
+                                bonus_block += 4
+                            elif i.id == 'paladin_sword':
+                                bonus_melee_damage += i.bonus
+                                bonus_block += 12
+                            elif i.id == 'pirate_sword':
+                                bonus_melee_damage += i.bonus
+                            elif i.id == 'aircutter':
+                                bonus_melee_damage += i.bonus
+                                bonus_critical_strike += 8
+                                bonus_parry += 12
+                            elif i.id == 'captain_sword':
+                                bonus_melee_damage += i.bonus
+                                bonus_block += 8
+                            elif i.id == 'sabre':
+                                bonus_melee_damage += i.bonus
+                                bonus_block += 4
+                                bonus_parry += 4
+                            elif i.id == 'temple_sword':
+                                bonus_melee_damage += i.bonus
+                                bonus_critical_strike += 6
+                            elif i.id == 'nomad_sword':
+                                bonus_melee_damage += i.bonus
+                            elif i.id == 'curved_sword':
+                                bonus_melee_damage += i.bonus
+                            elif i.id == 'legion_sword':
+                                bonus_melee_damage += i.bonus
+                                bonus_block += 6
+                            elif i.id == 'pretorian_sword':
+                                bonus_melee_damage += i.bonus
+                                bonus_block += 12
+                            elif i.id == 'the_sorrow':
+                                bonus_melee_damage += i.bonus
+                                bonus_critical_strike += 10
                     elif i.toggled == False and i.status == 1 and current_sword == sword_count:
                         i.status = 0
                         if i.id == 'steel_sword':
@@ -6344,6 +7202,46 @@ def global_map():
                             bonus_melee_damage -= i.bonus
                         elif i.id == 'mercenary_sword':
                             bonus_melee_damage -= i.bonus
+                        elif i.id == 'broad_sword':
+                            bonus_melee_damage -= i.bonus
+                        elif i.id == 'snake_sword':
+                            bonus_melee_damage -= i.bonus
+                            bonus_critical_strike -= 6
+                        elif i.id == 'great_sword':
+                            bonus_melee_damage -= i.bonus
+                            bonus_block -= 4
+                        elif i.id == 'paladin_sword':
+                            bonus_melee_damage -= i.bonus
+                            bonus_block -= 12
+                        elif i.id == 'pirate_sword':
+                            bonus_melee_damage -= i.bonus
+                        elif i.id == 'aircutter':
+                            bonus_melee_damage -= i.bonus
+                            bonus_critical_strike -= 8
+                            bonus_parry -= 12
+                        elif i.id == 'captain_sword':
+                            bonus_melee_damage -= i.bonus
+                            bonus_block -= 8
+                        elif i.id == 'sabre':
+                            bonus_melee_damage -= i.bonus
+                            bonus_block -= 4
+                            bonus_parry -= 4
+                        elif i.id == 'temple_sword':
+                            bonus_melee_damage -= i.bonus
+                            bonus_critical_strike -= 6
+                        elif i.id == 'nomad_sword':
+                            bonus_melee_damage -= i.bonus
+                        elif i.id == 'curved_sword':
+                            bonus_melee_damage -= i.bonus
+                        elif i.id == 'legion_sword':
+                            bonus_melee_damage -= i.bonus
+                            bonus_block -= 6
+                        elif i.id == 'pretorian_sword':
+                            bonus_melee_damage -= i.bonus
+                            bonus_block -= 12
+                        elif i.id == 'the_sorrow':
+                            bonus_melee_damage -= i.bonus
+                            bonus_critical_strike -= 10
             if current_sword != sword_count and i.status == 1 and 10*TILE_SIZE > i.y > 7*TILE_SIZE:
                 if i.id == 'steel_sword':
                     bonus_melee_damage -= i.bonus
@@ -6363,11 +7261,50 @@ def global_map():
                     bonus_melee_damage -= i.bonus
                 elif i.id == 'mercenary_sword':
                     bonus_melee_damage -= i.bonus
+                elif i.id == 'broad_sword':
+                    bonus_melee_damage -= i.bonus
+                elif i.id == 'snake_sword':
+                    bonus_melee_damage -= i.bonus
+                    bonus_critical_strike -= 6
+                elif i.id == 'great_sword':
+                    bonus_melee_damage -= i.bonus
+                    bonus_block -= 4
+                elif i.id == 'paladin_sword':
+                    bonus_melee_damage -= i.bonus
+                    bonus_block -= 12
+                elif i.id == 'pirate_sword':
+                    bonus_melee_damage -= i.bonus
+                elif i.id == 'aircutter':
+                    bonus_melee_damage -= i.bonus
+                    bonus_critical_strike -= 8
+                    bonus_parry -= 12
+                elif i.id == 'captain_sword':
+                    bonus_melee_damage -= i.bonus
+                    bonus_block -= 8
+                elif i.id == 'sabre':
+                    bonus_melee_damage -= i.bonus
+                    bonus_block -= 4
+                    bonus_parry -= 4
+                elif i.id == 'temple_sword':
+                    bonus_melee_damage -= i.bonus
+                    bonus_critical_strike -= 6
+                elif i.id == 'nomad_sword':
+                    bonus_melee_damage -= i.bonus
+                elif i.id == 'curved_sword':
+                    bonus_melee_damage -= i.bonus
+                elif i.id == 'legion_sword':
+                    bonus_melee_damage -= i.bonus
+                    bonus_block -= 6
+                elif i.id == 'pretorian_sword':
+                    bonus_melee_damage -= i.bonus
+                    bonus_block -= 12
+                elif i.id == 'the_sorrow':
+                    bonus_melee_damage -= i.bonus
+                    bonus_critical_strike -= 10
                 i.status = 0
                 i.toggled = False
             if i.status == 1 and inventory_active == True:
                 pygame.draw.rect(display, (125, 225, 125), sword_list[current_sword].rect, 3)
-
         #-------------------------------------------------------------------------------------------
         shoes_count = 0
         for shoes_count, i in enumerate(shoes_list):
@@ -6403,6 +7340,35 @@ def global_map():
                             elif i.id == 'ranger_shoes':
                                 bonus_defence += i.bonus
                                 bonus_armor_points += 6
+                            elif i.id == 'heavy_plate_shoes':
+                                bonus_armor_points += i.bonus
+                                bonus_defence += 12
+                                bonus_threshold +=4
+                            elif i.id == 'shadow_shoes':
+                                bonus_armor_points += 10
+                                bonus_defence += i.bonus
+                                bonus_critical_strike +=4
+                            elif i.id == 'arcane_shoes':
+                                bonus_armor_points += 6
+                                bonus_defence += 6
+                                bonus_fire_res += i.bonus
+                                bonus_frost_res += i.bonus
+                                bonus_energy_res += i.bonus
+                            elif i.id == 'trader_shoes':
+                                bonus_armor_points += i.bonus
+                                bonus_health_points += i.bonus
+                                bonus_block +=8
+                            elif i.id == 'leather_shoes':
+                                bonus_armor_points += i.bonus
+                                bonus_defence += 6
+                            elif i.id == 'tournament_shoes':
+                                bonus_armor_points += i.bonus
+                                bonus_defence += 12
+                                bonus_threshold +=6
+                            elif i.id == 'snakeskin_shoes':
+                                bonus_armor_points += i.bonus
+                                bonus_defence += i.bonus
+                                bonus_parry +=8
                     elif i.toggled == False and i.status == 1 and current_shoes == shoes_count:
                         i.status = 0
                         if i.id == 'simple_shoes':
@@ -6431,6 +7397,35 @@ def global_map():
                         elif i.id == 'ranger_shoes':
                             bonus_defence -= i.bonus
                             bonus_armor_points -= 6
+                        elif i.id == 'heavy_plate_shoes':
+                            bonus_armor_points -= i.bonus
+                            bonus_defence -= 12
+                            bonus_threshold -=4
+                        elif i.id == 'shadow_shoes':
+                            bonus_armor_points -= 10
+                            bonus_defence -= i.bonus
+                            bonus_critical_strike -=4
+                        elif i.id == 'arcane_shoes':
+                            bonus_armor_points -= 6
+                            bonus_defence -= 6
+                            bonus_fire_res -= i.bonus
+                            bonus_frost_res -= i.bonus
+                            bonus_energy_res -= i.bonus
+                        elif i.id == 'trader_shoes':
+                            bonus_armor_points -= i.bonus
+                            bonus_health_points -= i.bonus
+                            bonus_block -=8
+                        elif i.id == 'leather_shoes':
+                            bonus_armor_points -= i.bonus
+                            bonus_defence -= 6
+                        elif i.id == 'tournament_shoes':
+                            bonus_armor_points -= i.bonus
+                            bonus_defence -= 12
+                            bonus_threshold -=6
+                        elif i.id == 'snakeskin_shoes':
+                            bonus_armor_points -= i.bonus
+                            bonus_defence -= i.bonus
+                            bonus_parry -=8
             if current_shoes != shoes_count and i.status == 1 and 10*TILE_SIZE > i.y > 7*TILE_SIZE:
                 if i.id == 'simple_shoes':
                     bonus_defence -= i.bonus
@@ -6458,6 +7453,35 @@ def global_map():
                 elif i.id == 'ranger_shoes':
                     bonus_defence -= i.bonus
                     bonus_armor_points -= 6
+                elif i.id == 'heavy_plate_shoes':
+                    bonus_armor_points -= i.bonus
+                    bonus_defence -= 12
+                    bonus_threshold -=4
+                elif i.id == 'shadow_shoes':
+                    bonus_armor_points -= 10
+                    bonus_defence -= i.bonus
+                    bonus_critical_strike -=4
+                elif i.id == 'arcane_shoes':
+                    bonus_armor_points -= 6
+                    bonus_defence -= 6
+                    bonus_fire_res -= i.bonus
+                    bonus_frost_res -= i.bonus
+                    bonus_energy_res -= i.bonus
+                elif i.id == 'trader_shoes':
+                    bonus_armor_points -= i.bonus
+                    bonus_health_points -= i.bonus
+                    bonus_block -=8
+                elif i.id == 'leather_shoes':
+                    bonus_armor_points -= i.bonus
+                    bonus_defence -= 6
+                elif i.id == 'tournament_shoes':
+                    bonus_armor_points -= i.bonus
+                    bonus_defence -= 12
+                    bonus_threshold -=6
+                elif i.id == 'snakeskin_shoes':
+                    bonus_armor_points -= i.bonus
+                    bonus_defence -= i.bonus
+                    bonus_parry -=8
                 i.status = 0
                 i.toggled = False
             if i.status == 1 and inventory_active == True:
@@ -6577,7 +7601,6 @@ def global_map():
                 i.toggled = False
             if i.status == 1 and inventory_active == True:
                 pygame.draw.rect(display, (125, 225, 125), belt_list[current_belt].rect, 3)
-
         # ----------------------------------------------------------------------------------------------
         if toggle_char_sheet == True:
             draw_bg_char_sheet(display)
@@ -6689,7 +7712,7 @@ def global_map():
         # personality = int(randomlist[5])
         # intelligence = int(randomlist[6])
         # wisdom = int(randomlist[7])
-        # willpower = int(randomlist[8])
+        # willpower = int(randomlist[8.png])
         # luck = int(randomlist[9])
 
         strength = int(linecache.getline('MainMenuRes/char_statistic/charattributes.txt',1))
@@ -7001,6 +8024,8 @@ def global_map():
                 # --------------------------------
                 if event.key == K_v:
                     learning_points +=100
+                if event.key == K_b:
+                   pass
                 # button.experience += 800
                 # button.start_experience = button.experience
                 # print(button.start_experience)
@@ -7025,8 +8050,20 @@ def global_map():
                     block_movement = False
                     map_borders = True
 
+                if event.key == K_j and toggle_journal == False:
+                    toggle_journal = True
+                    scroll_sound.play()
+                elif event.key == K_j and toggle_journal == True:
+                    toggle_journal = False
+
                 if event.key == K_ESCAPE and toggle_game_menu == False:
                     toggle_game_menu = True
+                elif event.key == K_ESCAPE and toggle_game_menu == True:
+                    toggle_game_menu = False
+
+                if event.key == K_ESCAPE and toggle_game_menu == False:
+                    toggle_game_menu = True
+                    scroll_sound.play()
                 elif event.key == K_ESCAPE and toggle_game_menu == True:
                     toggle_game_menu = False
 
@@ -7077,6 +8114,9 @@ def global_map():
             for i in tavern_items:
                 if i != None:
                     i.store_event_handler(event)
+            for i in board_items:
+                if i != None:
+                    i.quest_npc_event_handler()
 
             sell_item.event_handler(event)
             steal_item.event_handler(event)
@@ -7145,29 +8185,42 @@ def global_map():
             gm_draw_map()
             gm_draw_bag()
             # gm_draw_injury()
-            PartyStatus.draw(button.PartyHealth)
+
             gm_draw_text('Press ESC for Menu', fontDescription, (0, 225, 0), 10, 10)
 
         scroll[0] += (GM_player_rect.x - scroll[0] - 300) / 20
         scroll[1] += (GM_player_rect.y - scroll[1] - 200) / 20
 
-        #mouse_scroll = True
-        #if mouse_scroll == True:
-
-
-        # if block_movement == False:
-        #     moving_party()
         pygame.mouse.set_visible(False)
 
-        # mx,my = pygame.mouse.get_pos()
         mouse_position = pygame.mouse.get_pos()
         GM_player_rect.x, GM_player_rect.y = mouse_position
-        if toggle_char_sheet == False:
-            GM_party_view = pygame.draw.circle(display, (255,255,255), (GM_party_rect.centerx+4, GM_party_rect.centery+8),30,1)
-        GM_party_rect.x, GM_party_rect.y = (800 - scroll[0], 180 - scroll[1])
+        # -----------------------------------MapCollisions---------------------------------------
+        line_0 = pygame.Rect(590 - scroll[0], 60 - scroll[1], 335, 5)
+        line_1 = pygame.Rect(590 - scroll[0], 55 - scroll[1], 5, 300)
+        line_2 = pygame.Rect(590 - scroll[0], 350 - scroll[1], 170, 5)
+        line_3 = pygame.Rect(920 - scroll[0], 65 - scroll[1], 10, 150)
+        line_4 = pygame.Rect(805 - scroll[0], 260 - scroll[1], 90, 10)
+        line_5 = pygame.Rect(805 - scroll[0], 260 - scroll[1], 10, 55)
+        line_6 = pygame.Rect(885 - scroll[0], 215 - scroll[1], 10, 50)
+        line_7 = pygame.Rect(760 - scroll[0], 310 - scroll[1], 50, 10)
+        line_8 = pygame.Rect(890 - scroll[0], 210 - scroll[1], 40, 10)
+        line_9 = pygame.Rect(755 - scroll[0], 305 - scroll[1], 10, 50)
+        line_10 = pygame.Rect(760 - scroll[0], 60 - scroll[1], 60, 20)
+        #------------------------------------CollisionTiles----------------------------
+        tile_rects = []
+        if westrad_borders == True:
+           tile_rects.extend([line_0, line_1, line_2, line_3,line_4, line_5, line_6, line_7,line_8, line_9, line_10])
+        # for i in tile_rects:
+        #     pygame.draw.rect(display, (255,0,0), i)
 
-        # GM_player_shade_rect.x,  GM_player_shade_rect.y = (800-scrollA[0],180-scrollA[1])
-        # (party.rect.centerx-scroll[0], party.rect.centery-scroll[1])
+
+# ---------------------------PartyMovement---------------------------------------
+        player_party = PlayerParty(800-scroll[0], 180-scroll[1])
+        player_party.move(tile_rects)
+        if toggle_char_sheet == False and party_icon == True:
+           player_party.draw()
+
 
         # ---------------------------SoundCounter---------------------------------------
         playSoundScroll_counter += 1
@@ -7187,7 +8240,7 @@ def global_map():
 
         #-----------------------------cartographer------------------------------------
         if Cartographer.status == 1:
-            movement_modifier = 0.1
+           player_party.speed = 0.4
         # ---------------------------Healing-------------------------------------------
         if moving_right or moving_down or moving_left or moving_up == True:
             healing_timer += 1
@@ -7200,61 +8253,28 @@ def global_map():
                 if button.PartyHealth < 100:
                    button.PartyHealth += 1
 
-        # ---------------------------Movement---------------------------------
-        player_movement = [0, 0]
+
         # ---------------------------PartyMovement---------------------------------
         if block_movement == False:
             if moving_right == True:
-                party_movement[0] += (0.2 + movement_modifier)
+               party_movement[0] += player_party.speed
             if moving_left == True:
-                party_movement[0] -= (0.2 + movement_modifier)
+               party_movement[0] -= player_party.speed
             if moving_up == True:
-                party_movement[1] -= (0.2 + movement_modifier)
+               party_movement[1] -= player_party.speed
             if moving_down == True:
-                party_movement[1] += (0.2 + movement_modifier)
+               party_movement[1] += player_party.speed
         # ---------------------RectMapBorders----------------------------------
         if map_borders == True:
             if GM_player_rect.x >= 740:
-                GM_player_rect.x = 740
+               GM_player_rect.x = 740
             if GM_player_rect.x <= 100:
-                GM_player_rect.x = 100
+               GM_player_rect.x = 100
 
             if GM_player_rect.y >= 460:
-                GM_player_rect.y = 460
+               GM_player_rect.y = 460
             if GM_player_rect.y <= 100:
-                GM_player_rect.y = 100
-
-        # -----------------------------------MapCollisions---------------------------------------
-        #pygame.draw.line(display, (255,0,0), (590- scroll[0], 220 - scroll[1]), (590- scroll[0], 165- scroll[1]), 1)
-
-        redline_0 = pygame.Rect(590 - scroll[0], 60 - scroll[1], 335, 5)
-        redline_1 = pygame.Rect(590 - scroll[0], 55 - scroll[1], 5, 300)
-        redline_2 = pygame.Rect(590 - scroll[0], 350 - scroll[1], 170, 5)
-        redline_3 = pygame.Rect(920 - scroll[0], 65 - scroll[1], 10, 150)
-        redline_4 = pygame.Rect(805 - scroll[0], 260 - scroll[1], 90, 10)
-        redline_5 = pygame.Rect(805 - scroll[0], 260 - scroll[1], 10, 55)
-        redline_6 = pygame.Rect(885 - scroll[0], 215 - scroll[1], 10, 50)
-        redline_7 = pygame.Rect(760 - scroll[0], 310 - scroll[1], 50, 10)
-        redline_8 = pygame.Rect(890 - scroll[0], 210 - scroll[1], 40, 10)
-        redline_9 = pygame.Rect(755 - scroll[0], 305 - scroll[1], 10, 50)
-        redline_10 = pygame.Rect(760 - scroll[0], 60 - scroll[1], 60, 20)
-        #pygame.draw.line(screen, Color_line, (60, 80), (130, 100), 1)
-        #pygame.display.update()
-        # redline_12 = pygame.Rect(835-scroll[0],130-scroll[1],10,40)
-        # dif_terrain_0 = pygame.Rect(840-scroll[0],140-scroll[1],20,20)
-        # pygame.draw.rect(display, (255,0,0), dif_terrain_0)
-
-        #------------------------------------CollisionTiles----------------------------
-        tile_rects = []
-        if westrad_borders == True:
-            tile_rects.extend([redline_0, redline_1, redline_2, redline_3,
-                               redline_4, redline_5, redline_6, redline_7,
-                               redline_8, redline_9, redline_10])
-        # for redline in tile_rects:
-        #     pygame.draw.rect(display, (random.randint(0,255),random.randint(0,255),random.randint(0,255)), redline)
-        #     if redline.colliderect(player_rect):
-        #         print(redline)
-
+               GM_player_rect.y = 100
 
 # -----------------------------------Events-----------------------------------------------
         for event in pygame.event.get():
@@ -7290,6 +8310,12 @@ def global_map():
                     block_movement = False
                     map_borders = True
 
+                if event.key == K_j and toggle_journal == False:
+                    toggle_journal = True
+                    scroll_sound.play()
+                elif event.key == K_j and toggle_journal == True:
+                    toggle_journal = False
+
                 if event.key == K_ESCAPE and toggle_game_menu == False:
                     toggle_game_menu = True
                 elif event.key == K_ESCAPE and toggle_game_menu == True:
@@ -7324,11 +8350,6 @@ def global_map():
                 if event.key == K_s:
                     moving_down = False
 
-        # -----------------------------------RectMovement/Collisions-------------------------------------------
-        # GM_player_rect, collisions  = move(GM_player_rect,player_movement, tile_rects)
-        GM_party_rect, collisions = move(GM_party_rect, party_movement, tile_rects)
-        # print(GM_party_rect)
-        # print(party_movement)
 
 # ------------------------------------Mines-------------------------------------------
         westrad_coal_mine = Mine(display,  840-scroll[0],155-scroll[1],mines_img[0], 'visible',250,f'{button.westrad_coal_mine}')
@@ -7336,19 +8357,56 @@ def global_map():
         westrad_ore_mine_1 = Mine(display,  715-scroll[0],150-scroll[1],mines_img[1], 'visible',500,f'{button.westrad_ore_mine_1}')
         westrad_gold_mine = Mine(display,  640-scroll[0],230-scroll[1],mines_img[3], 'visible',1000,f'{button.westrad_gold_mine}')
 
-        mines_box.extend([westrad_coal_mine,westrad_ore_mine_0,westrad_ore_mine_1,westrad_gold_mine])
+        charlatan_silver_mine = Mine(display,  965-scroll[0],240-scroll[1],mines_img[2], 'visible',750,f'{button.charlatan_silver_mine}')
+        charlatan_coal_mine = Mine(display,  1000-scroll[0],330-scroll[1],mines_img[0], 'visible',250,f'{button.charlatan_coal_mine}')
+
+        solomir_silver_mine = Mine(display,  700-scroll[0],550-scroll[1],mines_img[2], 'visible',750,f'{button.solomir_silver_mine}')
+        solomir_gold_mine_0 = Mine(display,  450-scroll[0],560-scroll[1],mines_img[3], 'visible',1000,f'{button.solomir_gold_mine_0}')
+        solomir_gems_mine = Mine(display,  260-scroll[0],630-scroll[1],mines_img[4], 'visible',1500,f'{button.solomir_gems_mine}')
+        solomir_gold_mine_1 = Mine(display,  600-scroll[0],640-scroll[1],mines_img[3], 'visible',1000,f'{button.solomir_gold_mine_1}')
+
+        kharfajian_gems_mine_0 = Mine(display,  310-scroll[0],100-scroll[1],mines_img[4], 'visible',1500,f'{button.kharfajian_gems_mine_0}')
+        kharfajian_gems_mine_1 = Mine(display,  100-scroll[0],460-scroll[1],mines_img[4], 'visible',1500,f'{button.kharfajian_gems_mine_1}')
+        kharfajian_krystal_mine = Mine(display,  220-scroll[0],280-scroll[1],mines_img[5], 'visible',2000,f'{button.kharfajian_krystal_mine}')
+
+        mines_box.extend([westrad_coal_mine,westrad_ore_mine_0,westrad_ore_mine_1,westrad_gold_mine,charlatan_silver_mine,charlatan_coal_mine,
+                          solomir_silver_mine,solomir_gold_mine_0,solomir_gold_mine_1,solomir_gems_mine,kharfajian_gems_mine_0,kharfajian_gems_mine_1,
+                          kharfajian_krystal_mine])
 
         mines_group = pygame.sprite.Group()
-        mines_group.add(westrad_coal_mine, westrad_ore_mine_0,westrad_ore_mine_1,westrad_gold_mine)
+        mines_group.add(westrad_coal_mine, westrad_ore_mine_0,westrad_ore_mine_1,westrad_gold_mine,charlatan_silver_mine,charlatan_coal_mine,
+                        solomir_silver_mine,solomir_gold_mine_0,solomir_gold_mine_1,solomir_gems_mine,kharfajian_gems_mine_0,kharfajian_gems_mine_1,
+                        kharfajian_krystal_mine)
 
         mine_encounter(display, westrad_coal_mine, scr_mines_img[0], 'Coal Mine',38,30)
         mine_encounter(display, westrad_ore_mine_0, scr_mines_img[1], 'Ore Mine',38,30)
         mine_encounter(display, westrad_ore_mine_1, scr_mines_img[1], 'Ore Mine',38,30)
         mine_encounter(display, westrad_gold_mine, scr_mines_img[3], 'Gold Mine',38,30)
+        mine_encounter(display, charlatan_silver_mine, scr_mines_img[2], 'Silver Mine',38,30)
+        mine_encounter(display, charlatan_coal_mine, scr_mines_img[0], 'Coal Mine',38,30)
+        mine_encounter(display, solomir_gold_mine_0, scr_mines_img[3], 'Gold Mine',38,30)
+        mine_encounter(display, solomir_gold_mine_1, scr_mines_img[3], 'Gold Mine',38,30)
+        mine_encounter(display, solomir_gems_mine, scr_mines_img[4], 'Gems Mine',38,30)
+        mine_encounter(display, solomir_silver_mine, scr_mines_img[2], 'Silver Mine',38,30)
+        mine_encounter(display, kharfajian_gems_mine_0, scr_mines_img[4], 'Gems Mine',38,30)
+        mine_encounter(display, kharfajian_gems_mine_1, scr_mines_img[4], 'Gems Mine',38,30)
+        mine_encounter(display, kharfajian_krystal_mine, scr_mines_img[5], 'Krystal Mine',30,30)
 
         for i in mines_box:
             if i.initiate():
-                old_ways_battle()
+                if i == westrad_coal_mine: initiate_encounter(99,1)
+                elif i == westrad_ore_mine_0: initiate_encounter(98,1)
+                elif i == westrad_ore_mine_1: initiate_encounter(97,1)
+                elif i == westrad_gold_mine: initiate_encounter(96,1)
+                elif i == charlatan_silver_mine: initiate_encounter(95,1)
+                elif i == charlatan_coal_mine: initiate_encounter(94,1)
+                elif i == solomir_silver_mine: initiate_encounter(93,1)
+                elif i == solomir_gold_mine_0: initiate_encounter(92,1)
+                elif i == solomir_gold_mine_1: initiate_encounter(91,1)
+                elif i == solomir_gems_mine: initiate_encounter(90,1)
+                elif i == kharfajian_gems_mine_0: initiate_encounter(89,1)
+                elif i == kharfajian_gems_mine_1: initiate_encounter(88,1)
+                elif i == kharfajian_krystal_mine: initiate_encounter(87,1)
 
         # ------------------------------Income------------------------------------------
         #income = sum([i.value for i in mines_box if i.owner == 'player'])
@@ -7357,8 +8415,16 @@ def global_map():
         if westrad_ore_mine_1.owner == 'player': income +=westrad_ore_mine_1.value
         if westrad_coal_mine.owner == 'player': income +=westrad_coal_mine.value
         if westrad_gold_mine.owner == 'player': income +=westrad_gold_mine.value
+        if charlatan_silver_mine.owner == 'player': income +=charlatan_silver_mine.value
+        if charlatan_coal_mine.owner == 'player': income +=charlatan_coal_mine.value
+        if solomir_gold_mine_0.owner == 'player': income +=solomir_gold_mine_0.value
+        if solomir_gold_mine_1.owner == 'player': income +=solomir_gold_mine_1.value
+        if solomir_gems_mine.owner == 'player': income +=solomir_gems_mine.value
+        if kharfajian_gems_mine_0.owner == 'player': income +=kharfajian_gems_mine_0.value
+        if kharfajian_gems_mine_1.owner == 'player': income +=kharfajian_gems_mine_1.value
+        if kharfajian_krystal_mine.owner == 'player': income +=kharfajian_krystal_mine.value
 
-
+    #-------------------------------------------------------------------------------
         if moving_right or moving_down or moving_left or moving_up == True:
             income_timer += 1
             if income_timer >= 800:
@@ -7387,7 +8453,7 @@ def global_map():
             quest_group.add(old_ways)  # add quests here too
             if old_ways.initiate():
                 pygame.mixer.music.fadeout(1500)
-                old_ways_battle()
+                initiate_encounter(1,1)
 
             old_ways.draw_story(old_ways_lore, 110, 155)
         elif old_ways.status == 'locked':
@@ -7395,9 +8461,11 @@ def global_map():
                 old_ways.quest_unavailable()
 
 #-------------------------------------Settlements-----------------------------------
+        town_group = pygame.sprite.Group()
         #--------------------------------Cleonel--------------------------------------
         cleonel = Town(display, city_icon,777-scroll[0], 190-scroll[1],'visible')
-        if cleonel.rect.colliderect(GM_party_rect):
+        if cleonel.rect.colliderect(player_party.rect):
+           town_group.add(cleonel)
            cleonel.initiate(display,settlement_window,TILE_SIZE*3.5, TILE_SIZE*1,
                              settlement_img[0],TILE_SIZE*3.74, TILE_SIZE*1.15,
                              "Cleonel", fontMenu,(80,50,40),TILE_SIZE*3.80, TILE_SIZE*1.20)
@@ -7406,8 +8474,9 @@ def global_map():
            CleonelPort.draw(display, font12, CleonelPort.description, (80,50,40),3.6*TILE_SIZE,5.6*TILE_SIZE, TILE_SIZE*5.8, TILE_SIZE*4.4)
            CleonelSmith.draw(display, font12, CleonelSmith.description, (80,50,40),3.6*TILE_SIZE,5.6*TILE_SIZE, TILE_SIZE*5.5, TILE_SIZE*2.8)
            CleonelAlchemist.draw(display, font12, CleonelAlchemist.description, (80,50,40),3.6*TILE_SIZE,5.6*TILE_SIZE, TILE_SIZE*5.2, TILE_SIZE*3.6)
-           CleonelTavern.draw(display, font12, CleonelTavern.description, (80,50,40),3.6*TILE_SIZE,5.6*TILE_SIZE, TILE_SIZE*6.1, TILE_SIZE*3.4)
-            #------------------------------------------Trader--------------------------
+           CleonelTavern.draw(display, font12, CleonelTavern.description, (80,50,40),3.6*TILE_SIZE,5.6*TILE_SIZE, TILE_SIZE*4.6, TILE_SIZE*3.8)
+           CleonelBoard.draw(display, font12, CleonelBoard.description, (80,50,40),3.6*TILE_SIZE,5.6*TILE_SIZE, TILE_SIZE*6.6, TILE_SIZE*3.5)
+           #------------------------------------------Trader--------------------------
            CleonelTrader.initiate(nek_0,hat_0,rng_0,glv_0,bow_1,dag_4)
            item_col = 0
            item_row = 0
@@ -7423,8 +8492,9 @@ def global_map():
                for count,i in enumerate(trader_items[:6]):
                     if i != None:
                         i.available = False
+
         #---------------------------------------Smith-------------------------------
-           CleonelSmith.initiate(hat_7,srd_0,blt_0,sho_1,pnt_2,dag_5)
+           CleonelSmith.initiate(hat_8,srd_0,blt_0,sho_1,pnt_2,dag_5)
            item_col = 0
            item_row = 0
            if CleonelSmith.toggled == True and toggle_char_sheet == False:
@@ -7439,8 +8509,9 @@ def global_map():
                for count,i in enumerate(smith_items[:6]):
                    if i != None:
                        i.available = False
+
            #---------------------------------------Tavern-------------------------------
-           CleonelTavern.initiate(hire_dunstan,hire_chevaliers,hire_light_archers,hire_light_infantry,hire_scouts,None)
+           CleonelTavern.initiate(hire_dunstan,hire_alba,hire_anselm,hire_regina,hire_bartelago,hire_severin)
            item_col = 0
            item_row = 0
            if CleonelTavern.toggled == True and toggle_char_sheet == False:
@@ -7455,8 +8526,9 @@ def global_map():
                for count,i in enumerate(tavern_items[:6]):
                    if i != None:
                        i.available = False
+
            #--------------------------------------Alchemist--------------------------------
-           CleonelAlchemist.initiate(ptn_0,ptn_1,ptn_2,ptn_3,ptn_4,ptn_5)
+           CleonelAlchemist.initiate(None,ptn_5,None,ptn_3,ptn_20,None)
            item_col = 0
            item_row = 0
            if CleonelAlchemist.toggled == True and toggle_char_sheet == False:
@@ -7471,14 +8543,67 @@ def global_map():
                 for count,i in enumerate(alchemist_items[:6]):
                     if i != None:
                        i.available = False
+                       alchemist_items = []
+           #--------------------------------------CityBoard--------------------------------
+           CleonelBoard.initiate(qst_0,None,None,None,None,None)
+           item_col = 0
+           item_row = 0
+           if CleonelBoard.toggled == True and toggle_char_sheet == False:
+               for count,i in enumerate(board_items[:6]):
+                   if i != None:
+                       i.draw_chest_item(display,TILE_SIZE*3.55, TILE_SIZE*6.2, item_col*TILE_SIZE*0.8,item_row*TILE_SIZE*1.4)
+                       i.available = True
+                       i.stored_item_info(display,font12,i.info,None,(80,50,40),3.6*TILE_SIZE,5.6*TILE_SIZE)
+                       item_col += 1
+                       if item_col == 6:item_row += 1;item_col = 0
+           elif CleonelBoard.toggled == False and toggle_char_sheet == False:
+               for count,i in enumerate(board_items[:6]):
+                   if i != None:
+                       i.available = False
+
+        #--------------------------------Bellenau--------------------------------------
+        bellenau = Town(display, city_icon,860-scroll[0], 230-scroll[1],'visible')
+        #--------------------------------Riversmouth--------------------------------------
+        riversmouth = Town(display, city_icon,650-scroll[0], 130-scroll[1],'visible')
+        #--------------------------------Westrad--------------------------------------
+        westrad = Town(display, city_icon,640-scroll[0], 340-scroll[1],'visible')
+        #--------------------------------Longdale--------------------------------------
+        longdale = Town(display, city_icon,660-scroll[0], 270-scroll[1],'visible')
+        #--------------------------------taernsby--------------------------------------
+        taernsby = Town(display, city_icon,980-scroll[0], 280-scroll[1],'visible')
+        #--------------------------------ramshorn--------------------------------------
+        ramshorn = Town(display, city_icon,992-scroll[0], 390-scroll[1],'visible')
+        #--------------------------------kilereth--------------------------------------
+        kilereth = Town(display, city_icon,777-scroll[0], 535-scroll[1],'visible')
+        #--------------------------------orilons_path--------------------------------------
+        orilons_path = Town(display, city_icon,715-scroll[0], 510-scroll[1],'visible')
+        #--------------------------------dalry--------------------------------------
+        dalry = Town(display, city_icon,650-scroll[0], 600-scroll[1],'visible')
+        #--------------------------------bellmare--------------------------------------
+        bellmare = Town(display, city_icon,545-scroll[0], 625-scroll[1],'visible')
+        #--------------------------------erimore--------------------------------------
+        erimore = Town(display, city_icon,300-scroll[0], 590-scroll[1],'visible')
+        #--------------------------------karas_vale--------------------------------------
+        karas_vale = Town(display, city_icon,75-scroll[0], 555-scroll[1],'visible')
+        #--------------------------------dawn_sister--------------------------------------
+        dawn_sister = Town(display, city_icon,240-scroll[0], 360-scroll[1],'visible')
+        #--------------------------------dusk_sister--------------------------------------
+        dusk_sister = Town(display, city_icon,190-scroll[0], 420-scroll[1],'visible')
+        #--------------------------------karak--------------------------------------
+        karak = Town(display, city_icon,30-scroll[0], 450-scroll[1],'visible')
+        #--------------------------------currinae---------------------------------
+        currinae = Town(display, city_icon,77-scroll[0], 390-scroll[1],'visible')
+        #--------------------------------maraketh---------------------------------
+        maraketh = Town(display, city_icon,426-scroll[0], 186-scroll[1],'visible')
+        #--------------------------------yarrin-----------------------------------
+        yarrin = Town(display, city_icon,380-scroll[0], 115-scroll[1],'visible')
+        #--------------------------------kharfageth-------------------------------
+        kharfageth = Town(display, city_icon,297-scroll[0], 140-scroll[1],'visible')
+        #--------------------------------hersoneth-------------------------------
+        hersoneth = Town(display, city_icon,180-scroll[0], 200-scroll[1],'visible')
 
 
-
-
-
-
-
-        #--------------------------------------------------------------------------------
+    #--------------------------------------------------------------------------------
         with open('MainMenuRes/inventory/unlocked_potions.json', 'w') as f:
             i = json.dumps(potions_dict, indent=2)
             f.write(i)
@@ -7489,15 +8614,20 @@ def global_map():
             g.write(l)
         g.close()
         #--------------------------------------------------------------------------------
-        town_box.extend([cleonel])
-        town_group = pygame.sprite.Group()
-        town_group.add(cleonel)
+        town_box.extend([cleonel,bellenau,riversmouth,westrad,longdale,taernsby,ramshorn,
+                         kilereth,orilons_path,dalry,bellmare,erimore, karas_vale, dawn_sister,
+                         dusk_sister, karak, currinae, maraketh,yarrin, kharfageth, hersoneth])
+
+        # town_group = pygame.sprite.Group()
+        # town_group.add(cleonel,bellenau,riversmouth,westrad,longdale,taernsby,ramshorn,
+        #                kilereth,orilons_path,dalry,bellmare,erimore, karas_vale, dawn_sister,
+        #                dusk_sister, karak, currinae, maraketh,yarrin, kharfageth, hersoneth)
 
 
-#----------------------------------Chests------------------------------------------------
+    #----------------------------------Chests------------------------------------------------
         #surface,x, y, img, investigation,difficulty, trap, status):
-        chest1 = Chest(display,875- scroll[0],215- scroll[1], chest_icon, 0,0,0,'visible')
-        if chest1.rect.colliderect(GM_party_rect):
+        chest1 = Chest(display,875 - scroll[0],215 - scroll[1], chest_icon, 0,0,0,'visible')
+        if chest1.rect.colliderect(player_party.rect):
            chest1.initiate(bow_0, dag_6, srd_1, pnt_0,arm_0, sho_0, clk_0,glv_1) # add items by id
         item_col = 0
         item_row = 0
@@ -7521,10 +8651,22 @@ def global_map():
 
         #add_stored_items(items_in_chest)
         #remove_stored_items(items_in_chest)    -  working
-
         #-------------------------------------dialogs--------------------------------------
-        dialog_0.initiate(display)
+        if npc_0.clicked:
+           dialog_1.initiate(display)
+           dialog_1.toggled = True
+        if dialog_1.toggled == True:
+            if dialog_1.phase == 0: dialog_1.get_line(display,"dialog",l_portrait_img[1],"rowan",1,"4",0,0,None,0,0)
+            if dialog_1.phase == 1:
+               dialog_1.get_resp(display,"dialog",r_portrait_img[3],"city guard",0,"1",0,0)
+               if letter_1 in inv_list: inv_list.remove(letter_1)
+            if dialog_1.phase == 2:
+               npc_0.clicked = False
+               dialog_1.toggled = False
+        #------------------------------------------------------------------------------------
+        dialog_0.toggled = False
         if dialog_0.toggled == True:
+            dialog_0.initiate(display)
             if dialog_0.phase == 0: dialog_0.get_line(display,"dialog",l_portrait_img[1],"rowan",0,"1",0,0,None,0,0)
             if dialog_0.phase == 1:
                 dialog_0.get_line(display,"dialog",l_portrait_img[1],"rowan",0,"2",0,0,None,0,0)
@@ -7545,18 +8687,14 @@ def global_map():
             if dialog_0.phase == 13:dialog_0.get_line(display,"dialog",l_portrait_img[1],"rowan",0,"7",0,0,None,0,0)
             if dialog_0.phase == 14:prologue.draw_story(display,0,0)
 
-
         # -------------------------InvisibilityChecks-------------------------
         for i in mines_box:
             i.hide_mine()
-
         for i in quest_box:
             i.hide_quest()
 
-
         # for i in town_box:
         #     i.hide_town()
-        #
         # for i in chest_box:
         #     i.hide_chest()
         # ------------------------------------WorldMapQuests------------------------------------
@@ -7565,33 +8703,30 @@ def global_map():
                 if i.status != 'invisible':
                     quest_group.draw(display)
                     quest_group.update()
-                if i.rect.colliderect(GM_party_rect):
+                if i.rect.colliderect(player_party.rect):
                     party_icon = False
             for j in mines_group:
                 if j.status != 'invisible':
                     mines_group.draw(display)
                     mines_group.update()
-                if j.rect.colliderect(GM_party_rect):
+                if j.rect.colliderect(player_party.rect):
                     party_icon = False
             for k in chest_group:
-                if k.status != 'invisible' and k.rect.colliderect(GM_party_view):
+                if k.status != 'invisible' and k.rect.colliderect(player_party.view):
                     chest_group.draw(display)
                     chest_group.update()
-                if k.rect.colliderect(GM_party_rect):
+                if k.rect.colliderect(player_party.rect):
                     party_icon = False
+
             for l in town_group:
-                if l.status != 'invisible':
-                    town_group.draw(display)
-                    town_group.update()
-                if l.rect.colliderect(GM_party_rect):
+                        #town_group.draw(display)
+                        #town_group.update()
+                if l.rect.colliderect(player_party.rect):
                     party_icon = False
+
             # for h in chapter_box:
             #     if h.toggled == True:
             #         party_icon = False
-
-
-            if party_icon == True:
-               display.blit(gm_party_icon, (GM_party_rect.x-6, GM_party_rect.y-8))
 
         # party_group.update()
         # party_group.draw(display)
@@ -7604,18 +8739,20 @@ def global_map():
             encounter_timer += 1
         if encounter_timer <= 299:
             block_movement = False
-        elif encounter_timer == 300:
-            dice = random.randint(0, 100)  # increase
-            if dice <= 25:
-                encounter = True
-                encounter_timer = 0
-                throw_dice = True
+        if encounter_timer == 300:
+           encounter_chance = random.randint(0, 100)
+           print(encounter_chance)
+        if encounter_timer >= 300 and encounter_chance <= 50:
+             encounter = True
+             encounter_timer = 0
+             throw_dice = True
+        elif encounter_timer >= 300 and encounter_chance > 50:
+             encounter_timer = 0
         if encounter == True:
             show_message('Your party is ambushed!', fontStats, (0, 0, 0), 300, 260)
             block_movement = True
             if throw_dice == True:
                 dice = random.randint(0, 1)
-                print(dice)
                 throw_dice = False
             for i, j in enumerate(encounter_box):
                 if dice == j.probability:
@@ -7636,16 +8773,17 @@ def global_map():
                 display.blit(gm_greencross, (no_button.rect.x - 4, no_button.rect.y))
             if yes_button.clicked == True:
                 if dice == 0:
-                    old_ways_battle()
+                    initiate_encounter(1,0)
                     encounter = False
                 elif dice == 1:
-                    Wolves.wolves_encounter()
+                    initiate_encounter(2,0)
                     encounter = False
             # elif no_button.clicked == True and escape_attempt < escape_difficulty:
-            #      gm_draw_text('No luck!', GM_font_Lore, (0,200,0), 420, 350)
-            elif no_button.clicked == True:  # and escape_attempt >= escape_difficulty:
+            #       gm_draw_text('No luck!', GM_font_Lore, (0,200,0), 420, 350)
+            elif no_button.clicked == True: #and escape_attempt >= escape_difficulty:
                 encounter = False
                 block_movement = False
+                encounter_timer = 0
             # elif escape_attempt < random.randint(0,100) and no_button.clicked == True:
 
         #------------------------------------BlockMovement-----------------------------------
@@ -7675,13 +8813,16 @@ def global_map():
         #----------------------------------------------------------------------------------
         if toggle_char_sheet == False:
             display.blit(timewheel_img, (timewheel_rect.x, timewheel_rect.y))
+            PartyStatus.draw(button.PartyHealth)
         # --------------------------------------------------------------------------------
         if toggle_game_menu == True and toggle_char_sheet == False:
            game_menu(display)
 
-       #--------------------------------------------------------------------------------
+        if toggle_journal == True and toggle_char_sheet == False:
+            journal.initiate()
        #-----------------------------------LevelUp--------------------------------------
         level_up()
+
         game_over(display)
 
         display.blit(GM_normal_icon, GM_player_rect)  # mouse cursor
@@ -7702,6 +8843,13 @@ def global_map():
             if i.rect.collidepoint(mouse_position):
                 pygame.mouse.set_visible(False)
                 display.blit(GM_select_icon, mouse_position)
+        # for i in town_box:
+        #     if i.entered == False:
+        #         alchemist_items = []
+        #         smith_items = []
+        #         trader_items = []
+        #         tavern_items = []
+        #         board_items = []
 
         # for event in pygame.event.get():
         #     for i in items_in_chest:
@@ -7913,7 +9061,7 @@ def global_map():
 
 
 
-def old_ways_battle():
+def battle_module():
     current_battle_running = True
 
     clock = pygame.time.Clock()
@@ -7995,7 +9143,6 @@ def old_ways_battle():
     music_list = ['Battle','Battle1','Battle2','Battle3','Battle4']
     play_music(random.choice(music_list))
 
-
     coins_sound = pygame.mixer.Sound('WorldMap/coins.wav')
     # ------------------------------------AttackSounds---------------------------------
     block_sound = pygame.mixer.Sound('BattleScreen/resources/sounds/block.wav')
@@ -8013,6 +9160,8 @@ def old_ways_battle():
     trap_sound = pygame.mixer.Sound('BattleScreen/resources/sounds/snap_trap.wav')
     sharpening_sound = pygame.mixer.Sound('BattleScreen/resources/sounds/sharpening.wav')
     bowstring_sound = pygame.mixer.Sound('BattleScreen/resources/sounds/bowload.wav')
+    gallop_sound = pygame.mixer.Sound('BattleScreen/resources/sounds/gallop.wav')
+    dragon_roar_sound = pygame.mixer.Sound('BattleScreen/resources/sounds/dragon_roar.wav')
     #------------------------------------StatusSounds--------------------------------
     energy_sound = pygame.mixer.Sound('BattleScreen/resources/sounds/energy.wav')
     fire_burn = pygame.mixer.Sound('BattleScreen/resources/sounds/fire_burn.wav')
@@ -8023,11 +9172,15 @@ def old_ways_battle():
     bleed_sound = pygame.mixer.Sound('BattleScreen/resources/sounds/bleed_sound.wav')
     clouded_sound = pygame.mixer.Sound('BattleScreen/resources/sounds/clouded_sound.wav')
     wind_sound = pygame.mixer.Sound('BattleScreen/resources/sounds/wind.wav')
-    # ------------------------------------ActionOrder--------------------------------
-    global current_fighter
-    current_fighter = 1
+
     # -------------------------------------ScaleOptions----------------------------
-    battle_type = 1   #0 reg, 1 grand, 2 epic
+    cond_list = []
+    with open('BattleScreen/encounter_conditions.txt') as f:
+        cond = f.readlines()
+    count = 0
+    for cond in cond_list: count += 1
+    battle_conditions = int(cond[0])
+    battle_type = int(cond[1])
     auto_battle = 0
     full_auto_battle = 0
 
@@ -8036,8 +9189,8 @@ def old_ways_battle():
         game_scale = 1
     if battle_type == 1:
         game_scale = 0.5
-    if battle_type == 1:
-        game_scale = 0.5
+    # if battle_type == 1:
+    #     game_scale = 0.5
 
     animod = round(2 * game_scale)
     tilescale = 0.10 * game_scale
@@ -8064,11 +9217,9 @@ def old_ways_battle():
     moving_up = False
     moving_down = False
 
-    #
-    # for i in army_player:
-    #     if moving_right:
-    #         i.rect.x +=TILE_SIZE
-    #
+    # ------------------------------------ActionOrder--------------------------------
+    global current_fighter
+    current_fighter = 1
     # ----------------------------------------------------------------------------
     global action_cooldown
     action_cooldown = 0
@@ -8102,6 +9253,8 @@ def old_ways_battle():
     clicked2 = False
     skip_turn = False
     show_indicators = True
+    global auto_potion
+    auto_potion = False
 
     stats_sk = []
     with open('MainMenuRes/char_statistic/charskirmish.txt') as f:
@@ -8148,7 +9301,6 @@ def old_ways_battle():
     alchemy = int(savviness[6])
     engineering = int(savviness[7])
 
-
     #-----------------------------------------UseTechniques--------------------------------
     battle_techniques_box = []
     technique_button = button.TechniqueButton(screen, 0, WINDOW_SIZE[1] * 0.91, techniques_img[66], int(TILE_SIZE*0.9), TILE_SIZE, 2,
@@ -8161,7 +9313,7 @@ def old_ways_battle():
                                                False, 'Bonus damage and a free action if enemy is defeated')
     technique_button4 = button.TechniqueButton(screen, int(TILE_SIZE*0.92)*4, WINDOW_SIZE[1] * 0.91, techniques_img[13], int(TILE_SIZE*0.9), TILE_SIZE, 2,
                                                False, 'Attack target several times with a secondary weapon')
-    technique_button5 = button.TechniqueButton(screen, int(TILE_SIZE*0.92)*5, WINDOW_SIZE[1] * 0.91, techniques_img[45], int(TILE_SIZE*0.9), TILE_SIZE, 2,
+    technique_button5 = button.TechniqueButton(screen, int(TILE_SIZE*0.92)*5, WINDOW_SIZE[1] * 0.91, techniques_img[45], int(TILE_SIZE*0.9), TILE_SIZE, 1,
                                                False, 'Defence party stance. Allows to always retaliate')
     technique_button6 = button.TechniqueButton(screen, int(TILE_SIZE*0.92)*6, WINDOW_SIZE[1] * 0.91, techniques_img[27], int(TILE_SIZE*0.9), TILE_SIZE, 2,
                                                False, 'Applies bleeding to multiple targets')
@@ -8192,7 +9344,6 @@ def old_ways_battle():
     technique_button19 = button.TechniqueButton(screen, int(TILE_SIZE*0.92)*19, WINDOW_SIZE[1] * 0.91, techniques_img[41], int(TILE_SIZE*0.9), TILE_SIZE, 4,
                                                 False, 'All allied troops are hastened')
 
-
     battle_techniques_box.extend([technique_button,technique_button1,technique_button2,technique_button3,technique_button4,technique_button5,technique_button6,
                                   technique_button7,technique_button8,technique_button9,technique_button10,technique_button11,technique_button12,
                                   technique_button13,technique_button14,technique_button15,technique_button16,technique_button17,technique_button18,technique_button19])
@@ -8202,25 +9353,23 @@ def old_ways_battle():
         novice = f.readlines()
     count = 0
     for novice in novice_list: count += 1
-    technique_button.available = True #int(novice[1]) combo
-    Educated = int(novice[2])
-    Quick_Shot = int(novice[3])
-    Quartermaster = int(novice[6])
-    technique_button1.available = True  #int(novice[10]) curse
-    technique_button2.available = True  #int(novice[11])Healing
-
+    technique_button.available = True #Combo int(novice[1])
+    Educated = True #int(novice[2])
+    Quick_Shot = True #int(novice[3])
+    Quartermaster = True #int(novice[6])
+    technique_button1.available = True  # int(novice[10]) curse
+    technique_button2.available = True  # int(novice[11])Healing
 
     adept_list = []
     with open('MainMenuRes/char_statistic/techniques_adept.txt') as f:
         adept = f.readlines()
     count = 0
     for adept in adept_list: count += 1
-    Snake_Eater = int(adept[0])
     technique_button3.available = True #int(adept[1]) Power_Blow
-    technique_button4.available = True # = int(adept[3])
+    technique_button4.available = True  #MultipleShot = int(adept[3])
     technique_button5.available = True  # Duelist =  int(adept[4])
     technique_button6.available = True #Bear_Trap = int(adept[5])
-    Potion_Master = int(adept[6])
+    Potion_Master = True #int(adept[6])
     technique_button7.available = True  #Knock_Down = int(adept[7])
     Battle_Reflex = int(adept[8])
     Persevere = int(adept[9])
@@ -8269,11 +9418,6 @@ def old_ways_battle():
         supply_modifier = 0
 
     #-------------------------------------------------------------------------------------
-
-
-
-
-
     #-----------------------------------------UsePotions-----------------------------------
     use_health_potion = False
     health_potion_restores = 50 + int((alchemy * 50) / 100)
@@ -8360,6 +9504,9 @@ def old_ways_battle():
     use_shrapnel_grenade = False
     shrapnel_grenade_damage = random.randint(10,20) + int((alchemy * 20) / 100)
     shrapnel_grenade_status = 'bleed'
+
+    use_concentration_potion = False
+    concentration_potion_adds = 10 + int((alchemy * 10) / 100)
     # ----------------------------------ShowStats------------------------------------
     font = pygame.font.SysFont('Times New Roman', 18)
     fontBag = pygame.font.Font('WorldMap/ESKARGOT.ttf', 38)
@@ -8437,11 +9584,11 @@ def old_ways_battle():
 
     upgrade = 1 + ((3*rowan_level)/100)
 
-    # ----------------------------------Charaters------------------------------
+    # ----------------------------------Characters------------------------------
     class Fighter():
         def __init__(self, x, y, id, max_hp, max_armor, strength, strength2, defence, threshold, reach, special,
                      alive, max_supply, max_tricks, hostile, arcane_res, fire_res, energy_res, frost_res, poison_res,
-                     crit, experience, type, parry, block, status):
+                     crit, experience, type, parry, block, attack_type, status):
             self.id = id
             self.max_hp = max_hp
             self.hp = max_hp
@@ -8481,6 +9628,7 @@ def old_ways_battle():
             self.experience = experience
             self.type = type
             self.status = status
+            self.attack_type = attack_type
             self.x = x
             self.y = y
             self.animation_list = []  # list of lists (action/img)
@@ -8523,7 +9671,8 @@ def old_ways_battle():
                 temp_list.append(img)  # appends temp list to store img
             self.animation_list.append(temp_list)
             # -----------------------------------------------------------------------------------
-            if self.id == 'rowan' or self.id == 'dunstan':
+            if self.id == 'rowan' or self.id == 'dunstan' or self.id == 'bartelago' or self.id == 'anselm'\
+                    or self.id == 'alba' or self.id == 'severin'or self.id == 'regina':
                 temp_list = []
                 for i in range(3):
                     img = pygame.image.load(f'BattleScreen/units/{self.id}/attack2/{i}.png')
@@ -8590,34 +9739,52 @@ def old_ways_battle():
 
         def move_it(self):
             if moving_right:
-                self.rect.x -= TILE_SIZE//4
+                self.rect.x -= TILE_SIZE//6
             if moving_left:
-                self.rect.x += TILE_SIZE//4
+                self.rect.x += TILE_SIZE//6
             if moving_up:
-                self.rect.y += TILE_SIZE//4
+                self.rect.y += TILE_SIZE//6
             if moving_down:
-                self.rect.y -= TILE_SIZE//4
+                self.rect.y -= TILE_SIZE//6
 
         # -----------------------------------Attack----------------------------
         def attack(self, target):
             rand = random.randint(-5, 5)
             if random.randint(0, 100) < self.crit:
-                damage = self.strength * 2 + rand - target.threshold
-                if damage <= 0:
-                    damage = 0
+                damage = self.strength * 2 + rand
+                if damage <= 0:damage = 0
                 fint_text = DamageText(target.rect.centerx, target.rect.y - 90, 'Critical hit!', (255,140,0))
                 damage_text_group.add(fint_text)
             elif random.randint(0, 100) < target.block:
                 pygame.mixer.Sound(block_sound).play()
                 damage = (self.strength + rand - target.threshold)//2
-                if damage <= 0:
-                    damage = 0
+                if damage <= 0:damage = 0
                 fint_text = DamageText(target.rect.centerx, target.rect.y - 75, 'Blocked!', (25,25,225))
                 damage_text_group.add(fint_text)
+            elif self.attack_type == 'fire':
+                damage = (self.strength + rand) * (1-(target.fire_res//100))
+                target.status = 'inflamed'
+            elif self.attack_type == 'frost':
+                damage = (self.strength + rand) * (1-(target.frost_res//100))
+                target.status = 'frozen'
+            elif self.attack_type == 'energy':
+                damage = (self.strength + rand) * (1-(target.energy_res//100))
+                target.status = 'shock'
+            elif self.attack_type == 'acid':
+                damage = self.strength + rand - target.threshold
+                target.status = 'corroded'
+            elif self.attack_type == 'poison':
+                damage = (self.strength + rand) * (1-(target.poison_res//100))
+                target.status = 'poisoned'
+            elif self.attack_type == 'arcane':
+                damage = (self.strength + rand) * (1-(target.arcane_res//100))
+                target.status = random.choice(['cursed','dreamy'])
+            elif self.attack_type == 'tear':
+                damage = self.strength + rand - target.threshold
+                target.status = 'bleed'
             else:
                 damage = self.strength + rand - target.threshold
-                if damage <= 0:
-                    damage = 0
+                if damage <= 0:damage = 0
             if self.special == 1:
                 # target.armor -= 0
                 target.hp -= damage
@@ -8641,6 +9808,21 @@ def old_ways_battle():
                     target.attack(self)
                     fint_text = DamageText(target.rect.centerx, target.rect.y - 60, 'Retaliate!', (255,255,255))
                     damage_text_group.add(fint_text)
+
+            if technique_button.toggled == True and self.hostile == True:
+                if self.tricks >= technique_button.price and self.status != 'haste':
+                    self.status = 'haste'
+                    self.tricks -= technique_button.price
+                    technique_button.toggled = False
+
+            if technique_button3.toggled == True and self.hostile == True:
+                if self.tricks >= technique_button3.price and self.status != 'haste':
+                    self.tricks -= technique_button3.price
+                    damage = round(damage * 1.50)
+                    if target.hp < 1:
+                       self.status = 'haste'
+                    technique_button3.toggled = False
+
             # runs hurn animation
             target.hurt()
             if target.hp < 1:
@@ -8695,22 +9877,40 @@ def old_ways_battle():
         def alternative_attack(self, target):
             rand = random.randint(-5, 5)
             if random.randint(0, 100) < self.crit:
-                damage = self.strength2 * 2 + rand - target.threshold
-                if damage <= 0:
-                    damage = 0
+                damage = self.strength2 * 2 + rand
+                if damage <= 0:damage = 0
                 fint_text = DamageText(target.rect.centerx, target.rect.y - 90, 'Critical hit!', (255,140,0))
                 damage_text_group.add(fint_text)
             elif random.randint(0, 100) < target.block:
                 pygame.mixer.Sound(block_sound).play()
                 damage = (self.strength2 + rand - target.threshold)//2
-                if damage <= 0:
-                    damage = 0
+                if damage <= 0:damage = 0
                 fint_text = DamageText(target.rect.centerx, target.rect.y - 75, 'Blocked!', (25,25,225))
                 damage_text_group.add(fint_text)
+            elif self.attack_type == 'fire':
+                damage = (self.strength2 + rand) * (1-(target.fire_res//100))
+                target.status = 'inflamed'
+            elif self.attack_type == 'frost':
+                damage = (self.strength2 + rand) * (1-(target.frost_res//100))
+                target.status = 'frozen'
+            elif self.attack_type == 'energy':
+                damage = (self.strength2 + rand) * (1-(target.energy_res//100))
+                target.status = 'shocked'
+            elif self.attack_type == 'acid':
+                damage = self.strength2 + rand - target.threshold
+                target.status = 'corroded'
+            elif self.attack_type == 'poison':
+                damage = (self.strength2 + rand) * (1-(target.poison_res//100))
+                target.status = 'poisoned'
+            elif self.attack_type == 'arcane':
+                damage = (self.strength2 + rand) * (1-(target.arcane_res//100))
+                target.status = random.choice(['cursed','dreamy'])
+            elif self.attack_type == 'tear':
+                damage = self.strength2 + rand - target.threshold
+                target.status = 'bleed'
             else:
                 damage = self.strength2 + rand - target.threshold
-                if damage <= 0:
-                    damage = 0
+                if damage <= 0:damage = 0
             if self.special == 1:
                 # target.armor -= 0
                 target.hp -= damage
@@ -8721,6 +9921,14 @@ def old_ways_battle():
                 if target.armor <= 0:
                     target.hp -= int((damage * (1 - target.defence / 100) - target.armor))
                     target.armor = 0
+
+            if technique_button4.toggled == True:
+                if self.tricks >= technique_button4.price and self.status != 'haste':
+                    self.status = 'haste'
+                    self.tricks -= technique_button4.price
+                    technique_button4.toggled = False
+
+
             # runs hurn animation
             target.hurt()
 
@@ -8743,7 +9951,7 @@ def old_ways_battle():
             damage_text_group.add(damage_text)
             # ---------------------------------AttackSounds---------------------------------------
             # attack sound # 0-standard blade; 1-arrow; 2-stone
-            if self.special == 0 and self.id == 'rowan' or self.id == 'dunstan':
+            if self.special == 0 and self.id == 'rowan' or self.id == 'dunstan' or self.id == 'bartelago':
                 pygame.mixer.Sound(arrow_sound).play()
             elif self.special == 0:
                 pygame.mixer.Sound(attack_sound).play()
@@ -8873,8 +10081,9 @@ def old_ways_battle():
                                        False, 'Armored assault cavalry', 0,False)
     unit_button4 = button.TroopsButton(screen, int(TILE_SIZE*0.92)*4, WINDOW_SIZE[1] * 0.91, units_img[4], int(TILE_SIZE*0.9), TILE_SIZE, 900,
                                        False, 'A trained group of scouts', 0,False)
-
-    battle_units_box.append([unit_button,unit_button1,unit_button2,unit_button3,unit_button4])
+    unit_button5 = button.TroopsButton(screen, 0, WINDOW_SIZE[1] * 0.92 - TILE_SIZE, units_img[5], int(TILE_SIZE*0.9), TILE_SIZE, 0,
+                                       False, 'Bartelago is your old friend. He prefers heavy swords and throwing daggers', 0,False)
+    battle_units_box.append([unit_button,unit_button1,unit_button2,unit_button3,unit_button4,unit_button5])
     #------------------------------------------------------------------------------------
     with open(f"MainMenuRes/inventory/unlocked_troops.json",'r') as g:
         data = json.loads(g.read())
@@ -8884,6 +10093,7 @@ def old_ways_battle():
             for j in i:
                 j.available = True
         #unit_button.available = data["0"]
+        #unit_button5.available = data["5"]
         #if battle_type == 1:
             #unit_button1.available = data["1"]
             #unit_button2.available = data["2"]
@@ -8901,81 +10111,67 @@ def old_ways_battle():
     # max_hp, max_armor, strength, strength2, defence, threshold, reach, special,
     # alive, max_supply, max_tricks, hostile, arcane_res, fire_res, energy_res,
     # frost_res, poison_res,crit, experience, allegiance, parry,block,status):
+    # 690 170 - rowan
     # -----------------------------------PlayerArmy--------------------------
-    dunstan = Fighter (590,190,'dunstan',round(120*upgrade),round(100*upgrade),round(40*upgrade),round(30*upgrade),round(65*upgrade),round(8*upgrade),1,0,True,
+    dunstan = Fighter (590,190,'dunstan',round(120*upgrade),round(120*upgrade),round(40*upgrade),round(30*upgrade),round(65*upgrade),round(8*upgrade),1,0,True,
                        round(4*upgrade),round(4*upgrade),False,0,round(15*upgrade),round(15*upgrade),round(15*upgrade),round(25*upgrade),round(5*upgrade),0,'hero',
-                       round(10*upgrade),round(35*upgrade),'healthy')
-    #-----------------------------------------------------------------------
-    militia_0 = Fighter(530 + random.randint(-25, 25), 240 + random.randint(-25, 25),
-                        'militia', 50, 30, 35, 0, 35, 3,1, 0, True, 1, 0, False, 0, 5, 0, 5, 5, 3, 40, 'regular',5,10,'healthy')
-    militia_1 = Fighter(510 + random.randint(-25, 25), 260 + random.randint(-25, 25),
-                        'militia', 50, 30, 35, 0, 35, 3,1, 0, True, 1, 0, False, 0, 5, 0, 5, 5, 3, 40, 'regular',5,10,'healthy')
-    militia_2 = Fighter(490 + random.randint(-25, 25), 280 + random.randint(-25, 25),
-                        'militia', 50, 30, 35, 0, 35, 3,1, 0, True, 1, 0, False, 0, 5, 0, 5, 5, 3, 40, 'regular',5,10,'healthy')
-    militia_3 = Fighter(460 + random.randint(-25, 25), 300 + random.randint(-25, 25),
-                        'militia', 50, 30, 35, 0, 35, 3,1, 0, True, 1, 0, False, 0, 5, 0, 5, 5, 3, 40, 'regular',5,10,'healthy')
-    militia_4 = Fighter(450 + random.randint(-25, 25), 320 + random.randint(-25, 25),
-                        'militia', 50, 30, 35, 0, 35, 3,1, 0, True, 1, 0, False, 0, 5, 0, 5, 5, 3, 40, 'regular',5,10,'healthy')
-    militia_5 = Fighter(430 + random.randint(-25, 25), 340 + random.randint(-25, 25),
-                        'militia', 50, 30, 35, 0, 35, 3,1, 0, True, 1, 0, False, 0, 5, 0, 5, 5, 3, 40, 'regular',5,10,'healthy')
-    captain_0 = Fighter(600 + random.randint(-25, 25), 250 + random.randint(-25, 25),
-                        'captain', 90, 65, 40, 0, 55, 6,1, 5, True, 2, 2, False, 0, 10, 10, 10, 10, 9, 85, 'regular',12,16,'healthy')
-    spearman_0 = Fighter(580 + random.randint(-25, 25), 280 + random.randint(-25, 25),
-                         'spearman', 55, 30, 36, 0, 45, 4,1, 0, True, 1, 0, False, 0, 5, 5, 5, 5, 9, 45, 'regular',33,5,'healthy')
-    spearman_1 = Fighter(560 + random.randint(-25, 25), 320 + random.randint(-25, 25),
-                         'spearman', 55, 30, 36, 0, 45, 4,1, 0, True, 1, 0, False, 0, 5, 5, 5, 5, 9, 45, 'regular',33,5,'healthy')
-    spearman_2 = Fighter(520 + random.randint(-25, 25), 300 + random.randint(-25, 25),
-                         'spearman', 55, 30, 36, 0, 45, 4,1, 0, True, 1, 0, False, 0, 5, 5, 5, 5, 9, 45, 'regular',33,5,'healthy')
-    spearman_3 = Fighter(570 + random.randint(-25, 25), 340 + random.randint(-25, 25),
-                         'spearman', 55, 30, 36, 0, 45, 4,1, 0, True, 1, 0, False, 0, 5, 5, 5, 5, 9, 45, 'regular',33,5,'healthy')
-#-----------------------------------------------------------------------
-    light_infantry = [militia_0,militia_1,militia_2,militia_3,militia_4,militia_5,captain_0,spearman_0,spearman_1,spearman_2,spearman_3]
-#-----------------------------------------------------------------------
-    archer_0 = Fighter(420 + random.randint(-25, 25), 190 + random.randint(-25, 25),
-                       'archer', 40, 30, 28, 0, 40, 2,2, 1, True, 2, 1, False, 0, 0, 0, 0, 25, 8, 70, 'regular',0,10,'healthy')
-    archer_1 = Fighter(380 + random.randint(-25, 25), 210 + random.randint(-25, 25),
-                       'archer', 40, 30, 28, 0, 40, 2,2, 1, True, 2, 1, False, 0, 0, 0, 0, 25, 8, 70, 'regular',0,10,'healthy')
-    archer_2 = Fighter(340 + random.randint(-25, 25), 230 + random.randint(-25, 25),
-                       'archer', 40, 30, 28, 0, 40, 2,2, 1, True, 2, 1, False, 0, 0, 0, 0, 25, 8, 70, 'regular',0,10,'healthy')
-    archer_3 = Fighter(300 + random.randint(-25, 25), 250 + random.randint(-25, 25),
-                       'archer', 40, 30, 28, 0, 40, 2,2, 1, True, 2, 1, False, 0, 0, 0, 0, 25, 8, 70, 'regular',0,10,'healthy')
-    archer_4 = Fighter(260 + random.randint(-25, 25), 270 + random.randint(-25, 25),
-                       'archer', 40, 30, 28, 0, 40, 2,2, 1, True, 2, 1, False, 0, 0, 0, 0, 25, 8, 70, 'regular',0,10,'healthy')
-    marksman_0 = Fighter(220 + random.randint(-25, 25), 290 + random.randint(-25, 25),
-                       'marksman', 55, 40, 36, 0, 45, 4,2, 1, True, 2, 1, False, 0, 15, 15, 15, 40, 12, 95, 'regular',0,15,'healthy')
-    marksman_1 = Fighter(470 + random.randint(-25, 25), 190 + random.randint(-25, 25),
-                         'marksman', 55, 40, 36, 0, 45, 4,2, 1, True, 2, 1, False, 0, 15, 15, 15, 40, 12, 95, 'regular',0,15,'healthy')
-    #-----------------------------------------------------------------------
-    light_archers = [archer_0,archer_1,archer_2,archer_3,archer_4,marksman_0,marksman_1]
-#-----------------------------------------------------------------------
-    chevalier_0 = Fighter(530 + random.randint(-20, 20), 440 + random.randint(-25, 25),
-                          'chevalier', 120, 100, 60, 0,55, 8, 1, 0, True, 1, 2, False, 12, 12, 12, 12, 0, 6, 125, 'regular',0,20,'healthy')
-    chevalier_1 = Fighter(470 + random.randint(-20, 20), 380 + random.randint(-25, 25),
-                          'chevalier', 120, 100, 60, 0,55, 8, 1, 0, True, 1, 2, False, 12, 12, 12, 12, 0, 6, 125, 'regular',0,20,'healthy')
-    chevalier_2 = Fighter(600 + random.randint(-20, 20), 420 + random.randint(-25, 25),
-                          'chevalier', 120, 100, 60, 0,55, 8, 1, 0, True, 1, 2, False, 12, 12, 12, 12, 0, 6, 125, 'regular',0,20,'healthy')
-    chevalier_3 = Fighter(550 + random.randint(-20, 20), 350 + random.randint(-25, 25),
-                          'chevalier', 120, 100, 60, 0,55, 8, 1, 0, True, 1, 2, False, 12, 12, 12, 12, 0, 6, 125, 'regular',0,20,'healthy')
-    #-----------------------------------------------------------------------
-    chevaliers = [chevalier_0,chevalier_1,chevalier_2,chevalier_3]
-    #-----------------------------------------------------------------------
-    scout_skirmisher_0 = Fighter(470 + random.randint(-25, 25), 240 + random.randint(-25, 25),
-                         'scout_skirmisher', 65, 40, 32, 0, 55, 2,3, 0, True, 2, 2, False, 0, 20, 0, 20, 40, 12, 80, 'regular',66,20,'healthy')
-    scout_skirmisher_1 = Fighter(325 + random.randint(-25, 25), 325 + random.randint(-25, 25),
-                                 'scout_skirmisher', 65, 40, 32, 0, 55, 2,3, 0, True, 2, 2, False, 0, 20, 0, 20, 40, 12, 80, 'regular',66,20,'healthy')
-    scout_saboteur_0 = Fighter(400 + random.randint(-25, 25), 250 + random.randint(-25, 25),
-                                 'scout_saboteur', 55, 35, 20, 0, 40, 2,2, 7, True, 4, 1, False, 20, 40, 20, 20, 40, 0, 110, 'regular',0,10,'healthy')
-    scout_hunter_0 = Fighter(380 + random.randint(-25, 25), 270 + random.randint(-25, 25),
-                               'scout_hunter', 45, 30, 32, 0, 30, 2,2, 1, True, 1, 1, False, 0, 10, 0, 10, 20, 10, 75, 'regular',0,15,'healthy')
-    scout_hunter_1 = Fighter(360 + random.randint(-25, 25), 290 + random.randint(-25, 25),
-                             'scout_hunter', 45, 30, 32, 0, 30, 2,2, 1, True, 1, 1, False, 0, 10, 0, 10, 20, 10, 75, 'regular',0,15,'healthy')
-
-    scouts = [scout_skirmisher_0,scout_skirmisher_1,scout_saboteur_0,scout_hunter_0,scout_hunter_1]
-    #-----------------------------------------------------------------------
+                       round(10*upgrade),round(35*upgrade),'weapon','healthy')
+    bartelago = Fighter (550,210,'bartelago',round(160*upgrade),round(80*upgrade),round(60*upgrade),round(20*upgrade),round(50*upgrade),round(6*upgrade),1,0,True,
+                       round(4*upgrade),round(4*upgrade),False,round(10*upgrade),round(10*upgrade),round(10*upgrade),round(10*upgrade),round(25*upgrade),round(8*upgrade),0,'hero',
+                       round(15*upgrade),round(10*upgrade),'tear','healthy')
     rowan = Fighter(690, 170, 'rowan',rowan_health_points , rowan_armor_points, rowan_melee_damage, rowan_ranged_damage,
                     rowan_defence,rowan_threshold, 1, 0, True,20, rowan_tricks, False,
                     rowan_arcana_res, rowan_fire_res, rowan_energy_res, rowan_frost_res,
-                    rowan_poison_res, rowan_critical_strike, 0, 'hero',rowan_parry,rowan_block,'healthy')
+                    rowan_poison_res, rowan_critical_strike, 0, 'hero',rowan_parry,rowan_block,'weapon','healthy')
+
+    #---------------------------------------light_infantry--------------------------------
+    light_infantry = []
+    for militia in range(10):
+        militia = Fighter(random.randrange(500, 600, 30), random.randrange(240, 400, 30),
+                           'militia', 50, 30, 35, 0, 35, 3,1, 0, True, 1, 0, False, 0, 5, 0, 5, 5, 3, 40, 'regular',5,10,'weapon','healthy')
+        light_infantry.append(militia)
+    for spearman in range(6):
+        spearman = Fighter(random.randrange(500, 600, 30), random.randrange(220, 400, 30),
+                             'spearman', 55, 30, 36, 0, 45, 4,1, 0, True, 1, 0, False, 0, 5, 5, 5, 5, 9, 45, 'regular',33,5,'weapon','healthy')
+        light_infantry.append(spearman)
+    for captain in range(2):
+        captain = Fighter(random.randrange(540, 640, 30), random.randrange(220, 400, 30),
+                'captain', 90, 65, 40, 0, 55, 6,1, 5, True, 2, 2, False, 0, 10, 10, 10, 10, 9, 85, 'regular',12,16,'weapon','healthy')
+        light_infantry.append(captain)
+
+    #---------------------------------------light_archers--------------------------------
+    light_archers = []
+    for archer in range(6):
+        archer = Fighter(random.randrange(240, 280, 30), random.randrange(220, 380, 30),
+                           'archer', 40, 30, 28, 0, 40, 2,2, 1, True, 2, 1, False, 0, 0, 0, 0, 25, 8, 70, 'regular',0,10,'weapon','healthy')
+        light_archers.append(archer)
+    for marksman in range(3):
+        marksman = Fighter(random.randrange(240, 280, 30), random.randrange(220, 380, 30),
+                            'marksman', 55, 40, 36, 0, 45, 4,2, 1, True, 2, 1, False, 0, 15, 15, 15, 40, 12, 95, 'regular',0,15,'weapon','healthy')
+        light_archers.append(marksman)
+
+    #-----------------------------------------chevaliers------------------------------------
+    chevaliers = []
+    for chevalier in range(5):
+        chevalier = Fighter(random.randrange(500, 600, 30), random.randrange(400, 500, 30),
+                            'chevalier', 120, 100, 60, 0,55, 8, 1, 0, True, 1, 2, False, 12, 12, 12, 12, 0, 6, 125, 'regular',0,20,'weapon','healthy')
+        chevaliers.append(chevalier)
+    #-------------------------------------scouts----------------------------------------
+    scouts = []
+    for scout_skirmisher in range(3):
+        scout_skirmisher = Fighter(random.randrange(320, 420, 30), random.randrange(240, 420, 30),
+                                   'scout_skirmisher', 65, 40, 32, 0, 55, 2,3, 0, True, 2, 2, False, 0, 20, 0, 20, 40, 12, 80, 'regular',66,20,'weapon','healthy')
+        scouts.append(scout_skirmisher)
+    for scout_saboteur in range(2):
+        scout_saboteur  = Fighter(random.randrange(320, 420, 30), random.randrange(240, 420, 30),
+                                      'scout_saboteur', 55, 35, 20, 0, 40, 2,2, 7, True, 4, 1, False, 20, 40, 20, 20, 40, 0, 110, 'regular',0,10,'weapon','healthy')
+        scouts.append(scout_saboteur)
+    for scout_hunter in range(3):
+        scout_hunter = Fighter(random.randrange(320, 420, 30),  random.randrange(240, 420, 30),
+                                 'scout_hunter', 45, 30, 32, 0, 30, 2,2, 1, True, 1, 1, False, 0, 10, 0, 10, 20, 10, 75, 'regular',0,15,'weapon','healthy')
+        scouts.append(scout_hunter)
+
+
     # -----------------------------------------------------------------------
     #battle_roll_dice = random.randint(0, 2)
     army_player = []
@@ -8985,138 +10181,102 @@ def old_ways_battle():
     # max_hp, max_armor, strength, strength2, defence, threshold, reach, special,
     # alive, max_supply, max_tricks, hostile, arcane_res, fire_res, energy_res,
     # frost_res, poison_res,crit, experience, allegiance, parry,block,status):
-    # --------------------Critters----------------------------------
-    h_brigand_0 = Fighter(700 + random.randint(-25, 25), 220 + random.randint(-25, 25),
-                  'brigand', 40, 25, 30, 0, 30, 3,1, 0, True, 1, 0, True, 0, 0, 0, 0, 0, 0, 25, 'regular',6,10,'healthy')
-    h_brigand_1 = Fighter(700 + random.randint(-25, 25), 240 + random.randint(-25, 25),
-                          'brigand', 40, 25, 30, 0, 30, 3,1, 0, True, 1, 0, True, 0, 0, 0, 0, 0, 0, 25, 'regular',6,10,'healthy')
-    h_brigand_2 = Fighter(700 + random.randint(-25, 25), 260 + random.randint(-25, 25),
-                          'brigand', 40, 25, 30, 0, 30, 3,1, 0, True, 1, 0, True, 0, 0, 0, 0, 0, 0, 25, 'regular',6,10,'healthy')
-    h_brigand_3 = Fighter(700 + random.randint(-25, 25), 280 + random.randint(-25, 25),
-                          'brigand', 40, 25, 30, 0, 30, 3,1, 0, True, 1, 0, True, 0, 0, 0, 0, 0, 0, 25, 'regular',6,10,'healthy')
-    h_brigand_4 = Fighter(700 + random.randint(-25, 25), 300 + random.randint(-25, 25),
-                          'brigand', 40, 25, 30, 0, 30, 3,1, 0, True, 1, 0, True, 0, 0, 0, 0, 0, 0, 25, 'regular',6,10,'healthy')
-    h_brigand_5 = Fighter(700 + random.randint(-25, 25), 320 + random.randint(-25, 25),
-                          'brigand', 40, 25, 30, 0, 30, 3,1, 0, True, 1, 0, True, 0, 0, 0, 0, 0, 0, 25, 'regular',6,10,'healthy')
-    h_brigand_6 = Fighter(700 + random.randint(-25, 25), 340 + random.randint(-25, 25),
-                          'brigand', 40, 25, 30, 0, 30, 3,1, 0, True, 1, 0, True, 0, 0, 0, 0, 0, 0, 25, 'regular',6,10,'healthy')
-    h_spearman_0 = Fighter(750 + random.randint(-25, 25), 200 + random.randint(-25, 25),
-                         'spearman', 55, 30, 36, 0, 45, 4,1, 0, True, 1, 0, True, 0, 5, 5, 5, 5, 9, 40, 'regular',33,5,'healthy')
-    h_spearman_1 = Fighter(750 + random.randint(-25, 25), 220 + random.randint(-25, 25),
-                           'spearman', 55, 30, 36, 0, 45, 4,1, 0, True, 1, 0, True, 0, 5, 5, 5, 5, 9, 40, 'regular',33,5,'healthy')
-    h_spearman_2 = Fighter(750 + random.randint(-25, 25), 240 + random.randint(-25, 25),
-                           'spearman', 55, 30, 36, 0, 45, 4,1, 0, True, 1, 0, True, 0, 5, 5, 5, 5, 9, 40, 'regular',33,5,'healthy')
-    h_spearman_3 = Fighter(750 + random.randint(-25, 25), 260 + random.randint(-25, 25),
-                           'spearman', 55, 30, 36, 0, 45, 4,1, 0, True, 1, 0, True, 0, 5, 5, 5, 5, 9, 40, 'regular',33,5,'healthy')
-    h_thug_0 = Fighter(770 + random.randint(-25, 25), 280 + random.randint(-25, 25),
-                       'thug', 80, 60, 55, 0,50, 4, 1, 6, True, 1, 2, True, 0, 8, 8, 8, 15, 6, 110, 'regular',12,12,'healthy')
-    h_thug_1 = Fighter(770 + random.randint(-25, 25), 300 + random.randint(-25, 25),
-                       'thug', 80, 60, 55, 0,50, 4, 1, 6, True, 1, 2, True, 0, 8, 8, 8, 15, 6, 110, 'regular',12,12,'healthy')
-    h_thug_2 = Fighter(770 + random.randint(-25, 25), 320 + random.randint(-25, 25),
-                       'thug', 80, 60, 55, 0,50, 4, 1, 6, True, 1, 2, True, 0, 8, 8, 8, 15, 6, 110, 'regular',12,12,'healthy')
-    h_thug_3 = Fighter(770 + random.randint(-25, 25), 340 + random.randint(-25, 25),
-                       'thug', 80, 60, 55, 0,50, 4, 1, 6, True, 1, 2, True, 0, 8, 8, 8, 15, 6, 110, 'regular',12,12,'healthy')
-    h_thug_4 = Fighter(770 + random.randint(-25, 25), 360 + random.randint(-25, 25),
-                       'thug', 80, 60, 55, 0,50, 4, 1, 6, True, 1, 2, True, 0, 8, 8, 8, 15, 6, 110, 'regular',12,12,'healthy')
 
-    riff_raff = [h_brigand_0,h_brigand_1,h_brigand_2,h_brigand_3,h_brigand_4,h_brigand_5,h_brigand_6,
-                 h_spearman_0,h_spearman_1,h_spearman_2,h_spearman_3,h_thug_0,h_thug_1,h_thug_2,h_thug_3,h_thug_4]
-    #-----------------------------------------------------------------------
+    # ---------------------------------------ENEMY-----------------------------------
+    #-------------------------------------riff_raff----------------------------------
+    riff_raff = []
+    for h_brigand in range(10):
+        h_brigand = Fighter(random.randrange(720, 760, 30),  random.randrange(300, 400, 30),
+                              'brigand', 40, 25, 30, 0, 30, 3,1, 0, True, 1, 0, True, 0, 0, 0, 0, 0, 0, 35, 'regular', 6, 10,'weapon', 'healthy')
+        riff_raff.append(h_brigand)
+    for h_spearman in range(8):
+        h_spearman = Fighter(random.randrange(720, 760, 30), random.randrange(200, 300, 30),
+                               'spearman', 55, 30, 36, 0, 45, 4,1, 0, True, 1, 0, True, 0, 5, 5, 5, 5, 9, 40, 'regular',33,5,'weapon','healthy')
+        riff_raff.append(h_spearman)
+    for h_thug in range(6):
+        h_thug = Fighter(random.randrange(720, 760, 30), random.randrange(400, 500, 30),
+                           'thug', 80, 60, 55, 0,50, 4, 1, 6, True, 1, 2, True, 0, 8, 8, 8, 15, 6, 110, 'regular',12,12,'weapon','healthy')
+        riff_raff.append(h_thug)
 
-    h_landsknecht_0 = Fighter(880 + random.randint(-25, 25), 220 + random.randint(-25, 25),
-                              'landsknecht', 70, 45, 40, 0,35, 6, 1, 0, True, 1, 1, True, 0, 10, 0, 10, 10, 7, 90, 'regular',12,8,'healthy')
-    h_landsknecht_1 = Fighter(880 + random.randint(-25, 25), 240 + random.randint(-25, 25),
-                              'landsknecht', 70, 45, 40, 0,35, 6, 1, 0, True, 1, 1, True, 0, 10, 0, 10, 10, 7, 90, 'regular',12,8,'healthy')
-    h_landsknecht_2 = Fighter(880 + random.randint(-25, 25), 260 + random.randint(-25, 25),
-                              'landsknecht', 70, 45, 40, 0,35, 6, 1, 0, True, 1, 1, True, 0, 10, 0, 10, 10, 7, 90, 'regular',12,8,'healthy')
-    h_landsknecht_3 = Fighter(880 + random.randint(-25, 25), 280 + random.randint(-25, 25),
-                              'landsknecht', 70, 45, 40, 0,35, 6, 1, 0, True, 1, 1, True, 0, 10, 0, 10, 10, 7, 90, 'regular',12,8,'healthy')
-    h_landsknecht_4 = Fighter(880 + random.randint(-25, 25), 300 + random.randint(-25, 25),
-                              'landsknecht', 70, 45, 40, 0,35, 6, 1, 0, True, 1, 1, True, 0, 10, 0, 10, 10, 7, 90, 'regular',12,8,'healthy')
-    h_footman_0= Fighter(860 + random.randint(-25, 25), 300 + random.randint(-25, 25),
-                        'footman', 90, 70, 45, 0, 60, 7,1, 0, True, 2, 1, True, 5, 10, 0, 10, 20, 0, 100, 'regular',8,20,'healthy')
-    h_footman_1= Fighter(860 + random.randint(-25, 25), 330 + random.randint(-25, 25),
-                       'footman', 90, 70, 45, 0, 60, 7,1, 0, True, 2, 1, True, 5, 10, 0, 10, 20, 0, 100, 'regular',8,20,'healthy')
-    h_footman_2= Fighter(860 + random.randint(-25, 25), 350 + random.randint(-25, 25),
-                       'footman', 90, 70, 45, 0, 60, 7,1, 0, True, 2, 1, True, 5, 10, 0, 10, 20, 0, 100, 'regular',8,20,'healthy')
-    h_footman_3= Fighter(860 + random.randint(-25, 25), 380 + random.randint(-25, 25),
-                       'footman', 90, 70, 45, 0, 60, 7,1, 0, True, 2, 1, True, 5, 10, 0, 10, 20, 0, 100, 'regular',8,20,'healthy')
-    h_footman_4= Fighter(860 + random.randint(-25, 25),400 + random.randint(-25, 25),
-                         'footman', 90, 70, 45, 0, 60, 7,1, 0, True, 2, 1, True, 5, 10, 0, 10, 20, 0, 100, 'regular',8,20,'healthy')
+    #-------------------------------------mercenary_gang----------------------------------
+    mercenary_gang = []
+    for h_landsknecht in range(6):
+        h_landsknecht = Fighter(random.randrange(800, 880, 30), random.randrange(200, 480, 30),
+                             'landsknecht', 70, 45, 40, 0, 35, 6, 1, 0, True, 1, 1, True, 0, 10, 0, 10, 10, 7, 90, 'regular',12,8,'weapon','healthy')
+        mercenary_gang.append(h_landsknecht)
+    for h_footman in range(8):
+        h_footman = Fighter(random.randrange(800, 880, 30), random.randrange(200, 480, 30),
+                             'footman', 90, 70, 45, 0, 60, 7,1, 0, True, 2, 1, True, 5, 10, 0, 10, 20, 0, 100, 'regular',8,20,'weapon','healthy')
+        mercenary_gang.append(h_footman)
 
-    mercenary_gang = [h_landsknecht_0,h_landsknecht_1,h_landsknecht_2,h_landsknecht_2,
-                      h_landsknecht_3,h_footman_0,h_footman_1,h_footman_2,h_footman_3,h_landsknecht_4,h_footman_4]
-    #-----------------------------------------------------------------------
-    h_bowman_0 = Fighter(1000 + random.randint(-25, 25), 260 + random.randint(-25, 25),
-                       'bowman', 35, 20, 25, 0, 25, 0, 2, 1, True, 1, 0, True, 0, 0, 0, 0, 10, 5, 25, 'regular',0,10,'healthy')
-    h_bowman_1 = Fighter(1000 + random.randint(-25, 25), 280 + random.randint(-25, 25),
-                         'bowman', 35, 20, 25, 0, 25, 0, 2, 1, True, 1, 0, True, 0, 0, 0, 0, 10, 5, 25, 'regular',0,10,'healthy')
-    h_bowman_2 = Fighter(1000 + random.randint(-25, 25), 300 + random.randint(-25, 25),
-                         'bowman', 35, 20, 25, 0, 25, 0, 2, 1, True, 1, 0, True, 0, 0, 0, 0, 10, 5, 25, 'regular',0,10,'healthy')
-    h_bowman_3 = Fighter(1000 + random.randint(-25, 25), 310 + random.randint(-25, 25),
-                         'bowman', 35, 20, 25, 0, 25, 0, 2, 1, True, 1, 0, True, 0, 0, 0, 0, 10, 5, 25, 'regular',0,10,'healthy')
-    h_bowman_4 = Fighter(1000 + random.randint(-25, 25), 320 + random.randint(-25, 25),
-                         'bowman', 35, 20, 25, 0, 25, 0, 2, 1, True, 1, 0, True, 0, 0, 0, 0, 10, 5, 25, 'regular',0,10,'healthy')
-    h_bowman_5 = Fighter(1000 + random.randint(-25, 25), 340 + random.randint(-25, 25),
-                         'bowman', 35, 20, 25, 0, 25, 0, 2, 1, True, 1, 0, True, 0, 0, 0, 0, 10, 5, 25, 'regular',0,10,'healthy')
-    h_bowman_6 = Fighter(1000 + random.randint(-25, 25), 360 + random.randint(-25, 25),
-                         'bowman', 35, 20, 25, 0, 25, 0, 2, 1, True, 1, 0, True, 0, 0, 0, 0, 10, 5, 25, 'regular',0,10,'healthy')
-    h_bowman_7 = Fighter(1000 + random.randint(-25, 25), 380 + random.randint(-25, 25),
-                         'bowman', 35, 20, 25, 0, 25, 0, 2, 1, True, 1, 0, True, 0, 0, 0, 0, 10, 5, 25, 'regular',0,10,'healthy')
+    #----------------------------------------bandit_bowmen-------------------------------
+    bandit_bowmen = []
+    for h_bowman in range(8):
+        h_bowman = Fighter(random.randrange(980, 1020, 30), random.randrange(260, 460, 30),
+                               'bowman', 35, 20, 25, 0, 25, 0, 2, 1, True, 1, 0, True, 0, 0, 0, 0, 10, 5, 30, 'regular',0,10,'weapon','healthy')
+        bandit_bowmen.append(h_bowman)
 
-    bandit_bowmen = [h_bowman_0,h_bowman_1,h_bowman_2,h_bowman_3,h_bowman_4,h_bowman_5,h_bowman_6,h_bowman_7]
-    #------------------------------------------------------------------------------------
-    h_red_dragon= Fighter(900 + random.randint(-25, 25), 240 + random.randint(-25, 25),
-                         'red_dragon', 2500, 200, 40, 0, 85, 20,3, 4, True, 0, 10, True, 25, 100, 25, 25, 100, 10, 3000,'monster',10,20,'healthy')
-
+    #-------------------------------------------red_dragon-----------------------------
+    h_red_dragon= Fighter(900, 240, 'red_dragon', 2500, 200, 40, 0, 85, 20,3, 4, True, 0, 10, True, 25, 100, 25, 25, 100, 10, 3000,'monster',10,20,'fire','healthy')
     red_dragon = [h_red_dragon]
-    #------------------------------------------------------------------------------------
-    h_thug_0 = Fighter(700 + random.randint(-25, 25), 440 + random.randint(-25, 25),
-                       'thug', 80, 60, 55, 0,50, 4, 1, 6, True, 1, 2, True, 0, 8, 8, 8, 15, 6, 110, 'regular',12,12,'healthy')
-    h_thug_1 = Fighter(700 + random.randint(-25, 25), 460 + random.randint(-25, 25),
-                       'thug', 80, 60, 55, 0,50, 4, 1, 6, True, 1, 2, True, 0, 8, 8, 8, 15, 6, 110, 'regular',12,12,'healthy')
-    h_thug_2 = Fighter(740 + random.randint(-25, 25), 360 + random.randint(-25, 25),
-                       'thug', 80, 60, 55, 0,50, 4, 1, 6, True, 1, 2, True, 0, 8, 8, 8, 15, 6, 110, 'regular',12,12,'healthy')
-    h_thug_3 = Fighter(740 + random.randint(-25, 25), 380 + random.randint(-25, 25),
-                       'thug', 80, 60, 55, 0,50, 4, 1, 6, True, 1, 2, True, 0, 8, 8, 8, 15, 6, 110, 'regular',12,12,'healthy')
-    h_thug_4 = Fighter(740 + random.randint(-25, 25), 400 + random.randint(-25, 25),
-                       'thug', 100, 60, 55, 0,50, 4, 1, 6, True, 1, 2, True, 0, 8, 8, 8, 15, 6, 110, 'regular',12,12,'healthy')
-    h_landsknecht_0 = Fighter(800 + random.randint(-25, 25), 220 + random.randint(-25, 25),
-                              'landsknecht', 70, 45, 40, 0,35, 6, 1, 0, True, 1, 1, True, 0, 10, 0, 10, 10, 7, 90, 'regular',12,8,'healthy')
-    h_landsknecht_1 = Fighter(800 + random.randint(-25, 25), 240 + random.randint(-25, 25),
-                              'landsknecht', 70, 45, 40, 0,35, 6, 1, 0, True, 1, 1, True, 0, 10, 0, 10, 10, 7, 90, 'regular',12,8,'healthy')
-    h_landsknecht_2 = Fighter(800 + random.randint(-25, 25), 260 + random.randint(-25, 25),
-                              'landsknecht', 70, 45, 40, 0,35, 6, 1, 0, True, 1, 1, True, 0, 10, 0, 10, 10, 7, 90, 'regular',12,8,'healthy')
-    h_landsknecht_3 = Fighter(800 + random.randint(-25, 25), 280 + random.randint(-25, 25),
-                              'landsknecht', 70, 45, 40, 0,35, 6, 1, 0, True, 1, 1, True, 0, 10, 0, 10, 10, 7, 90, 'regular',12,8,'healthy')
-    thugs = [h_thug_0,h_thug_1,h_thug_2,h_thug_3,h_thug_4]
-    knechts = [h_landsknecht_0,h_landsknecht_1,h_landsknecht_2,h_landsknecht_3]
-    #h_unit0 = random.choice([h_bowman_0, h_brigand_0])
+
+    #---------------------------------------------thugs---------------------------------
+    thugs = []
+    for h_thug in range(6):
+        h_thug = Fighter(random.randrange(820, 860, 30),  random.randrange(200, 480, 30),
+                           'thug', 80, 60, 55, 0,50, 4, 1, 6, True, 1, 2, True, 0, 8, 8, 8, 15, 6, 110, 'regular',12,12,'weapon','healthy')
+        thugs.append(h_thug)
+
+    #------------------------------------------------knechts-----------------------------
+    knechts = []
+    for h_landsknecht in range(6):
+        h_landsknecht = Fighter(random.randrange(820, 860, 30), random.randrange(200, 480, 30),
+                                  'landsknecht', 70, 45, 40, 0,35, 6, 1, 0, True, 1, 1, True, 0, 10, 0, 10, 10, 7, 90, 'regular',12,8,'weapon','healthy')
+        knechts.append(h_landsknecht)
+
+#------------------------------------------wolf_pack------------------------------------------
+    wolf_pack = []
+    for h_wolf in range(6):
+        h_wolf = Fighter(700 + random.randint(-25, 25), random.randrange(200, 300, 30),'wolf',40,1,25,0,0,0,1,3,True,0,0,True,0,0,0,5,5,3,25,'regular',6,6,'tear','healthy')
+        wolf_pack.append(h_wolf)
+    for h_blackwolf in range(4):
+        h_blackwolf = Fighter(700 + random.randint(-25, 25), random.randrange(200, 300, 30),'blackwolf',60,1,30,0,0,4,1,3,True,0,0,True,0,0,0,15,10,7,45,'regular',12,6,'tear','healthy')
+        wolf_pack.append(h_blackwolf)
 
 # ----------------------------------------------------------------------------------------
     battle_roll_dice = random.randint(0, 1)
     print(battle_roll_dice)
     # -----------------------------------------------------------------------
     army_hostiles = []
-    if battle_roll_dice == 0:
-        army_hostiles.extend(riff_raff)
-        army_hostiles.extend(bandit_bowmen)
-        army_hostiles.extend(mercenary_gang)
-        #army_hostiles.extend(thugs)
-    if battle_roll_dice == 1:
-        #army_hostiles.extend(knechts)
-        army_hostiles.extend(red_dragon)
+    if battle_conditions == 1:
+        if battle_roll_dice == 0:
+            army_hostiles.extend(riff_raff)
+            army_hostiles.extend(bandit_bowmen)
+            army_hostiles.extend(mercenary_gang)
+        if battle_roll_dice == 1:
+            army_hostiles.extend(riff_raff)
+            army_hostiles.extend(thugs)
+            army_hostiles.extend(knechts)
+            army_hostiles.extend(bandit_bowmen)
+        if battle_roll_dice == 2:
+            army_hostiles.extend(red_dragon)
+
+    if battle_conditions == 2:
+       army_hostiles.extend(wolf_pack)
 
     army_hostiles_reserves = []
     enemy_reserves = True
+
+
+
+
+
+
     # ------------------------------ItemsUse(Button)---------------------------
     # inventory_button = button.Button(screen,WINDOW_SIZE[0]*0 + 110, WINDOW_SIZE[1]*0 - 6,inventory_bag,280,120,0, True, 'Inventory')
     book_button = button.ToggleButton(screen, 110, 455, book_of_tricks, 84, 76, 0, True, 'Book of Tricks')
     inventory_button = button.ToggleButton(screen, 20, 455, inventory_bag, 76, 74, 0, True, 'Inventory')
     troops_button = button.ToggleButton(screen, 205, 445, troops, 84, 84, 0, True, 'Troops')
-
-
-
 
 
     # ------------------------------ItemsUse(PotionButton)-------------------
@@ -9133,7 +10293,7 @@ def old_ways_battle():
  #-------------------------------------------------------------------------------------------
     battle_items_box = []
     potion_button = button.PotionButton(screen, 0, WINDOW_SIZE[1] * 0.91, potions_img[0], int(TILE_SIZE*0.9), TILE_SIZE, 45,
-                                  False, f'Health Potion. Restores {health_potion_restores} health', 1)
+                                   False, f'Health Potion. Restores {health_potion_restores} health', 1)
     potion_button1 = button.PotionButton(screen, int(TILE_SIZE*0.92), WINDOW_SIZE[1] * 0.91, potions_img[1], int(TILE_SIZE*0.9), int(TILE_SIZE*0.95), 80,
                                    False, f'Defence Potion. Restores {defence_potion_adds} armor. Maximizes defense', 2+supply_modifier)
     potion_button2 = button.PotionButton(screen, int(TILE_SIZE*0.92)*2, WINDOW_SIZE[1] * 0.91, potions_img[4], int(TILE_SIZE*0.9), int(TILE_SIZE*0.95), 70,
@@ -9158,17 +10318,6 @@ def old_ways_battle():
                                    False,f'Energyshield Potion. Adds {energyshield_potion_adds} energy resistance', 1)
     potion_button12 = button.PotionButton(screen, int(TILE_SIZE*0.92)*12, WINDOW_SIZE[1] * 0.91, potions_img[9], int(TILE_SIZE*0.9), int(TILE_SIZE*0.95), 50,
                                    False,f'Moonlight Potion. Adds {moonlight_potion_adds} arcana resistance', 1)
-
-    potion_button20 = button.PotionButton(screen, 0, WINDOW_SIZE[1] * 0.92 - TILE_SIZE, potions_img[13], int(TILE_SIZE*0.9), int(TILE_SIZE*0.95), 135,
-                                    False,f'Dark Cloud Potion. Curses multiple targets. Lowers target\'s resistances', 2+supply_modifier)
-    potion_button21 = button.PotionButton(screen, int(TILE_SIZE*0.92), WINDOW_SIZE[1] * 0.92 - TILE_SIZE, potions_img[21], int(TILE_SIZE*0.9), int(TILE_SIZE*0.95), 115,
-                                    False,f'Energy Shard. Shocks multiple targets. Lowers target\'s abilities', 2+supply_modifier)
-    potion_button22 = button.PotionButton(screen, int(TILE_SIZE*0.92)*2, WINDOW_SIZE[1] * 0.92 - TILE_SIZE, potions_img[22], int(TILE_SIZE*0.9), int(TILE_SIZE*0.95), 200,
-                                    False,f'Fire Grenade. Damages multiple targets', 3+supply_modifier)
-    potion_button23 = button.PotionButton(screen, int(TILE_SIZE*0.92)*3, WINDOW_SIZE[1] * 0.92 - TILE_SIZE, potions_img[23], int(TILE_SIZE*0.9), int(TILE_SIZE*0.95), 225,
-                                    False,f'Shrapnel Grenade. Damages multiple targets. Ignores armor and applies bleeding', 3+supply_modifier)
-    potion_button24 = button.PotionButton(screen, int(TILE_SIZE*0.92)*4, WINDOW_SIZE[1] * 0.92 - TILE_SIZE, potions_img[24], int(TILE_SIZE*0.9), int(TILE_SIZE*0.95), 250,
-                                    False,f'Earth Shard. Damages constructs', 3+supply_modifier)
     potion_button13 = button.PotionButton(screen, int(TILE_SIZE*0.92)*5, WINDOW_SIZE[1] * 0.92 - TILE_SIZE, potions_img[11], int(TILE_SIZE*0.9), int(TILE_SIZE*0.95), 120,
                                     False,f'Poison. Poisons multiple targets', 2+supply_modifier)
     potion_button14 = button.PotionButton(screen, int(TILE_SIZE*0.92)*6, WINDOW_SIZE[1] * 0.92 - TILE_SIZE, potions_img[18], int(TILE_SIZE*0.9), int(TILE_SIZE*0.95), 130,
@@ -9183,12 +10332,24 @@ def old_ways_battle():
                                     False,f'Ritual Potion. Attempts to destroy wicked', 3+supply_modifier)
     potion_button19 = button.PotionButton(screen, int(TILE_SIZE*0.92)*11, WINDOW_SIZE[1] * 0.92 - TILE_SIZE, potions_img[16], int(TILE_SIZE*0.9), int(TILE_SIZE*0.95), 140,
                                     False,f'Liquid Frost. Freezes multiple targets. Lowers target\'s defence', 2+supply_modifier)
+    potion_button20 = button.PotionButton(screen, 0, WINDOW_SIZE[1] * 0.92 - TILE_SIZE, potions_img[13], int(TILE_SIZE*0.9), int(TILE_SIZE*0.95), 135,
+                                          False,f'Dark Cloud Potion. Curses multiple targets. Lowers target\'s resistances', 2+supply_modifier)
+    potion_button21 = button.PotionButton(screen, int(TILE_SIZE*0.92), WINDOW_SIZE[1] * 0.92 - TILE_SIZE, potions_img[21], int(TILE_SIZE*0.9), int(TILE_SIZE*0.95), 115,
+                                          False,f'Energy Shard. Shocks multiple targets. Lowers target\'s abilities', 2+supply_modifier)
+    potion_button22 = button.PotionButton(screen, int(TILE_SIZE*0.92)*2, WINDOW_SIZE[1] * 0.92 - TILE_SIZE, potions_img[22], int(TILE_SIZE*0.9), int(TILE_SIZE*0.95), 200,
+                                          False,f'Fire Grenade. Damages multiple targets', 3+supply_modifier)
+    potion_button23 = button.PotionButton(screen, int(TILE_SIZE*0.92)*3, WINDOW_SIZE[1] * 0.92 - TILE_SIZE, potions_img[23], int(TILE_SIZE*0.9), int(TILE_SIZE*0.95), 225,
+                                          False,f'Shrapnel Grenade. Damages multiple targets. Ignores armor and applies bleeding', 3+supply_modifier)
+    potion_button24 = button.PotionButton(screen, int(TILE_SIZE*0.92)*4, WINDOW_SIZE[1] * 0.92 - TILE_SIZE, potions_img[24], int(TILE_SIZE*0.9), int(TILE_SIZE*0.95), 250,
+                                          False,f'Earth Shard. Damages constructs', 3+supply_modifier)
+    potion_button25 = button.PotionButton(screen, int(TILE_SIZE*0.92)*12, WINDOW_SIZE[1] * 0.92 - TILE_SIZE, potions_img[25], int(TILE_SIZE*0.9), int(TILE_SIZE*0.95), 90,
+                                          False,f'Concentration Potion. Increases block and parry by {concentration_potion_adds}', 1)
 
     battle_items_box.append([potion_button, potion_button1, potion_button2, potion_button3, potion_button4, potion_button5,
                              potion_button6,potion_button7, potion_button8,potion_button9, potion_button10, potion_button11,
                              potion_button12,potion_button13, potion_button14,potion_button15, potion_button16, potion_button17,
                              potion_button18, potion_button19, potion_button20, potion_button21, potion_button22, potion_button23,
-                             potion_button24])
+                             potion_button24, potion_button25])
 
     #---------------------------------Consumables----------------------------------
     with open(f"MainMenuRes/inventory/unlocked_potions.json",'r') as f:
@@ -9211,24 +10372,19 @@ def old_ways_battle():
         # potion_button10.available = info["6"]
         # potion_button11.available = info["8"]
         # potion_button12.available = info["9"]
-        # potion_button13.available = info["13"]
-        # potion_button14.available = info["21"]
-        # potion_button15.available = info["22"]
-        # potion_button16.available = info["23"]
-        # potion_button17.available = info["24"]
-        # potion_button18.available = info["11"]
-        # potion_button19.available = info["18"]
-        # potion_button20.available = info["2"]
-        # potion_button21.available = info["5"]
-        # potion_button22.available = info["19"]
-        # potion_button23.available = info["17"]
-        # potion_button24.available = info["16"]
-
-
-
-
-
-
+        # potion_button13.available = info["11"]
+        # potion_button14.available = info["18"]
+        # potion_button15.available = info["2"]
+        # potion_button16.available = info["5"]
+        # potion_button17.available = info["19"]
+        # potion_button18.available = info["17"]
+        # potion_button19.available = info["16"]
+        # potion_button20.available = info["13"]
+        # potion_button21.available = info["21"]
+        # potion_button22.available = info["22"]
+        # potion_button23.available = info["23"]
+        # potion_button24.available = info["24"]
+        # potion_button25.available = info["25"]
 
     # ------------------------------IconToggle(Reset)------------------------
     restart_button = button.Button(screen, 1100, 8, retry_icon, 84, 90, 25, False, 'Try Again')
@@ -9246,7 +10402,6 @@ def old_ways_battle():
 
     map_data = [[int(c) for c in row] for row in f.read().split('\n')]
     f.close()
-
 
     # -----------------------------------------------------------------------------
     def items_info (item):
@@ -9279,22 +10434,17 @@ def old_ways_battle():
     def aura(who):
         global current_fighter
         global action_cooldown
-        if technique_button.toggled == True:
-            if who.tricks >= technique_button.price and who.status != 'haste':
-                current_fighter -= 1
-                action_cooldown = 0
-                who.tricks -= technique_button.price
-                technique_button.toggled = False
+
 
     def move_map():
         if moving_right:
-            scroll[0] += TILE_SIZE//4
+            scroll[0] += TILE_SIZE//6
         if moving_left:
-            scroll[0] -= TILE_SIZE//4
+            scroll[0] -= TILE_SIZE//6
         if moving_up:
-            scroll[1] -= TILE_SIZE//4
+            scroll[1] -= TILE_SIZE//6
         if moving_down:
-            scroll[1] += TILE_SIZE//4
+            scroll[1] += TILE_SIZE//6
         for i in army_player:
             i.move_it()
         for j in army_hostiles:
@@ -9396,7 +10546,7 @@ def old_ways_battle():
                 who.energy_res = 0
             who.status = 'healthy'
         #------------------------------------
-        if who.status == 'dreamy':
+        if who.status == 'dreamy' and who.type != 'monster':
             global current_fighter
             pygame.mixer.Sound(dream_sound).play()
             current_fighter += 1
@@ -9423,10 +10573,42 @@ def old_ways_battle():
             action_cooldown = 0
             who.status = 'healthy'
 
+    # ------------------------------AutoDefencePotion------------------
+    def auto_defence_potion(who):
+        global current_fighter
+        global action_cooldown
+        if (who.armor / who.max_armor) < 0.2 and who.armor < 100 and who.max_armor > 50 and who.supply > 0:
+            if who.max_armor - who.armor > 100:
+               add_defence_amount = 100
+            else:
+                add_defence_amount = who.max_armor - who.armor
+            who.armor += add_defence_amount
+            who.defence = 100
+            who.supply -= 1
+            pygame.mixer.Sound(open_potion).play()
+            current_fighter += 1
+            action_cooldown = 0
+
+    #------------------------------AutoHealthPotion------------------
+    def auto_health_potion(who):
+        global current_fighter
+        global action_cooldown
+        if (who.hp / who.max_hp) < 0.5 and who.supply > 0:
+            if who.max_hp - who.hp > 50:
+                heal_amount = 50
+            else:
+                heal_amount = who.max_hp - who.hp
+            who.hp += heal_amount
+            who.status = 'healthy'
+            who.supply -= 1
+            damage_text = DamageText(who.rect.centerx, who.rect.y - 35, str(heal_amount), green)
+            damage_text_group.add(damage_text)
+            pygame.mixer.Sound(open_potion).play()
+            current_fighter += 1
+            action_cooldown = 0
 
     #------------------------------------------------------------------------------
-    throw_dream_dice = True
-    dice_timer = 0
+
     while current_battle_running:
         if full_auto_battle == 1:
            start_full_auto_battle()
@@ -9444,11 +10626,7 @@ def old_ways_battle():
         army_hostiles_back = [enemy for enemy in army_hostiles if enemy.reach == 2]
         # display.fill((146,244,255))
         draw_bgBackscreen()
-        if throw_dream_dice == False:
-            dice_timer += 1
-        if dice_timer >=100:
-            throw_dream_dice = True
-            dice_timer = 0
+
         # draw_bg()
 
     # --------------------------------MapGeneration-------------------------------------
@@ -9460,7 +10638,6 @@ def old_ways_battle():
             img = pygame.image.load(f'BattleScreen/battle_maps/cubes/{x}.png').convert_alpha()
             img = pygame.transform.scale(img,  (int(WINDOW_SIZE[0] * tilescale), (int(WINDOW_SIZE[1] * tilescale))))
             tiles_img.append(img)
-
 
         #-----------------------------------------------------------------------------
         tiles = []
@@ -9475,14 +10652,17 @@ def old_ways_battle():
                     screen.blit(tiles_img[1], (570 + (x * 60 - y * 60) * rendermod - scroll[0], 80* rendermod + (x * 18 + y * 18) * rendermod - scroll[1]))
                 tiles.append(pygame.Rect(x*TILE_SIZE, y*TILE_SIZE, TILE_SIZE, TILE_SIZE))
 
-
-
-
-
     # -----------------------------DrawUnits/AnimationSpeedMod------------
-        if unit_button.summon == True:
-            army_player.extend([dunstan])
-            unit_button.summon = False
+        if summon_dunstan:
+            if unit_button.summon == True:
+                army_player.extend([dunstan])
+                summon_dunstan = False
+                unit_button.summon = False
+        if summon_bartelago:
+            if unit_button5.summon == True:
+                army_player.extend([bartelago])
+                summon_bartelago = False
+                unit_button5.summon = False
         if summon_melee:
             if unit_button1.summon == True:
                 army_player.extend(light_infantry)
@@ -9504,7 +10684,6 @@ def old_ways_battle():
                 summon_support = False
                 unit_button4.summon = False
 
-
         for count,units in enumerate(army_player):
             units.update(round(random.uniform(0.7, 1.2), 2))
             units.draw()
@@ -9513,7 +10692,6 @@ def old_ways_battle():
             if units.alive == True and show_indicators == True:
                 HealthBar.draw(units.hp)
                 ArmorBar.draw(units.armor)
-
 
         # ------------------Enemy--------------
         for count,hostile in enumerate(army_hostiles):
@@ -9524,8 +10702,6 @@ def old_ways_battle():
             if hostile.alive == True and show_indicators == True:
                 HealthBar.draw(hostile.hp)
                 ArmorBar.draw(hostile.armor)
-
-
 
         # ------------------------EnemyReserves------------------
         # if h_dragohare.alive == False:
@@ -9558,7 +10734,21 @@ def old_ways_battle():
                 button.PartyStartHealth = button.PartyHealth
                 print(button.PartyHealth)
                 print(button.PartyStartHealth)
+                if battle_conditions == 99: button.westrad_coal_mine = 'neutral'
+                if battle_conditions == 98: button.westrad_ore_mine_0 = 'neutral'
+                if battle_conditions == 97: button.westrad_ore_mine_1 = 'neutral'
+                if battle_conditions == 96: button.westrad_gold_mine = 'neutral'
+                if battle_conditions == 95: button.charlatan_silver_mine = 'neutral'
+                if battle_conditions == 94: button.charlatan_coal_mine = 'neutral'
+                if battle_conditions == 93: button.solomir_silver_mine = 'neutral'
+                if battle_conditions == 92: button.solomir_gold_mine_0 = 'neutral'
+                if battle_conditions == 91: button.solomir_gold_mine_1 = 'neutral'
+                if battle_conditions == 90: button.solomir_gems_mine = 'neutral'
+                if battle_conditions == 89: button.kharfajian_gems_mine_0 = 'neutral'
+                if battle_conditions == 88: button.kharfajian_gems_mine_1 = 'neutral'
+                if battle_conditions == 87: button.kharfajian_krystal_mine = 'neutral'
                 current_battle_running = False
+
         # --------------------------------------------------------------------------------
         if book_button.rect.collidepoint(pos) and book_button.available == True:
             draw_text(f'{book_button.description}', fontDMG, green, potion_button.rect.x + 5, potion_button.rect.y - 110)
@@ -9700,6 +10890,11 @@ def old_ways_battle():
                 items_info(potion_button24)
                 if potion_button24.draw():
                     use_earth_shard = True
+            # ------------Concentration-------------
+            if potion_button25.available == True:
+                items_info(potion_button25)
+                if potion_button25.draw():
+                    use_concentration_potion = True
         # ---------------------InventoryStock--------------------------------------
             for count,i in enumerate(battle_items_box):
                 for potion in i:
@@ -9715,36 +10910,48 @@ def old_ways_battle():
                     if unit.available == True:
                         screen.blit(no_icon, (unit.rect.x, unit.rect.y))
 # -----------------------------ArmySummon----------------------------------------
-            if unit_button.available == True:
-                unit_info(unit_button)
-                if unit_button.draw():
-                   button.wealth -= unit_button.price
-                   pygame.mixer.Sound(coins_sound).play()
-                   unit_button.summon = True
-            if unit_button1.available == True:
-                unit_info(unit_button1)
-                if unit_button1.draw():
-                    button.wealth -= unit_button1.price
-                    pygame.mixer.Sound(coins_sound).play()
-                    unit_button1.summon = True
-            if unit_button2.available == True:
-                unit_info(unit_button2)
-                if unit_button2.draw():
-                    button.wealth -= unit_button2.price
-                    pygame.mixer.Sound(coins_sound).play()
-                    unit_button2.summon = True
-            if unit_button3.available == True:
-                unit_info(unit_button3)
-                if unit_button3.draw():
-                    button.wealth -= unit_button3.price
-                    pygame.mixer.Sound(coins_sound).play()
-                    unit_button3.summon = True
-            if unit_button4.available == True:
-                unit_info(unit_button4)
-                if unit_button4.draw():
-                    button.wealth -= unit_button4.price
-                    pygame.mixer.Sound(coins_sound).play()
-                    unit_button4.summon = True
+            if summon_dunstan == True:
+                if unit_button.available == True:
+                    unit_info(unit_button)
+                    if unit_button.draw():
+                       button.wealth -= unit_button.price
+                       pygame.mixer.Sound(coins_sound).play()
+                       unit_button.summon = True
+            if summon_bartelago == True:
+                if unit_button5.available == True:
+                    unit_info(unit_button5)
+                    if unit_button5.draw():
+                        button.wealth -= unit_button5.price
+                        pygame.mixer.Sound(coins_sound).play()
+                        unit_button5.summon = True
+            if summon_melee == True:
+                if unit_button1.available == True:
+                    unit_info(unit_button1)
+                    if unit_button1.draw():
+                        button.wealth -= unit_button1.price
+                        pygame.mixer.Sound(coins_sound).play()
+                        unit_button1.summon = True
+            if summon_ranged == True:
+                if unit_button2.available == True:
+                    unit_info(unit_button2)
+                    if unit_button2.draw():
+                        button.wealth -= unit_button2.price
+                        pygame.mixer.Sound(coins_sound).play()
+                        unit_button2.summon = True
+            if summon_cavalry == True:
+                if unit_button3.available == True:
+                    unit_info(unit_button3)
+                    if unit_button3.draw():
+                        button.wealth -= unit_button3.price
+                        pygame.mixer.Sound(coins_sound).play()
+                        unit_button3.summon = True
+            if summon_support == True:
+                if unit_button4.available == True:
+                    unit_info(unit_button4)
+                    if unit_button4.draw():
+                        button.wealth -= unit_button4.price
+                        pygame.mixer.Sound(coins_sound).play()
+                        unit_button4.summon = True
         #print(total_fighters)
     #------------------------------------------------------------------------------
         if book_button.toggled == True and battle_status == 0:
@@ -9772,7 +10979,23 @@ def old_ways_battle():
                             status_checker(ally)
                             #------------------------------------
                             if ally.type == 'temporary':
-                                if ally.reach != 2 and all(enemy.alive == False for enemy in army_hostiles_front):
+                                if (ally.armor / ally.max_armor) < 0.2 and ally.armor < 100 and ally.max_armor > 50 and ally.supply > 0:
+                                    auto_defence_potion(ally)
+                                    current_fighter += 1
+                                    action_cooldown = 0
+                                    hastened(ally)
+                                elif (ally.hp / ally.max_hp) < 0.5 and ally.supply > 0:
+                                    auto_health_potion(ally)
+                                    current_fighter += 1
+                                    action_cooldown = 0
+                                    hastened(ally)
+                                elif ally.id == 'scout_saboteur':
+                                    splash = alive_enemy_targets
+                                    ally.attack(random.choice([enemy for enemy in army_hostiles if enemy.alive == True]))
+                                    for enemy in army_hostiles[:splash]:
+                                        if 25 >= random.randint(0,100) and enemy.alive == True:
+                                            enemy.status = random.choice(['inflamed','poisoned','corroded'])
+                                elif ally.reach != 2 and all(enemy.alive == False for enemy in army_hostiles_front):
                                     ally.attack(random.choice([enemy for enemy in army_hostiles if enemy.alive == True]))
                                 elif ally.reach != 2:
                                     ally.attack(random.choice([enemy for enemy in army_hostiles_front if enemy.alive == True]))
@@ -9786,8 +11009,10 @@ def old_ways_battle():
                                 if engage == True and target != None:
                                    ally.attack(target)
                                    target.status = random.choice(['inflamed','poisoned','corroded'])
-                                   for enemy in army_hostiles[:6]:
-                                       if 50 >= random.randint(0,100) and enemy.alive == True:
+                                   if alive_enemy_targets >= 6: splash = 6
+                                   else: splash = alive_enemy_targets
+                                   for enemy in army_hostiles[:splash]:
+                                       if 70 >= random.randint(0,100) and enemy.alive == True:
                                               enemy.status = random.choice(['inflamed','poisoned','corroded'])
                                    current_fighter += 1
                                    action_cooldown = 0
@@ -9835,14 +11060,12 @@ def old_ways_battle():
                                             hastened(ally)
                                             regen_heal(ally)
 
-                            if ally.id == 'rowan' or 'dunstan':
+                            if ally.id == 'rowan' or 'dunstan' or 'bartelago' or 'anselm' or 'regina' or 'alba' or 'severin':
                                 if engage2 == True and target != None:
                                     ally.alternative_attack(target)
                                     current_fighter += 1
                                     action_cooldown = 0
-                                    if Quick_Shot == 1 and ally.status != 'haste':
-                                        quick_shot_dice = random.randint(0,100)
-                                        if quick_shot_dice <= 15:
+                                    if Quick_Shot == 1 and ally.status != 'haste' and ally.id == 'rowan' and random.randint(0,100) <= 25:
                                            current_fighter -= 1
                                            action_cooldown = 0
                                     hastened(ally)
@@ -9891,7 +11114,6 @@ def old_ways_battle():
                                     action_cooldown = 0
                                     hastened(ally)
                                 use_health_potion = False
-
                             # ------------DefencePotion---------------
                             if use_defence_potion == True and button.wealth >= potion_button1.price:
                                 if ally.supply >= potion_button1.supply:
@@ -9909,7 +11131,6 @@ def old_ways_battle():
                                     action_cooldown = 0
                                     hastened(ally)
                                 use_defence_potion = False
-
                             # ------------BerserkPotion---------------
                             if use_berserk_potion == True and button.wealth >= potion_button2.price:
                                 if ally.supply >= potion_button2.supply:
@@ -9975,7 +11196,7 @@ def old_ways_battle():
                                     action_cooldown = 0
                                     hastened(ally)
                                 use_ironskin_potion = False
-                           # ------------deathkiss---------------
+                            # ------------deathkiss---------------
                             if use_deathkiss_potion == True and button.wealth >= potion_button7.price:
                                 if ally.supply >= potion_button7.supply:
                                     ally.crit += deathkiss_potion_adds
@@ -10106,7 +11327,6 @@ def old_ways_battle():
                                     action_cooldown = 0
                                     hastened(ally)
                                 use_darkcloud_potion = False
-
                             # ------------acid---------------
                             if use_acid_potion == True and button.wealth >= potion_button15.price:
                                 if ally.supply >= potion_button15.supply:
@@ -10166,8 +11386,7 @@ def old_ways_battle():
                                     else: target = alive_targets
                                     for enemy in army_hostiles[:target]:
                                         if 50 >= random.randint(0,100) and enemy.alive == True and enemy.type == 'wicked':
-                                              enemy.hp = 0
-                                              enemy.alive = False
+                                              enemy.hp -= 100
                                     ally.supply -= potion_button18.supply
                                     button.wealth -= potion_button18.price
                                     pygame.mixer.Sound(break_potion).play()
@@ -10265,6 +11484,18 @@ def old_ways_battle():
                                     action_cooldown = 0
                                     hastened(ally)
                                 use_earth_shard = False
+                            # ------------Concentration---------------
+                            if use_concentration_potion == True and button.wealth >= potion_button25.price:
+                                if ally.supply >= potion_button25.supply:
+                                    ally.block += concentration_potion_adds
+                                    ally.parry += concentration_potion_adds
+                                    ally.supply -= potion_button25.supply
+                                    button.wealth -= potion_button25.price
+                                    pygame.mixer.Sound(open_potion).play()
+                                    current_fighter += 1
+                                    action_cooldown = 0
+                                    hastened(ally)
+                                use_concentration_potion = False
                     else:
                         current_fighter += 1
 
@@ -10303,34 +11534,33 @@ def old_ways_battle():
                                 enemy.hp += heal_amount
                                 enemy.status = 'healthy'
                                 enemy.supply -= 1
-
                                 damage_text = DamageText(enemy.rect.centerx, enemy.rect.y - 35, str(heal_amount), green)
                                 damage_text_group.add(damage_text)
                                 pygame.mixer.Sound(open_potion).play()
                                 current_fighter += 1
                                 action_cooldown = 0
                                 hastened(enemy)
-
                             # ------------------------------EnemyAbilities------------------
                             elif enemy.id == 'footman' and enemy.tricks >0 and 25 >= random.randint(0,100):
                                     enemy.status = 'haste'
                                     enemy.tricks -= 1
                                     pygame.mixer.Sound(wind_sound).play()
-
                             elif enemy.id == 'landsknecht' and enemy.tricks >0 and 25 >= random.randint(0,100):
+                                if alive_front_targets >=2:
                                     for i in range(2):
-                                        if alive_front_targets >=2:
-                                           target = random.choice([ally for ally in army_player_front if ally.alive == True])
-                                           enemy.attack(target)
-                                        else:
-                                           target =random.choice([ally for ally in army_player if ally.alive == True])
-                                           enemy.attack(target)
-                                        target.status = 'bleed'
-                                    pygame.mixer.Sound(sharpening_sound).play()
-                                    enemy.tricks -= 1
-                                    current_fighter += 1
-                                    action_cooldown = 0
-                                    hastened(enemy)
+                                       target = random.choice([ally for ally in army_player_front if ally.alive == True])
+                                       enemy.attack(target)
+                                       target.status = 'bleed'
+                                else:
+                                    for i in range(2):
+                                       target =random.choice([ally for ally in army_player if ally.alive == True])
+                                       enemy.attack(target)
+                                       target.status = 'bleed'
+                                pygame.mixer.Sound(sharpening_sound).play()
+                                enemy.tricks -= 1
+                                current_fighter += 1
+                                action_cooldown = 0
+                                hastened(enemy)
                             elif enemy.id == 'thug' and enemy.tricks >0 and 25 >= random.randint(0,100):
                                 if alive_front_targets >=1:
                                     target = random.choice([ally for ally in army_player_front if ally.alive == True])
@@ -10339,8 +11569,8 @@ def old_ways_battle():
                                     target =random.choice([ally for ally in army_player if ally.alive == True])
                                     enemy.attack(target)
                                 if target.threshold >= 3: target.threshold -=3
-                                if target.armor >= 25: target.armor -= 25
-                                if target.defence >= 6: target.defence -=6
+                                if target.armor >= 30: target.armor -= 30
+                                if target.defence >= 10: target.defence -=10
                                 pygame.mixer.Sound(sharpening_sound).play()
                                 enemy.tricks -= 1
                                 current_fighter += 1
@@ -10348,13 +11578,25 @@ def old_ways_battle():
                                 hastened(enemy)
                             elif enemy.reach == 3 and enemy.id == 'red_dragon':
                                 alive_targets = sum(ally.alive == True for ally in army_player)
-                                if alive_targets >= 6:
+                                target = random.choice([ally for ally in army_player if ally.alive == True])
+                                if enemy.tricks >0 and 25 >= random.randint(0,100):
+                                    enemy.attack_type = 'fire'
+                                    enemy.tricks -= 1
+                                    for ally in army_player:
+                                        if ally.alive == True:
+                                           enemy.attack(ally)
+                                           pygame.mixer.Sound(dragon_roar_sound).play()
+                                elif alive_targets >= 6:
                                     for ally in army_player[:6]:
-                                        enemy.attack(ally)
+                                           enemy.attack_type = random.choice(['fire','tear'])
+                                           enemy.attack(target)
                                 elif alive_targets < 6:
                                     for ally in army_player[:alive_targets]:
-                                        enemy.attack(ally)
-                                ally.status = 'inflamed'
+                                           enemy.attack_type = random.choice(['fire','tear'])
+                                           enemy.attack(target)
+                                else:
+                                    enemy.attack_type = 'tear'
+                                    enemy.attack(target)
                                 enemy.armor = enemy.max_armor
                                 current_fighter += 1
                                 action_cooldown = 0
@@ -10410,7 +11652,6 @@ def old_ways_battle():
                     else:
                         current_fighter += 1
 
-
             # ----------------------------Turns------------------------------
             for count,i in enumerate(army_hostiles):
                 if i.hp < 1:
@@ -10465,12 +11706,10 @@ def old_ways_battle():
                             ally.reset()
                         for enemy in army_hostiles:
                             enemy.reset()
-
                         button.wealth = button.start_wealth  # restart gold here
                         current_fighter = 1
                         action_cooldown = 0
                         battle_status = 0
-
                         pos = pygame.mouse.get_pos()  # text over the button
                     if restart_button.rect.collidepoint(pos):
                         draw_text(f'{restart_button.description}', fontDMG, green, restart_button.rect.x + 30,
@@ -10478,7 +11717,7 @@ def old_ways_battle():
 
             # -------------------Defeat/VictoryStatusDisplay-------------------
             if battle_status == 2:
-                button.quest_old_ways = 'locked'
+                #button.quest_old_ways = 'locked'
                 draw_text(f'Victory!', fontMenuLarge, green, screen.get_width() * 0.46, 0)
                 if play_victory_music == True:
                     play_music('BattleVictory')
@@ -10489,13 +11728,25 @@ def old_ways_battle():
                         button.start_wealth = button.wealth
                         if Educated == 1:
                             bonus_experience = int(((sum([enemy.experience for enemy in army_hostiles])) *
-                                                    (button.lore + button.investigation) / 75))
+                                               (button.lore + button.investigation) / 75))
                         else:
                             bonus_experience = int(((sum([enemy.experience for enemy in army_hostiles])) *
-                                                (button.lore + button.investigation) / 100))
+                                               (button.lore + button.investigation) / 100))
                         button.experience += sum([enemy.experience for enemy in army_hostiles]) + bonus_experience
                         button.start_experience = button.experience
-                        button.westrad_coal_mine = 'player'
+                        if battle_conditions == 99: button.westrad_coal_mine = 'player'
+                        if battle_conditions == 98: button.westrad_ore_mine_0 = 'player'
+                        if battle_conditions == 97: button.westrad_ore_mine_1 = 'player'
+                        if battle_conditions == 96: button.westrad_gold_mine = 'player'
+                        if battle_conditions == 95: button.charlatan_silver_mine = 'player'
+                        if battle_conditions == 94: button.charlatan_coal_mine = 'player'
+                        if battle_conditions == 93: button.solomir_silver_mine = 'player'
+                        if battle_conditions == 92: button.solomir_gold_mine_0 = 'player'
+                        if battle_conditions == 91: button.solomir_gold_mine_1 = 'player'
+                        if battle_conditions == 90: button.solomir_gems_mine = 'player'
+                        if battle_conditions == 89: button.kharfajian_gems_mine_0 = 'player'
+                        if battle_conditions == 88: button.kharfajian_gems_mine_1 = 'player'
+                        if battle_conditions == 87: button.kharfajian_krystal_mine = 'player'
                         # button.quest_finale= 'unlocked'
                         print(button.start_wealth)
                         print(button.wealth)
@@ -10555,8 +11806,6 @@ def old_ways_battle():
                 #             j.clicked=False
                 #             j.summoned=False
                 #
-
-
 
                 if event.key == K_o:
                     # fullscreen = not fullscreen
@@ -10639,11 +11888,10 @@ def old_ways_battle():
         if grid == True:
             draw_grid(screen)
 
-
         for count, ally in enumerate(army_player):
             if ally.rect.collidepoint(pos) and ally.alive == True:
                 draw_text(
-                    f'{ally.id} | HP: {ally.hp} | ARM: {ally.armor} | ATK: {ally.strength} | RNG: {ally.strength2} | THR: {ally.threshold} | DEF: {ally.defence} | CRT: {ally.crit}  | BLK: {ally.block} | RTL: {ally.parry}',
+                    f'{ally.id} | HP: {ally.hp} | ARM: {ally.armor} | ATK: {ally.strength} | RNG: {ally.strength2} | TYP: {ally.attack_type} | THR: {ally.threshold} | DEF: {ally.defence} | CRT: {ally.crit}  | BLK: {ally.block} | RTL: {ally.parry}',
                     font, (0, 100, 0), ((panel.get_width()) * 0.01),
                     (((screen.get_height() + bg_backscreen.get_height()) / 2.32)))
                 draw_text(
@@ -10656,7 +11904,7 @@ def old_ways_battle():
                 pygame.mouse.set_visible(False)
                 screen.blit(attack_icon, pos)
                 draw_text(
-                    f'{enemy.id} | HP: {enemy.hp} | ARM: {enemy.armor} | ATK: {enemy.strength} | THR: {enemy.threshold} | DEF: {enemy.defence} | CRT: {enemy.crit} | BLK: {enemy.block}  | RTL: {enemy.parry}',
+                    f'{enemy.id} | HP: {enemy.hp} | ARM: {enemy.armor} | ATK: {enemy.strength} | TYP: {enemy.attack_type} | THR: {enemy.threshold} | DEF: {enemy.defence} | CRT: {enemy.crit} | BLK: {enemy.block}  | RTL: {enemy.parry}',
                     font, (100, 0, 0), ((panel.get_width()) * 0.01),
                     (((screen.get_height() + bg_backscreen.get_height()) / 2.32)))
                 draw_text(

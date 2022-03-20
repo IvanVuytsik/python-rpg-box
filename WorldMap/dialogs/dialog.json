@@ -13,9 +13,21 @@
       "10": "Sorry captain, Riversmouth is not my destination."
     },
     {
-      "1": "",
-      "2": "",
-      "3": ""
+      "1": "...(cough)",
+      "2": "I am here to declare my arrival as law demands",
+      "3": "",
+      "4": "...(cough)",
+      "5": "I am here to declare my arrival as law demands",
+      "6": "",
+      "7": "...(cough)",
+      "8": "I am here to declare my arrival as law demands",
+      "9": "",
+      "10": "...(cough)",
+      "11": "I am here to declare my arrival as law demands",
+      "12": "",
+      "13": "...(cough)",
+      "14": "I am here to declare my arrival as law demands",
+      "15": ""
     }
   ],
 
@@ -33,14 +45,40 @@
       "8_1": "but I appreciate you asked. I still have my",
       "8_2": "charm. If you ever visit Riversmouth, please",
       "8_3": "find Silus. He will know the rest."
-    },
-    {
-      "1": "",
-      "2": "",
-      "3": ""
     }
+
+  ],
+
+  "city guard": [
+    {
+      "1": "(The man at the table doesn't react to you)",
+      "2": "Hm. What do you want?",
+      "3": "Ah..another ship with those... pardoned",
+      "4": "Crown needs everyone they can get these days ",
+      "5": "Let me see your papers",
+      "6": "Well well. A royal seal. So you are a special",
+      "6_1": "kind of criminal, aren't you?",
+      "7": "Sir, I...",
+      "8": "I didn't realize you were expecting this man...",
+      "9": "Of course, sir. I will store it right away"
+    }
+
+  ],
+
+  "dunstan": [
+    {
+      "1": "What's going on here? Don't you recognize my guest?",
+      "2": "Indeed. Now, go take care of his papers. On the double.",
+      "3": "Rowan!",
+      "4": "Yes, a regiment commander. I served the crown long",
+      "5": "enough to get you out of there. Not as fast as I had hoped.",
+      "6": "Thank you.",
+      "7": "Let's move to my home. I introduce you to Vyola and kids.",
+      "7_1": "Besides, you must be hungry and in need of rest.",
+      "8": "Let's go. Tell me the whole story on the way."
+
+    }
+
   ]
-
-
 
 }

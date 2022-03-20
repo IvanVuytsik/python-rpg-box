@@ -50,19 +50,43 @@ import VagrantsLot
 #thief +
 #quartermaster +
 
+#----------------------------------itemsForLists---------------------------------
+#light_leather_gloves,leather_gloves,reinforced_gloves,
+#light_plate_gloves,thieves_gloves,plate_gloves,tournament_gloves,war_gloves,basilisk_gloves
+#light_chain_mail,light_plate_armor,light_leather,nomad_armor
+#ranger_cloak,war_cloak,full_cloak
+#tournament_helm,leather_hood,light_chain_helm,protector_helm
+#deep_endless,spider_amulet,moon_crest
+#noble_belt,duel_belt,war_belt,day_belt
+#leather_pants,reinforced_pants,light_plate_pants,heavy_plate_pants,plate_pants
+#war_dagger,ranger_dagger
+#mercenary_sword,the_sunrise,spider_sword,short_sword
+#plate_shoes,hunter_shoes,light_plate_shoes,ranger_shoes
+#unity_ring,emerald_ring,minor_health_ring,minor_protection_ring,trinity_ring
+#crowbar,lockmaster_tools,alchemist_kit
+#metal_bow,curved_bow,peasant_bow,war_bow,redwood_bow
 
 
 
 
+
+
+
+battle_result = 0
 #----------------------------------------Income---------------------------------------
 westrad_coal_mine = 'neutral'
 westrad_ore_mine_0 = 'neutral'
 westrad_ore_mine_1 = 'neutral'
 westrad_gold_mine = 'neutral'
-
-
-
-
+charlatan_silver_mine = 'neutral'
+charlatan_coal_mine = 'neutral'
+solomir_silver_mine = 'neutral'
+solomir_gold_mine_0 = 'neutral'
+solomir_gold_mine_1 = 'neutral'
+solomir_gems_mine = 'neutral'
+kharfajian_gems_mine_0 = 'neutral'
+kharfajian_gems_mine_1 = 'neutral'
+kharfajian_krystal_mine = 'neutral'
 
 
 
@@ -133,7 +157,7 @@ quest_old_ways = 'unlocked'
 # #unlocked_quests.extend((quest_new_beginnings,quest_dire_wolves,quest_highwaymen,quest_dragonhunt,quest_finale))
 #
 #-------------------------------------StoryProgression----------------------------------------
-prologue = True     # Homecoming
+chapter_0 = True     # Homecoming
 chapter_1 = False   # Troubles in the Land
 chapter_2 = False   # Charlatan Kings
 chapter_3 = False   # Blood and Honor
@@ -344,7 +368,7 @@ class InvButton():
 # awareness = int(linecache.getline('MainMenuRes/char_statistic/charattributes.txt',5))
 # personality = int(linecache.getline('MainMenuRes/char_statistic/charattributes.txt',6))
 # intelligence = int(linecache.getline('MainMenuRes/char_statistic/charattributes.txt',7))
-# wisdom = int(linecache.getline('MainMenuRes/char_statistic/charattributes.txt',8))
+# wisdom = int(linecache.getline('MainMenuRes/char_statistic/charattributes.txt',8.png))
 # willpower = int(linecache.getline('MainMenuRes/char_statistic/charattributes.txt',9))
 # luck = int(linecache.getline('MainMenuRes/char_statistic/charattributes.txt',10))
 
@@ -436,7 +460,7 @@ savviness_tree.extend((medicine,lore,persuasion,arcane,divine,alchemy,engineerin
 #     arcane = int(linecache.getline('MainMenuRes/char_statistic/charsavviness.txt',5))
 #     divine = int(linecache.getline('MainMenuRes/char_statistic/charsavviness.txt',6))
 #     alchemy = int(linecache.getline('MainMenuRes/char_statistic/charsavviness.txt',7))
-#     engineering = int(linecache.getline('MainMenuRes/char_statistic/charsavviness.txt',8))
+#     engineering = int(linecache.getline('MainMenuRes/char_statistic/charsavviness.txt',8.png))
 # #-----------------------------------------------------------------------------------
 # def update_survival ():
 #     acrobatics = int(linecache.getline('MainMenuRes/char_statistic/charsurvive.txt',1))
@@ -446,7 +470,7 @@ savviness_tree.extend((medicine,lore,persuasion,arcane,divine,alchemy,engineerin
 #     deception = int(linecache.getline('MainMenuRes/char_statistic/charsurvive.txt',5))
 #     traps = int(linecache.getline('MainMenuRes/char_statistic/charsurvive.txt',6))
 #     stupefy = int(linecache.getline('MainMenuRes/char_statistic/charsurvive.txt',7))
-#     nature = int(linecache.getline('MainMenuRes/char_statistic/charsurvive.txt',8))
+#     nature = int(linecache.getline('MainMenuRes/char_statistic/charsurvive.txt',8.png))
 
 # def update_skirmish ():
 #     melee = int(linecache.getline('MainMenuRes/char_statistic/charskirmish.txt',1))
@@ -456,7 +480,7 @@ savviness_tree.extend((medicine,lore,persuasion,arcane,divine,alchemy,engineerin
 #     intimidation = int(linecache.getline('MainMenuRes/char_statistic/charskirmish.txt',5))
 #     tactics = int(linecache.getline('MainMenuRes/char_statistic/charskirmish.txt',6))
 #     arming = int(linecache.getline('MainMenuRes/char_statistic/charskirmish.txt',7))
-#     siege = int(linecache.getline('MainMenuRes/char_statistic/charskirmish.txt',8))
+#     siege = int(linecache.getline('MainMenuRes/char_statistic/charskirmish.txt',8.png))
 
 # def update_resistances ():
 #     threshold = int(linecache.getline('MainMenuRes/char_statistic/charres.txt',1))
@@ -520,7 +544,7 @@ savviness_tree.extend((medicine,lore,persuasion,arcane,divine,alchemy,engineerin
 #     bonus_supply = int(linecache.getline('MainMenuRes/char_statistic/charbonussecondary.txt',5))
 #     bonus_health_points = int(linecache.getline('MainMenuRes/char_statistic/charbonussecondary.txt',6))
 #     bonus_armor_points = int(linecache.getline('MainMenuRes/char_statistic/charbonussecondary.txt',7))
-#     bonus_threshold = int(linecache.getline('MainMenuRes/char_statistic/charbonussecondary.txt',8))
+#     bonus_threshold = int(linecache.getline('MainMenuRes/char_statistic/charbonussecondary.txt',8.png))
 #     bonus_defence = int(linecache.getline('MainMenuRes/char_statistic/charbonussecondary.txt',9))
 #     bonus_arcana_res = int(linecache.getline('MainMenuRes/char_statistic/charbonussecondary.txt',10))
 #     bonus_energy_res = int(linecache.getline('MainMenuRes/char_statistic/charbonussecondary.txt',11))
@@ -534,7 +558,7 @@ savviness_tree.extend((medicine,lore,persuasion,arcane,divine,alchemy,engineerin
 #     bonus_intimidation = int(linecache.getline('MainMenuRes/char_statistic/charbonusstats.txt',5))
 #     bonus_tactics = int(linecache.getline('MainMenuRes/char_statistic/charbonusstats.txt',6))
 #     bonus_arming = int(linecache.getline('MainMenuRes/char_statistic/charbonusstats.txt',7))
-#     bonus_siege = int(linecache.getline('MainMenuRes/char_statistic/charbonusstats.txt',8))
+#     bonus_siege = int(linecache.getline('MainMenuRes/char_statistic/charbonusstats.txt',8.png))
 #     bonus_acrobatics = int(linecache.getline('MainMenuRes/char_statistic/charbonusstats.txt',9))
 #     bonus_stealth = int(linecache.getline('MainMenuRes/char_statistic/charbonusstats.txt',10))
 #     bonus_thievery =int(linecache.getline('MainMenuRes/char_statistic/charbonusstats.txt',11))
@@ -561,7 +585,7 @@ savviness_tree.extend((medicine,lore,persuasion,arcane,divine,alchemy,engineerin
 # bonus_health_points = int(linecache.getline('MainMenuRes/char_statistic/charbonussecondary.txt',6))
 # bonus_armor_points = int(linecache.getline('MainMenuRes/char_statistic/charbonussecondary.txt',7))
 #
-# bonus_threshold = int(linecache.getline('MainMenuRes/char_statistic/charbonussecondary.txt',8))
+# bonus_threshold = int(linecache.getline('MainMenuRes/char_statistic/charbonussecondary.txt',8.png))
 # bonus_defence = int(linecache.getline('MainMenuRes/char_statistic/charbonussecondary.txt',9))
 # bonus_arcana_res = int(linecache.getline('MainMenuRes/char_statistic/charbonussecondary.txt',10))
 # bonus_energy_res = int(linecache.getline('MainMenuRes/char_statistic/charbonussecondary.txt',11))
@@ -576,7 +600,7 @@ savviness_tree.extend((medicine,lore,persuasion,arcane,divine,alchemy,engineerin
 # bonus_intimidation = int(linecache.getline('MainMenuRes/char_statistic/charbonusstats.txt',5))
 # bonus_tactics = int(linecache.getline('MainMenuRes/char_statistic/charbonusstats.txt',6))
 # bonus_arming = int(linecache.getline('MainMenuRes/char_statistic/charbonusstats.txt',7))
-# bonus_siege = int(linecache.getline('MainMenuRes/char_statistic/charbonusstats.txt',8))
+# bonus_siege = int(linecache.getline('MainMenuRes/char_statistic/charbonusstats.txt',8.png))
 # bonus_skirmish = []
 # bonus_skirmish.extend((bonus_melee, bonus_ranged, bonus_parrying,
 #                        bonus_athletics,bonus_intimidation, bonus_tactics,
@@ -614,7 +638,7 @@ savviness_tree.extend((medicine,lore,persuasion,arcane,divine,alchemy,engineerin
 # Camp_Doctor = str(linecache.getline('MainMenuRes/char_statistic/techniques_novice.txt',5))
 # Thief = str(linecache.getline('MainMenuRes/char_statistic/techniques_novice.txt',6))
 # Quartermaster = str(linecache.getline('MainMenuRes/char_statistic/techniques_novice.txt',7))
-# Scout = str(linecache.getline('MainMenuRes/char_statistic/techniques_novice.txt',8))
+# Scout = str(linecache.getline('MainMenuRes/char_statistic/techniques_novice.txt',8.png))
 # Haggler = str(linecache.getline('MainMenuRes/char_statistic/techniques_novice.txt',9))
 # Estates = str(linecache.getline('MainMenuRes/char_statistic/techniques_novice.txt',10))
 # Curse = str(linecache.getline('MainMenuRes/char_statistic/techniques_novice.txt',11))
@@ -627,7 +651,7 @@ savviness_tree.extend((medicine,lore,persuasion,arcane,divine,alchemy,engineerin
 # Duelist = str(linecache.getline('MainMenuRes/char_statistic/techniques_adept.txt',5))
 # Bear_Trap = str(linecache.getline('MainMenuRes/char_statistic/techniques_adept.txt',6))
 # Potion_Master = str(linecache.getline('MainMenuRes/char_statistic/techniques_adept.txt',7))
-# Knock_Down = str(linecache.getline('MainMenuRes/char_statistic/techniques_adept.txt',8))
+# Knock_Down = str(linecache.getline('MainMenuRes/char_statistic/techniques_adept.txt',8.png))
 # Battle_Reflex = str(linecache.getline('MainMenuRes/char_statistic/techniques_adept.txt',9))
 # Persevere = str(linecache.getline('MainMenuRes/char_statistic/techniques_adept.txt',10))
 # Moon_Shield = str(linecache.getline('MainMenuRes/char_statistic/techniques_adept.txt',11))
@@ -640,7 +664,7 @@ savviness_tree.extend((medicine,lore,persuasion,arcane,divine,alchemy,engineerin
 # Barrage = str(linecache.getline('MainMenuRes/char_statistic/techniques_expert.txt',5))
 # Shields_Up = str(linecache.getline('MainMenuRes/char_statistic/techniques_expert.txt',6))
 # War_Engineer = str(linecache.getline('MainMenuRes/char_statistic/techniques_expert.txt',7))
-# Charge = str(linecache.getline('MainMenuRes/char_statistic/techniques_expert.txt',8))
+# Charge = str(linecache.getline('MainMenuRes/char_statistic/techniques_expert.txt',8.png))
 # Reaper = str(linecache.getline('MainMenuRes/char_statistic/techniques_expert.txt',9))
 # Troll_Skin = str(linecache.getline('MainMenuRes/char_statistic/techniques_expert.txt',10))
 # Dream_Cloud = str(linecache.getline('MainMenuRes/char_statistic/techniques_expert.txt',11))
@@ -653,7 +677,7 @@ savviness_tree.extend((medicine,lore,persuasion,arcane,divine,alchemy,engineerin
 # Planewalker = str(linecache.getline('MainMenuRes/char_statistic/techniques_master.txt',5))
 # Commander = str(linecache.getline('MainMenuRes/char_statistic/techniques_master.txt',6))
 # Master_Mechanist = str(linecache.getline('MainMenuRes/char_statistic/techniques_master.txt',7))
-# Battle_Prudence = str(linecache.getline('MainMenuRes/char_statistic/techniques_master.txt',8))
+# Battle_Prudence = str(linecache.getline('MainMenuRes/char_statistic/techniques_master.txt',8.png))
 # Channelling = str(linecache.getline('MainMenuRes/char_statistic/techniques_master.txt',9))
 # Divine_Intervention = str(linecache.getline('MainMenuRes/char_statistic/techniques_master.txt',10))
 # Shadows = str(linecache.getline('MainMenuRes/char_statistic/techniques_master.txt',11))
@@ -693,3 +717,84 @@ savviness_tree.extend((medicine,lore,persuasion,arcane,divine,alchemy,engineerin
 #
 #     for i in tile_rects:
 #         pygame.draw.rect(display, (255,0,0), i)
+
+
+
+# class WorldParty:
+#     def __init__(self, max_vel, rotation_vel):
+#         self.img = self.IMG
+#         self.max_vel = max_vel
+#         self.vel = 0
+#         self.rotation_vel = rotation_vel
+#         self.angle = 0
+#         self.x,self.y = self.START_POS
+#         self.acceleration = 0.1
+#         self.rect = self.img.get_rect()
+#
+#     def rotate(self, left=False, right=False):
+#         if left:
+#             self.angle +=self.rotation_vel
+#         elif right:
+#             self.angle -=self.rotation_vel
+#
+#     def draw(self,win):
+#         blit_rotate_center(win,self.img,(self.x,self.y), self.angle)
+#
+#     def move_forward(self):
+#         self.vel = min(self.vel + self.acceleration, self.max_vel)
+#         self.move()
+#
+#     def move_backward(self):
+#         self.vel = max(self.vel - self.acceleration, -self.max_vel/2)
+#         self.move()
+#
+#     def move(self):
+#         radians = math.radians(self.angle)
+#         vertical = math.cos(radians)*self.vel
+#         horizontal = math.sin(radians)*self.vel
+#         self.y -= vertical
+#         self.x -= horizontal
+#
+#     def collide(self,mask,x=0,y=0):
+#         party_mask = pygame.mask.from_surface(self.img)
+#         offset = (int(self.x-x), int(self.y-y))
+#         poi = mask.overlap(party_mask,offset)
+#         return poi
+#
+#     def reset(self):
+#         self.x, self.y = self.START_POS
+#         self.vel = 0
+#         self.angle = 0
+#
+# class PlayerParty(WorldParty):
+#     IMG = gm_party_icon
+#     START_POS = (180-scroll[0],200-scroll[1])
+#     def reduce_speed(self):
+#         self.vel = max(self.vel - self.acceleration / 2,0)
+#         self.move()
+#     def bounce (self):
+#         self.vel = -self.vel / 2
+#         self.move()
+#
+# def draw(win, images, player_icon):
+#     for img,pos in images:
+#         win.blit(img,pos)
+#     player_icon.draw(win)
+#     pygame.display.update()
+#
+# def move_player(player_icon):
+#     keys = pygame.key.get_pressed()
+#     moved = False
+#     if keys[pygame.K_a]:
+#         player_icon.rotate(left=True)
+#     if keys[pygame.K_d]:
+#         player_icon.rotate(right=True)
+#     if keys[pygame.K_w]:
+#         moved = True
+#         player_icon.move_forward()
+#     if keys[pygame.K_s]:
+#         moved = True
+#         player_icon.move_backward()
+#     if not moved:
+#         player_icon.reduce_speed()
+
